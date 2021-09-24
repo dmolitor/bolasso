@@ -1,5 +1,5 @@
 Package: bolasso
-Title: "Bootstrap-enhanced Lasso"
+Title: "Model Consistent Lasso Estimation through the Bootstrap"
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Daniel",
