@@ -46,7 +46,7 @@ model_matrix <- function(form, data, x = NULL, y = NULL, prediction = FALSE) {
   if (prediction) {
     y <- NULL
   } else {
-    y <- data[, form_lhs]
+    y <- data[[form_lhs]]
   }
   list(x = x, y = y)
 }
