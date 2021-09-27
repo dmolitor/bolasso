@@ -1,14 +1,30 @@
 Package: bolasso
-Title: "Model Consistent Lasso Estimation through the Bootstrap"
-Version: 0.0.0.9000
+Title: Model Consistent Lasso Estimation through the Bootstrap
+Version: 0.0.1
 Authors@R: 
     person(given = "Daniel",
            family = "Molitor",
            role = c("aut", "cre"),
            email = "molitdj97@gmail.com")
-Description: What the package does (one paragraph).
+Description: Implements the [Bolasso algorithm](https://arxiv.org/abs/0804.1302)
+    for consistent variable selection and estimation accuracy. Includes support for
+    parallelization via the [future](https://cran.r-project.org/web/packages/future/index.html)
+    package. For details see: Bach (2008 dblp), 'Bolasso: model consistent Lasso estimation through the bootstrap', 
+    <arXiv:0804.1302>.
+Depends:
+    R (>= 3.6.0)
+Imports:
+    future.apply (>= 1.1.0),
+    gamlr (>= 1.0),
+    glmnet (>= 3.0),
+    Matrix (>= 1.0-6),
+    progressr,
+    Rdpack,
+    stats,
+    tibble
+RdMacros: Rdpack
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
