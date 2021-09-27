@@ -20,7 +20,8 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 <!-- badges: end -->
 
-The goal of bolasso is to ...
+The goal of bolasso is to implement model-consistent Lasso estimation via the 
+bootstrap.
 
 ## Installation
 
