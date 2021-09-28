@@ -126,7 +126,7 @@ typical value for this threshold is 0.9 and typically shouldn't be lower
 than that.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>selected_vars</span><span class='op'>(</span><span class='va'>object</span>, threshold <span class='op'>=</span> <span class='fl'>0.9</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>selected_vars</span><span class='op'>(</span><span class='va'>object</span>, threshold <span class='op'>=</span> <span class='fl'>0.9</span>, summarise <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -142,6 +142,14 @@ bootstrap replicates for which Lasso must select a variable for it to be
 considered a selected variable.</p></td>
     </tr>
     <tr>
+      <th>summarise</th>
+      <td><p>A Boolean indicator where <code>FALSE</code> indicates returning the
+full set of coefficients at the selected variable/bootstrap replicate level
+and <code>TRUE</code> indicates taking the average of each variable's coefficient
+across bootstrap replicates. The default value is <code>TRUE</code> as it's more
+efficient and interpretable.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Additional arguments to pass to <code><a href='https://rdrr.io/r/stats/predict.html'>predict</a></code> on
 objects with class cv.glmnet or cv.gamlr.</p></td>
@@ -154,8 +162,8 @@ objects with class cv.glmnet or cv.gamlr.</p></td>
 for each bootstrap replicate.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://glmnet.stanford.edu/reference/predict.glmnet.html'>glmnet::predict.glmnet()</a></code> for details on additional arguments to
-pass to <code>...</code>.</p></div>
+    <div class='dont-index'><p><code><a href='https://glmnet.stanford.edu/reference/predict.glmnet.html'>glmnet::predict.glmnet()</a></code> and <code>gamlr:::predict.gamlr</code> for details
+on additional arguments to pass to <code>...</code>.</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
