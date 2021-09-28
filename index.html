@@ -70,14 +70,6 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span>
-  collapse <span class="op">=</span> <span class="cn">TRUE</span>,
-  comment <span class="op">=</span> <span class="st">"#&gt;"</span>,
-  fig.path <span class="op">=</span> <span class="st">"man/figures/README-"</span>,
-  out.width <span class="op">=</span> <span class="st">"100%"</span>
-<span class="op">)</span></code></pre></div>
 <div id="bolasso-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#bolasso-" class="anchor"></a>bolasso <a href="dmolitor.github.io/bolasso/"><img src="reference/figures/logo.png" align="right" height="139"></a>
@@ -89,21 +81,25 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="co"># devtools::install_github("dmolitor/bolasso")</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"dmolitor/bolasso"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="usage" class="section level2">
+<div id="variable-selection-with-bolasso" class="section level2">
 <h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
+<a href="#variable-selection-with-bolasso" class="anchor"></a>Variable selection with bolasso</h2>
 <p>To illustrate the usage of bolasso, we’ll use the <a href="https://github.com/jbrownlee/Datasets/blob/master/pima-indians-diabetes.names">Pima Indians Diabetes dataset</a> to determine which factors are important predictors of testing positive for diabetes. For a full description of the input variables, see the link above.</p>
 <div id="load-requisite-packages-and-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#load-requisite-packages-and-data" class="anchor"></a>Load requisite packages and data</h3>
-</div>
-<div id="variable-selection-with-bolasso" class="section level3">
-<h3 class="hasAnchor">
-<a href="#variable-selection-with-bolasso" class="anchor"></a>Variable selection with bolasso</h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">bolasso</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">readr</span><span class="op">)</span>
+
+<span class="va">diabetes</span> <span class="op">&lt;-</span> <span class="fu">read_csv</span><span class="op">(</span>
+  <span class="st">"https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.csv"</span>,
+  col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span>, <span class="st">"outcome"</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
 <p>First, we run 100-fold bootstrapped Lasso with the <code>glmnet</code> implementation. We can get a rough estimate of the elapsed time using <code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">start.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
@@ -117,7 +113,7 @@
 <span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start.time</span>
-<span class="co">#&gt; Time difference of 29.96589 secs</span></code></pre></div>
+<span class="co">#&gt; Time difference of 23.7819 secs</span></code></pre></div>
 <p>We can get a quick overview of the model by printing the <code>bolasso</code> object.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span>
@@ -128,51 +124,55 @@
 <span class="co">#&gt;    - 768 Observations</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Selected variables:</span>
-<span class="co">#&gt;    - 6/8 predictors selected with 90% threshold</span>
+<span class="co">#&gt;    - 5/8 predictors selected with 90% threshold</span>
 <span class="co">#&gt;    - 4/8 predictors selected with 100% threshold</span></code></pre></div>
+</div>
+<div id="extracting-selected-variables" class="section level3">
+<h3 class="hasAnchor">
+<a href="#extracting-selected-variables" class="anchor"></a>Extracting selected variables</h3>
 <p>Next, we can extract all variables that were selected in 90% and 100% of the bootstrapped Lasso models. We can also pass any relevant arguments to <code>predict</code> on the <code>cv.glmnet</code> or <code>cv.gamlr</code> model objects. In this case we will use the lambda value that minimizes OOS error.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Selected in 90% of Lasso models</span>
-<span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>,
+<code class="sourceCode R"><span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>,
               threshold <span class="op">=</span> <span class="fl">0.9</span>,
               select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 7 x 2</span>
+<span class="co">#&gt; # A tibble: 6 x 2</span>
 <span class="co">#&gt;   variable  mean_coef</span>
 <span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 Intercept   -8.33  </span>
-<span class="co">#&gt; 2 V1           0.123 </span>
-<span class="co">#&gt; 3 V2           0.0349</span>
-<span class="co">#&gt; 4 V3          -0.0118</span>
-<span class="co">#&gt; 5 V6           0.0860</span>
-<span class="co">#&gt; 6 V7           0.885 </span>
-<span class="co">#&gt; 7 V8           0.0143</span>
-<span class="co"># Selected in 100% of Lasso models</span>
-<span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>,
+<span class="co">#&gt; 1 Intercept   -8.22  </span>
+<span class="co">#&gt; 2 V1           0.119 </span>
+<span class="co">#&gt; 3 V2           0.0344</span>
+<span class="co">#&gt; 4 V3          -0.0114</span>
+<span class="co">#&gt; 5 V6           0.0859</span>
+<span class="co">#&gt; 6 V7           0.934</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>,
               threshold <span class="op">=</span> <span class="fl">1</span>,
               select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 5 x 2</span>
 <span class="co">#&gt;   variable  mean_coef</span>
 <span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 Intercept   -8.33  </span>
-<span class="co">#&gt; 2 V1           0.123 </span>
-<span class="co">#&gt; 3 V2           0.0349</span>
-<span class="co">#&gt; 4 V6           0.0860</span>
-<span class="co">#&gt; 5 V7           0.885</span></code></pre></div>
+<span class="co">#&gt; 1 Intercept   -8.22  </span>
+<span class="co">#&gt; 2 V1           0.119 </span>
+<span class="co">#&gt; 3 V2           0.0344</span>
+<span class="co">#&gt; 4 V6           0.0859</span>
+<span class="co">#&gt; 5 V7           0.934</span></code></pre></div>
+</div>
+<div id="plotting-selected-variables" class="section level3">
+<h3 class="hasAnchor">
+<a href="#plotting-selected-variables" class="anchor"></a>Plotting selected variables</h3>
 <p>We can also quickly plot the selected variables at the 90% and 100% threshold values.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Selected in 90% of Lasso models</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Selected in 100% of Lasso models</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-6-2.png" width="100%"></p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="100%"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-7-2.png" width="100%"></p>
 </div>
 <div id="parallelizing-bolasso" class="section level3">
 <h3 class="hasAnchor">
 <a href="#parallelizing-bolasso" class="anchor"></a>Parallelizing bolasso</h3>
 <p>We can execute <code>bolasso</code> in parallel via the <a href="https://cran.r-project.org/web/packages/future/index.html">future</a> package. To do so we can copy the code from above with only one minor tweak.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/sequential.html">sequential</a></span><span class="op">)</span>
 
 <span class="va">start.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
@@ -186,12 +186,11 @@
 <span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start.time</span>
-<span class="co">#&gt; Time difference of 28.22652 secs</span></code></pre></div>
+<span class="co">#&gt; Time difference of 24.65288 secs</span></code></pre></div>
 <p>This document was created on a system with 8 cores and we can see the computation time has decreased significantly</p>
 </div>
 </div>
 </div>
-
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
