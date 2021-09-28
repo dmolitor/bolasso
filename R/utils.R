@@ -62,23 +62,37 @@ model_matrix <- function(form, data, x = NULL, y = NULL, prediction = FALSE) {
 #' @param threshold A numeric between 0 and 1, specifying the fraction of
 #'   bootstrap replicates for which Lasso must select a variable for it to be
 #'   considered a selected variable.
+#' @param summarise A Boolean indicator where `FALSE` indicates returning the
+#'   full set of coefficients at the selected variable/bootstrap replicate level
+#'   and `TRUE` indicates taking the average of each variable's coefficient
+#'   across bootstrap replicates. The default value is `TRUE` as it's more
+#'   efficient and interpretable.
 #' @param ... Additional arguments to pass to \code{\link{predict}} on
 #'   objects with class \link{cv.glmnet} or \link{cv.gamlr}.
 #'
 #' @return A tibble with each selected variable and its respective coefficient
 #'   for each bootstrap replicate.
 #'
-#' @seealso [glmnet::predict.glmnet()] for details on additional arguments to
-#'   pass to `...`.
+#' @seealso [glmnet::predict.glmnet()] and [gamlr:::predict.gamlr()] for details
+#'   on additional arguments to pass to `...`.
 #'
 #' @export
-selected_vars <- function(object, threshold = 0.9, ...) {
+selected_vars <- function(object, threshold = 0.9, summarise = TRUE, ...) {
   stopifnot(inherits(object, "bolasso"),
             is.numeric(threshold))
   model_coefs <- coef.bolasso(object = object, ...)
   model_coefs <- sparsity_threshold(model_coefs, threshold = threshold)
   model_coefs <- tidy_selected_vars(model_coefs)
-  tidy_intercept(model_coefs)
+  model_coefs <- lapply(model_coefs, tidy_intercept)
+  if (summarise) {
+    tibble::enframe(
+      colMeans(model_coefs$x_summarised[, -1], na.rm = TRUE),
+      name = "variable",
+      value = "mean_coef"
+    )
+  } else {
+    model_coefs$x
+  }
 }
 
 sparsity_threshold <- function(dat, threshold) {

@@ -9,13 +9,14 @@ Authors@R:
 Description: Implements the [Bolasso algorithm](https://arxiv.org/abs/0804.1302)
     for consistent variable selection and estimation accuracy. Includes support for
     parallelization via the [future](https://cran.r-project.org/web/packages/future/index.html)
-    package. For details see: Bach (2008 dblp), 'Bolasso: model consistent Lasso estimation through the bootstrap', 
+    package. For details see: Bach (2008 DBLP), 'Bolasso: model consistent Lasso estimation through the bootstrap', 
     <arXiv:0804.1302>.
 Depends:
     R (>= 3.6.0)
 Imports:
     future.apply (>= 1.1.0),
     gamlr (>= 1.0),
+    ggplot2,
     glmnet (>= 3.0),
     Matrix (>= 1.0-6),
     progressr,

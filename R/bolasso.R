@@ -1,4 +1,4 @@
-new_bolasso <- function(x, implement, varnames) {
+new_bolasso <- function(x, implement, varnames, nboot) {
   stopifnot(
     is.list(x),
     all(
@@ -14,6 +14,7 @@ new_bolasso <- function(x, implement, varnames) {
   attr(x, "implement") <- implement
   attr(x, "call") <- sys.call(1L)
   attr(x, "varnames") <- varnames
+  attr(x, "nboot") <- nboot
   x
 }
 
@@ -143,5 +144,10 @@ bolasso <- function(form,
                           implement = implement,
                           ...)
   }
-  new_bolasso(models, implement = implement, varnames = colnames(data$x))
+  new_bolasso(
+    models,
+    implement = implement,
+    varnames = colnames(data$x),
+    nboot = n.boot
+  )
 }
