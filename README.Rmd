@@ -4,7 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r message=FALSE, warning=FALSE, paged.print=TRUE}
+```{r message=FALSE, warning=FALSE, paged.print=TRUE, echo=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -29,9 +29,9 @@ You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-# devtools::install_github("dmolitor/bolasso")
+devtools::install_github("dmolitor/bolasso")
 ```
-## Usage
+## Variable selection with bolasso
 
 To illustrate the usage of bolasso, we'll use the 
 [Pima Indians Diabetes dataset](https://github.com/jbrownlee/Datasets/blob/master/pima-indians-diabetes.names)
@@ -40,7 +40,7 @@ for diabetes. For a full description of the input variables, see the link above.
 
 ### Load requisite packages and data
 
-```{r message=FALSE, warning=FALSE, echo=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE, results='hide'}
 library(bolasso)
 library(readr)
 
@@ -49,8 +49,6 @@ diabetes <- read_csv(
   col_names = c(paste0("V", 1:8), "outcome")
 )
 ```
-
-### Variable selection with bolasso
 
 First, we run 100-fold bootstrapped Lasso with the `glmnet` implementation. We
 can get a rough estimate of the elapsed time using `Sys.time()`.
@@ -74,6 +72,7 @@ We can get a quick overview of the model by printing the `bolasso` object.
 model
 ```
 
+### Extracting selected variables
 
 Next, we can extract all variables that were selected in 90% and 100% of the 
 bootstrapped Lasso models. We can also pass any relevant arguments to `predict`
@@ -81,25 +80,25 @@ on the `cv.glmnet` or `cv.gamlr` model objects. In this case we will use the
 lambda value that minimizes OOS error.
 
 ```{r}
-# Selected in 90% of Lasso models
 selected_vars(model,
               threshold = 0.9,
               select = "lambda.min")
+```
 
-# Selected in 100% of Lasso models
+```{r}
 selected_vars(model,
               threshold = 1,
               select = "lambda.min")
 ```
 
+### Plotting selected variables
+
 We can also quickly plot the selected variables at the 90% and 100% threshold
 values.
 
 ```{r}
-# Selected in 90% of Lasso models
 plot(model, threshold = 0.9)
 
-# Selected in 100% of Lasso models
 plot(model, threshold = 1)
 ```
 

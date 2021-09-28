@@ -1,15 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-``` r
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
-
 # bolasso <a href='dmolitor.github.io/bolasso/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
@@ -29,10 +20,10 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-# devtools::install_github("dmolitor/bolasso")
+devtools::install_github("dmolitor/bolasso")
 ```
 
-## Usage
+## Variable selection with bolasso
 
 To illustrate the usage of bolasso, we’ll use the [Pima Indians Diabetes
 dataset](https://github.com/jbrownlee/Datasets/blob/master/pima-indians-diabetes.names)
@@ -42,7 +33,15 @@ link above.
 
 ### Load requisite packages and data
 
-### Variable selection with bolasso
+``` r
+library(bolasso)
+library(readr)
+
+diabetes <- read_csv(
+  "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.csv",
+  col_names = c(paste0("V", 1:8), "outcome")
+)
+```
 
 First, we run 100-fold bootstrapped Lasso with the `glmnet`
 implementation. We can get a rough estimate of the elapsed time using
@@ -60,7 +59,7 @@ model <- bolasso(
 )
 
 Sys.time() - start.time
-#> Time difference of 29.96589 secs
+#> Time difference of 23.7819 secs
 ```
 
 We can get a quick overview of the model by printing the `bolasso`
@@ -75,9 +74,11 @@ model
 #>    - 768 Observations
 #> 
 #> Selected variables:
-#>    - 6/8 predictors selected with 90% threshold
+#>    - 5/8 predictors selected with 90% threshold
 #>    - 4/8 predictors selected with 100% threshold
 ```
+
+### Extracting selected variables
 
 Next, we can extract all variables that were selected in 90% and 100% of
 the bootstrapped Lasso models. We can also pass any relevant arguments
@@ -85,50 +86,50 @@ to `predict` on the `cv.glmnet` or `cv.gamlr` model objects. In this
 case we will use the lambda value that minimizes OOS error.
 
 ``` r
-# Selected in 90% of Lasso models
 selected_vars(model,
               threshold = 0.9,
               select = "lambda.min")
-#> # A tibble: 7 x 2
+#> # A tibble: 6 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
-#> 1 Intercept   -8.33  
-#> 2 V1           0.123 
-#> 3 V2           0.0349
-#> 4 V3          -0.0118
-#> 5 V6           0.0860
-#> 6 V7           0.885 
-#> 7 V8           0.0143
-# Selected in 100% of Lasso models
+#> 1 Intercept   -8.22  
+#> 2 V1           0.119 
+#> 3 V2           0.0344
+#> 4 V3          -0.0114
+#> 5 V6           0.0859
+#> 6 V7           0.934
+```
+
+``` r
 selected_vars(model,
               threshold = 1,
               select = "lambda.min")
 #> # A tibble: 5 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
-#> 1 Intercept   -8.33  
-#> 2 V1           0.123 
-#> 3 V2           0.0349
-#> 4 V6           0.0860
-#> 5 V7           0.885
+#> 1 Intercept   -8.22  
+#> 2 V1           0.119 
+#> 3 V2           0.0344
+#> 4 V6           0.0859
+#> 5 V7           0.934
 ```
+
+### Plotting selected variables
 
 We can also quickly plot the selected variables at the 90% and 100%
 threshold values.
 
 ``` r
-# Selected in 90% of Lasso models
 plot(model, threshold = 0.9)
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
 ``` r
-# Selected in 100% of Lasso models
 plot(model, threshold = 1)
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-2.png" width="100%" />
 
 ### Parallelizing bolasso
 
@@ -151,7 +152,7 @@ model <- bolasso(
 )
 
 Sys.time() - start.time
-#> Time difference of 28.22652 secs
+#> Time difference of 24.65288 secs
 ```
 
 This document was created on a system with 8 cores and we can see the
