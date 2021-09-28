@@ -73,7 +73,7 @@ model_matrix <- function(form, data, x = NULL, y = NULL, prediction = FALSE) {
 #' @return A tibble with each selected variable and its respective coefficient
 #'   for each bootstrap replicate.
 #'
-#' @seealso [glmnet::predict.glmnet()] and [gamlr:::predict.gamlr()] for details
+#' @seealso [glmnet::predict.glmnet()] and `gamlr:::predict.gamlr` for details
 #'   on additional arguments to pass to `...`.
 #'
 #' @export

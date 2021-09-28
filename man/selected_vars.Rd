@@ -4,7 +4,7 @@
 \alias{selected_vars}
 \title{Bolasso-selected Variables}
 \usage{
-selected_vars(object, threshold = 0.9, ...)
+selected_vars(object, threshold = 0.9, summarise = TRUE, ...)
 }
 \arguments{
 \item{object}{An object of class \link{bolasso}.}
@@ -12,6 +12,12 @@ selected_vars(object, threshold = 0.9, ...)
 \item{threshold}{A numeric between 0 and 1, specifying the fraction of
 bootstrap replicates for which Lasso must select a variable for it to be
 considered a selected variable.}
+
+\item{summarise}{A Boolean indicator where \code{FALSE} indicates returning the
+full set of coefficients at the selected variable/bootstrap replicate level
+and \code{TRUE} indicates taking the average of each variable's coefficient
+across bootstrap replicates. The default value is \code{TRUE} as it's more
+efficient and interpretable.}
 
 \item{...}{Additional arguments to pass to \code{\link{predict}} on
 objects with class \link{cv.glmnet} or \link{cv.gamlr}.}
@@ -27,6 +33,6 @@ typical value for this threshold is 0.9 and typically shouldn't be lower
 than that.
 }
 \seealso{
-\code{\link[glmnet:predict.glmnet]{glmnet::predict.glmnet()}} for details on additional arguments to
-pass to \code{...}.
+\code{\link[glmnet:predict.glmnet]{glmnet::predict.glmnet()}} and \code{gamlr:::predict.gamlr} for details
+on additional arguments to pass to \code{...}.
 }
