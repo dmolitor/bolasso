@@ -1,4 +1,4 @@
-new_bolasso <- function(x, implement, varnames, nboot) {
+new_bolasso <- function(x, implement, varnames, nboot, dimensions) {
   stopifnot(
     is.list(x),
     all(
@@ -15,6 +15,7 @@ new_bolasso <- function(x, implement, varnames, nboot) {
   attr(x, "call") <- sys.call(1L)
   attr(x, "varnames") <- varnames
   attr(x, "nboot") <- nboot
+  attr(x, "dimensions") <- dimensions
   x
 }
 
@@ -148,6 +149,7 @@ bolasso <- function(form,
     models,
     implement = implement,
     varnames = colnames(data$x),
-    nboot = n.boot
+    nboot = n.boot,
+    dimensions = dim(data$x)
   )
 }

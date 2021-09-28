@@ -44,18 +44,19 @@ predict.bolasso <- function(object, new.data, select = c("min", "1se"), ...) {
 
 #' @method print bolasso
 #' @export
-print.bolasso <- function(object, ...) {
-  nboot <- attributes(object)$nboot
-  npred <- length(attributes(object)$varnames)
-  selected90 <- selected_vars(object)
-  selected100 <- selected_vars(object, threshold = 1)
+print.bolasso <- function(x, ...) {
+  nboot <- attributes(x)$nboot
+  npred <- length(attributes(x)$varnames)
+  nobs <- attributes(x)$dimensions[[1]]
+  selected90 <- selected_vars(x)
+  selected100 <- selected_vars(x, threshold = 1)
   cat("-------------",
       paste0(nboot, "-fold"),
       "bootstrapped Lasso -------------\n\n")
   cat(
     "Model matrix dimensions:\n",
     "  -", npred, "Predictors\n",
-    "  -", object[[1]]$glmnet.fit$nobs, "Observations\n\n"
+    "  -", nobs, "Observations\n\n"
   )
   cat(
     "Selected variables:\n",
@@ -66,31 +67,43 @@ print.bolasso <- function(object, ...) {
     paste0(nrow(selected100[selected100$variable != "Intercept", ]), "/", npred),
     "predictors selected with 100% threshold\n"
   )
-  return(invisible(object))
+  return(invisible(x))
 }
 
 #' @method plot bolasso
 #' @export
-plot.bolasso <- function(object, threshold = 0.9, ...) {
-  s <- selected_vars(object = object, threshold = threshold, ...)
+plot.bolasso <- function(x, threshold = 0.9, ...) {
+  s <- selected_vars(object = x, threshold = threshold)
   s <- s[order(s$mean_coef), ]
-  s$variable <- factor(s$variable)
+  s <- s[s$variable != "Intercept", ]
+  s$variable <- factor(s$variable, levels = s$variable)
   s$mean_coef <- round(s$mean_coef, 3)
   s$color <- ifelse(s$mean_coef < 0, "negative", "positive")
+  coef_range <- range(s$mean_coef)
+  coef_diff <- coef_range[[2]] - coef_range[[1]]
   if (nrow(s) >= 10) {
     s <- rbind(s[1:5, ], s[(nrow(s) - 5):nrow(s), ])
   }
   ggplot2::ggplot(data = s,
-                  aes(x = variable,
-                      y = mean_coef,
-                      fill = color)) +
+                  ggplot2::aes(x = get("variable"),
+                               y = get("mean_coef"),
+                               fill = get("color"))) +
     ggplot2::geom_bar(stat = "identity", width = 0.5) +
+    ggplot2::geom_text(ggplot2::aes(label = paste0("(", get("mean_coef"), ")"),
+                                    x = get("variable"),
+                                    y = get("mean_coef") +
+                                      0.03 *
+                                      sign(get("mean_coef")) *
+                                      coef_diff),
+                       size = 3,
+                       inherit.aes = FALSE) +
     ggplot2::theme_minimal() +
     ggplot2::labs(x = "Predictor",
                   y = "Mean Coefficient",
                   title = "Top/Bottom 5 Selected Predictors") +
-    ggplot2::theme(axis.title = element_text(face = "bold"),
-                   axis.text.x = element_text(angle = 90),
-                   plot.title = element_text(hjust = 0.5, face = "bold"),
+    ggplot2::theme(axis.title = ggplot2::element_text(face = "bold"),
+                   axis.text.x = ggplot2::element_text(angle = 90),
+                   plot.title = ggplot2::element_text(hjust = 0.5,
+                                                      face = "bold"),
                    legend.position = "none")
 }
