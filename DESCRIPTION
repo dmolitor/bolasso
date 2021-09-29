@@ -12,13 +12,13 @@ Description: Implements the [Bolasso algorithm](https://arxiv.org/abs/0804.1302)
     package. For details see: Bach (2008 DBLP), 'Bolasso: model consistent Lasso estimation through the bootstrap', 
     <arXiv:0804.1302>.
 Depends:
+    Matrix (>= 1.0-6),
     R (>= 3.6.0)
 Imports:
     future.apply (>= 1.1.0),
     gamlr (>= 1.0),
     ggplot2,
     glmnet (>= 3.0),
-    Matrix (>= 1.0-6),
     progressr,
     Rdpack,
     stats,
