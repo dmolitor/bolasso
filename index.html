@@ -113,7 +113,7 @@
 <span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start.time</span>
-<span class="co">#&gt; Time difference of 23.7819 secs</span></code></pre></div>
+<span class="co">#&gt; Time difference of 34.18556 secs</span></code></pre></div>
 <p>We can get a quick overview of the model by printing the <code>bolasso</code> object.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span>
@@ -124,8 +124,8 @@
 <span class="co">#&gt;    - 768 Observations</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Selected variables:</span>
-<span class="co">#&gt;    - 5/8 predictors selected with 90% threshold</span>
-<span class="co">#&gt;    - 4/8 predictors selected with 100% threshold</span></code></pre></div>
+<span class="co">#&gt;    - 6/8 predictors selected with 90% threshold</span>
+<span class="co">#&gt;    - 3/8 predictors selected with 100% threshold</span></code></pre></div>
 </div>
 <div id="extracting-selected-variables" class="section level3">
 <h3 class="hasAnchor">
@@ -135,47 +135,47 @@
 <code class="sourceCode R"><span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>,
               threshold <span class="op">=</span> <span class="fl">0.9</span>,
               select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 6 x 2</span>
+<span class="co">#&gt; # A tibble: 7 x 2</span>
 <span class="co">#&gt;   variable  mean_coef</span>
 <span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 Intercept   -8.22  </span>
-<span class="co">#&gt; 2 V1           0.119 </span>
-<span class="co">#&gt; 3 V2           0.0344</span>
-<span class="co">#&gt; 4 V3          -0.0114</span>
-<span class="co">#&gt; 5 V6           0.0859</span>
-<span class="co">#&gt; 6 V7           0.934</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>,
+<span class="co">#&gt; 2 V1           0.117 </span>
+<span class="co">#&gt; 3 V2           0.0346</span>
+<span class="co">#&gt; 4 V3          -0.0121</span>
+<span class="co">#&gt; 5 V6           0.0839</span>
+<span class="co">#&gt; 6 V7           0.893 </span>
+<span class="co">#&gt; 7 V8           0.0155</span>
+<span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>,
               threshold <span class="op">=</span> <span class="fl">1</span>,
               select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 5 x 2</span>
+<span class="co">#&gt; # A tibble: 4 x 2</span>
 <span class="co">#&gt;   variable  mean_coef</span>
 <span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 Intercept   -8.22  </span>
-<span class="co">#&gt; 2 V1           0.119 </span>
-<span class="co">#&gt; 3 V2           0.0344</span>
-<span class="co">#&gt; 4 V6           0.0859</span>
-<span class="co">#&gt; 5 V7           0.934</span></code></pre></div>
+<span class="co">#&gt; 2 V1           0.117 </span>
+<span class="co">#&gt; 3 V2           0.0346</span>
+<span class="co">#&gt; 4 V6           0.0839</span></code></pre></div>
 </div>
 <div id="plotting-selected-variables" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-selected-variables" class="anchor"></a>Plotting selected variables</h3>
 <p>We can also quickly plot the selected variables at the 90% and 100% threshold values.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="100%"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="75%"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-7-2.png" width="100%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-6-2.png" width="75%"></p>
 </div>
 <div id="parallelizing-bolasso" class="section level3">
 <h3 class="hasAnchor">
 <a href="#parallelizing-bolasso" class="anchor"></a>Parallelizing bolasso</h3>
-<p>We can execute <code>bolasso</code> in parallel via the <a href="https://cran.r-project.org/web/packages/future/index.html">future</a> package. To do so we can copy the code from above with only one minor tweak.</p>
+<p>We can execute <code>bolasso</code> in parallel via the <a href="https://cran.r-project.org/web/packages/future/index.html">future</a> package. To do so we can copy the code from above with only one minor tweak shown below.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="st">"multisession"</span><span class="op">)</span></code></pre></div>
+<p>We can now run the code from above, unaltered, and it will execute in parallel.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/sequential.html">sequential</a></span><span class="op">)</span>
-
-<span class="va">start.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">start.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span>
   <span class="va">outcome</span> <span class="op">~</span> <span class="va">.</span>,
@@ -186,8 +186,7 @@
 <span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start.time</span>
-<span class="co">#&gt; Time difference of 24.65288 secs</span></code></pre></div>
-<p>This document was created on a system with 8 cores and we can see the computation time has decreased significantly</p>
+<span class="co">#&gt; Time difference of 19.6347 secs</span></code></pre></div>
 </div>
 </div>
 </div>
