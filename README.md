@@ -11,7 +11,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 <!-- badges: end -->
 
 The goal of bolasso is to implement model-consistent Lasso estimation
-via the bootstrap.
+via the bootstrap [\[1\]](#1).
 
 ## Installation
 
@@ -59,7 +59,7 @@ model <- bolasso(
 )
 
 Sys.time() - start.time
-#> Time difference of 34.18556 secs
+#> Time difference of 29.13701 secs
 ```
 
 We can get a quick overview of the model by printing the `bolasso`
@@ -75,7 +75,7 @@ model
 #> 
 #> Selected variables:
 #>    - 6/8 predictors selected with 90% threshold
-#>    - 3/8 predictors selected with 100% threshold
+#>    - 4/8 predictors selected with 100% threshold
 ```
 
 ### Extracting selected variables
@@ -92,23 +92,24 @@ selected_vars(model,
 #> # A tibble: 7 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
-#> 1 Intercept   -8.22  
-#> 2 V1           0.117 
-#> 3 V2           0.0346
-#> 4 V3          -0.0121
-#> 5 V6           0.0839
-#> 6 V7           0.893 
-#> 7 V8           0.0155
+#> 1 Intercept   -8.20  
+#> 2 V1           0.120 
+#> 3 V2           0.0347
+#> 4 V3          -0.0118
+#> 5 V6           0.0866
+#> 6 V7           0.849 
+#> 7 V8           0.0139
 selected_vars(model,
               threshold = 1,
               select = "lambda.min")
-#> # A tibble: 4 x 2
+#> # A tibble: 5 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
-#> 1 Intercept   -8.22  
-#> 2 V1           0.117 
-#> 3 V2           0.0346
-#> 4 V6           0.0839
+#> 1 Intercept   -8.20  
+#> 2 V1           0.120 
+#> 3 V2           0.0347
+#> 4 V3          -0.0118
+#> 5 V6           0.0866
 ```
 
 ### Plotting selected variables
@@ -154,5 +155,11 @@ model <- bolasso(
 )
 
 Sys.time() - start.time
-#> Time difference of 19.6347 secs
+#> Time difference of 13.5281 secs
 ```
+
+## References
+
+<a id="1">\[1\]</a> Bach, Francis. “Bolasso: Model Consistent Lasso
+Estimation through the Bootstrap.” ArXiv:0804.1302 \[Cs, Math, Stat\],
+April 8, 2008. <http://arxiv.org/abs/0804.1302>.

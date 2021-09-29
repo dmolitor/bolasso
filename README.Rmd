@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 The goal of bolasso is to implement model-consistent Lasso estimation via the 
-bootstrap.
+bootstrap [[1]](#1).
 
 ## Installation
 
@@ -130,3 +130,8 @@ model <- bolasso(
 
 Sys.time() - start.time
 ```
+
+## References
+
+<a id="1">[1]</a>
+Bach, Francis. “Bolasso: Model Consistent Lasso Estimation through the Bootstrap.” ArXiv:0804.1302 [Cs, Math, Stat], April 8, 2008. http://arxiv.org/abs/0804.1302.
