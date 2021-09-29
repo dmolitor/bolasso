@@ -59,7 +59,7 @@ model <- bolasso(
 )
 
 Sys.time() - start.time
-#> Time difference of 23.7819 secs
+#> Time difference of 34.18556 secs
 ```
 
 We can get a quick overview of the model by printing the `bolasso`
@@ -74,8 +74,8 @@ model
 #>    - 768 Observations
 #> 
 #> Selected variables:
-#>    - 5/8 predictors selected with 90% threshold
-#>    - 4/8 predictors selected with 100% threshold
+#>    - 6/8 predictors selected with 90% threshold
+#>    - 3/8 predictors selected with 100% threshold
 ```
 
 ### Extracting selected variables
@@ -89,29 +89,26 @@ case we will use the lambda value that minimizes OOS error.
 selected_vars(model,
               threshold = 0.9,
               select = "lambda.min")
-#> # A tibble: 6 x 2
+#> # A tibble: 7 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
 #> 1 Intercept   -8.22  
-#> 2 V1           0.119 
-#> 3 V2           0.0344
-#> 4 V3          -0.0114
-#> 5 V6           0.0859
-#> 6 V7           0.934
-```
-
-``` r
+#> 2 V1           0.117 
+#> 3 V2           0.0346
+#> 4 V3          -0.0121
+#> 5 V6           0.0839
+#> 6 V7           0.893 
+#> 7 V8           0.0155
 selected_vars(model,
               threshold = 1,
               select = "lambda.min")
-#> # A tibble: 5 x 2
+#> # A tibble: 4 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
 #> 1 Intercept   -8.22  
-#> 2 V1           0.119 
-#> 3 V2           0.0344
-#> 4 V6           0.0859
-#> 5 V7           0.934
+#> 2 V1           0.117 
+#> 3 V2           0.0346
+#> 4 V6           0.0839
 ```
 
 ### Plotting selected variables
@@ -123,24 +120,29 @@ threshold values.
 plot(model, threshold = 0.9)
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="75%" />
 
 ``` r
 plot(model, threshold = 1)
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-2.png" width="75%" />
 
 ### Parallelizing bolasso
 
 We can execute `bolasso` in parallel via the
 [future](https://cran.r-project.org/web/packages/future/index.html)
 package. To do so we can copy the code from above with only one minor
-tweak.
+tweak shown below.
 
 ``` r
-future::plan(future::sequential)
+future::plan("multisession")
+```
 
+We can now run the code from above, unaltered, and it will execute in
+parallel.
+
+``` r
 start.time <- Sys.time()
 
 model <- bolasso(
@@ -152,8 +154,5 @@ model <- bolasso(
 )
 
 Sys.time() - start.time
-#> Time difference of 24.65288 secs
+#> Time difference of 19.6347 secs
 ```
-
-This document was created on a system with 8 cores and we can see the
-computation time has decreased significantly
