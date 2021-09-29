@@ -1,3 +1,5 @@
+#' @import Matrix
+
 new_bolasso <- function(x, implement, varnames, nboot, dimensions) {
   stopifnot(
     is.list(x),
