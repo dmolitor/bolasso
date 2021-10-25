@@ -76,6 +76,10 @@ plot.bolasso <- function(x, threshold = 0.9, ...) {
   s <- selected_vars(object = x, threshold = threshold)
   s <- s[order(s$mean_coef), ]
   s <- s[s$variable != "Intercept", ]
+  if (nrow(s) == 0) {
+    message("No selected variables to plot")
+    return(invisible(x))
+  }
   s$variable <- factor(s$variable, levels = s$variable)
   s$mean_coef <- round(s$mean_coef, 3)
   s$color <- ifelse(s$mean_coef < 0, "negative", "positive")

@@ -1,6 +1,6 @@
 #' @import Matrix
 
-new_bolasso <- function(x, implement, varnames, nboot, dimensions) {
+new_bolasso <- function(x, implement, varnames, nboot, dimensions, fun.call) {
   stopifnot(
     is.list(x),
     all(
@@ -14,7 +14,7 @@ new_bolasso <- function(x, implement, varnames, nboot, dimensions) {
   )
   class(x) <- "bolasso"
   attr(x, "implement") <- implement
-  attr(x, "call") <- sys.call(1L)
+  attr(x, "call") <- fun.call
   attr(x, "varnames") <- varnames
   attr(x, "nboot") <- nboot
   attr(x, "dimensions") <- dimensions
@@ -152,6 +152,7 @@ bolasso <- function(form,
     implement = implement,
     varnames = colnames(data$x),
     nboot = n.boot,
-    dimensions = dim(data$x)
+    dimensions = dim(data$x),
+    fun.call = match.call()
   )
 }
