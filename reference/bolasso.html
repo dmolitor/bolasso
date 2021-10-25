@@ -231,7 +231,39 @@ respective implementations and arguments that can be passed to <code>...</code>.
 <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>bolasso_form</span>,
         new.data <span class='op'>=</span> <span class='va'>mtcars_test</span>,
         select <span class='op'>=</span> <span class='st'>"lambda.min"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error: `x` must be of class `matrix` or `sparseMatrix`</span></div><div class='input'>
+</div><div class='output co'>#&gt;                     boot1    boot2    boot3     boot4    boot5    boot6
+#&gt; Mazda RX4        23.53203 21.31155 20.38801 22.290720 22.27351 21.94408
+#&gt; Datsun 710       26.39838 25.65987 30.73719 27.331865 23.36205 24.69222
+#&gt; Duster 360       15.27134 15.34670 13.64426  8.423965 14.22472 15.46800
+#&gt; Merc 240D        23.13465 22.65999 27.44668 21.980070 23.39864 21.78321
+#&gt; Merc 280         18.72157 18.82589 18.99172 17.249912 21.24348 18.30049
+#&gt; Honda Civic      29.66803 28.55722 31.92853 28.131520 27.31862 27.60294
+#&gt; Toyota Corolla   28.63992 27.65163 31.55401 30.084933 25.56220 26.69050
+#&gt; Camaro Z28       14.61451 14.34784 13.39836  8.986365 14.97222 14.66826
+#&gt; Pontiac Firebird 17.25657 14.82313 16.19174 12.794893 16.11565 16.05771
+#&gt; Maserati Bora    14.18150 14.71184 17.21216  8.396929 11.88185 14.61647
+#&gt;                     boot7    boot8    boot9   boot10   boot11   boot12   boot13
+#&gt; Mazda RX4        21.42965 18.82831 23.22819 20.14767 15.38615 21.52801 20.42563
+#&gt; Datsun 710       31.17257 25.62445 25.92730 24.50229 26.38631 26.26061 29.43843
+#&gt; Duster 360       13.31440 15.80368 15.89598 17.17782 15.19136 12.60124 10.22709
+#&gt; Merc 240D        23.64343 21.01089 23.67867 21.78253 24.44045 21.91810 26.32699
+#&gt; Merc 280         18.29764 17.98024 19.86190 17.58422 18.97526 17.93253 17.81826
+#&gt; Honda Civic      35.80988 25.13158 29.70004 26.70624 29.92394 30.08307 32.93965
+#&gt; Toyota Corolla   33.05723 27.56742 28.51666 26.01848 26.83720 27.57016 30.29603
+#&gt; Camaro Z28       17.50096 15.51962 14.91479 16.33376 16.78562 14.44168  9.86533
+#&gt; Pontiac Firebird 17.97528 15.62626 16.96378 16.31812 16.54070 16.04707 15.59535
+#&gt; Maserati Bora    20.20025 17.60688 13.24071 17.30561 19.69561 21.45137 17.86446
+#&gt;                    boot14   boot15   boot16   boot17   boot18   boot19   boot20
+#&gt; Mazda RX4        20.96366 23.00697 19.63938 20.72184 22.53705 21.92048 21.68905
+#&gt; Datsun 710       29.04419 26.01095 21.00265 25.77933 25.60174 25.00468 22.52004
+#&gt; Duster 360       12.14012 14.26750 16.01328 14.81375 15.41257 14.91257 15.08037
+#&gt; Merc 240D        22.16729 23.64211 19.49836 23.43581 22.98283 22.26822 21.15043
+#&gt; Merc 280         18.50003 19.07564 18.52614 19.48435 18.95140 18.24974 20.15770
+#&gt; Honda Civic      31.84528 27.46691 22.16310 27.58397 28.90394 27.96428 24.74005
+#&gt; Toyota Corolla   30.00382 27.00526 21.95821 26.47687 27.86820 27.03570 23.91624
+#&gt; Camaro Z28       13.48879 14.26750 15.80876 14.58134 14.54991 14.16212 14.90464
+#&gt; Pontiac Firebird 16.06674 16.75329 15.26705 15.22047 16.91750 15.85567 15.11960
+#&gt; Maserati Bora    24.75042 14.54118 16.73050 17.24715 14.33267 13.79177 14.54958</div><div class='input'>
 <span class='co'>## Alternal Matrix Interface</span>
 
 <span class='co'># Train model</span>
