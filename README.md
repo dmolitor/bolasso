@@ -26,7 +26,7 @@ devtools::install_github("dmolitor/bolasso")
 ## Variable selection with bolasso
 
 To illustrate the usage of bolasso, we’ll use the [Pima Indians Diabetes
-dataset](https://github.com/jbrownlee/Datasets/blob/master/pima-indians-diabetes.names)
+dataset](http://math.furman.edu/~dcs/courses/math47/R/library/mlbench/html/PimaIndiansDiabetes.html)
 to determine which factors are important predictors of testing positive
 for diabetes. For a full description of the input variables, see the
 link above.
@@ -37,10 +37,9 @@ link above.
 library(bolasso)
 library(readr)
 
-diabetes <- read_csv(
-  "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.csv",
-  col_names = c(paste0("V", 1:8), "outcome")
-)
+data(PimaIndiansDiabetes, package = "mlbench")
+# Quick overview of the dataset
+str(PimaIndiansDiabetes)
 ```
 
 First, we run 100-fold bootstrapped Lasso with the `glmnet`
@@ -48,18 +47,17 @@ implementation. We can get a rough estimate of the elapsed time using
 `Sys.time()`.
 
 ``` r
-start.time <- Sys.time()
-
-model <- bolasso(
-  outcome ~ .,
-  data = diabetes,
-  n.boot = 100, 
-  implement = "glmnet",
-  family = "binomial"
-)
-
-Sys.time() - start.time
-#> Time difference of 29.13701 secs
+system.time({
+  model <- bolasso(
+    diabetes ~ .,
+    data = PimaIndiansDiabetes,
+    n.boot = 100, 
+    implement = "glmnet",
+    family = "binomial"
+  )
+})
+#>    user  system elapsed 
+#>   18.66    0.08   18.78
 ```
 
 We can get a quick overview of the model by printing the `bolasso`
@@ -92,24 +90,24 @@ selected_vars(model,
 #> # A tibble: 7 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
-#> 1 Intercept   -8.20  
-#> 2 V1           0.120 
-#> 3 V2           0.0347
-#> 4 V3          -0.0118
-#> 5 V6           0.0866
-#> 6 V7           0.849 
-#> 7 V8           0.0139
+#> 1 Intercept   -8.15  
+#> 2 pregnant     0.119 
+#> 3 glucose      0.0348
+#> 4 pressure    -0.0113
+#> 5 mass         0.0821
+#> 6 pedigree     0.849 
+#> 7 age          0.0138
 selected_vars(model,
               threshold = 1,
               select = "lambda.min")
 #> # A tibble: 5 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
-#> 1 Intercept   -8.20  
-#> 2 V1           0.120 
-#> 3 V2           0.0347
-#> 4 V3          -0.0118
-#> 5 V6           0.0866
+#> 1 Intercept   -8.15  
+#> 2 pregnant     0.119 
+#> 3 glucose      0.0348
+#> 4 mass         0.0821
+#> 5 pedigree     0.849
 ```
 
 ### Plotting selected variables
@@ -144,22 +142,21 @@ We can now run the code from above, unaltered, and it will execute in
 parallel.
 
 ``` r
-start.time <- Sys.time()
-
-model <- bolasso(
-  outcome ~ .,
-  data = diabetes,
-  n.boot = 100, 
-  implement = "glmnet",
-  family = "binomial"
-)
-
-Sys.time() - start.time
-#> Time difference of 13.5281 secs
+system.time({
+  model <- bolasso(
+    diabetes ~ .,
+    data = PimaIndiansDiabetes,
+    n.boot = 100, 
+    implement = "glmnet",
+    family = "binomial"
+  )
+})
+#>    user  system elapsed 
+#>    0.10    0.05    5.59
 ```
 
 ## References
 
-<a id="1">\[1\]</a> Bach, Francis. “Bolasso: Model Consistent Lasso
+<a id="1">\[1\]</a>Bach, Francis. “Bolasso: Model Consistent Lasso
 Estimation through the Bootstrap.” ArXiv:0804.1302 \[Cs, Math, Stat\],
 April 8, 2008. <http://arxiv.org/abs/0804.1302>.

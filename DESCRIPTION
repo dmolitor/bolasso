@@ -23,6 +23,8 @@ Imports:
     Rdpack,
     stats,
     tibble
+Suggests:
+    mlbench
 RdMacros: Rdpack
 License: MIT + file LICENSE
 Encoding: UTF-8
