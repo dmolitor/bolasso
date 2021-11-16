@@ -42,17 +42,17 @@ for diabetes. For a full description of the input variables, see the link above.
 
 ### Load requisite packages and data
 
-```{r echo=TRUE, message=FALSE, warning=FALSE, results='hide'}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(bolasso)
-library(readr)
 
 data(PimaIndiansDiabetes, package = "mlbench")
+
 # Quick overview of the dataset
 str(PimaIndiansDiabetes)
 ```
 
 First, we run 100-fold bootstrapped Lasso with the `glmnet` implementation. We
-can get a rough estimate of the elapsed time using `Sys.time()`.
+can get a rough estimate of the elapsed time using `system.time()`.
 
 ```{r}
 system.time({
@@ -130,6 +130,6 @@ system.time({
 
 ## References
 
-<a id="1">[1]</a>Bach, Francis. “Bolasso: Model Consistent Lasso Estimation 
+<a id="1">[1]</a> Bach, Francis. “Bolasso: Model Consistent Lasso Estimation 
 through the Bootstrap.” ArXiv:0804.1302 [Cs, Math, Stat], April 8, 2008. 
 http://arxiv.org/abs/0804.1302.

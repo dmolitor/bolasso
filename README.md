@@ -35,16 +35,26 @@ link above.
 
 ``` r
 library(bolasso)
-library(readr)
 
 data(PimaIndiansDiabetes, package = "mlbench")
+
 # Quick overview of the dataset
 str(PimaIndiansDiabetes)
+#> 'data.frame':    768 obs. of  9 variables:
+#>  $ pregnant: num  6 1 8 1 0 5 3 10 2 8 ...
+#>  $ glucose : num  148 85 183 89 137 116 78 115 197 125 ...
+#>  $ pressure: num  72 66 64 66 40 74 50 0 70 96 ...
+#>  $ triceps : num  35 29 0 23 35 0 32 0 45 0 ...
+#>  $ insulin : num  0 0 0 94 168 0 88 0 543 0 ...
+#>  $ mass    : num  33.6 26.6 23.3 28.1 43.1 25.6 31 35.3 30.5 0 ...
+#>  $ pedigree: num  0.627 0.351 0.672 0.167 2.288 ...
+#>  $ age     : num  50 31 32 21 33 30 26 29 53 54 ...
+#>  $ diabetes: Factor w/ 2 levels "neg","pos": 2 1 2 1 2 1 2 1 2 2 ...
 ```
 
 First, we run 100-fold bootstrapped Lasso with the `glmnet`
 implementation. We can get a rough estimate of the elapsed time using
-`Sys.time()`.
+`system.time()`.
 
 ``` r
 system.time({
@@ -57,7 +67,7 @@ system.time({
   )
 })
 #>    user  system elapsed 
-#>   18.66    0.08   18.78
+#>   18.16    0.04   18.20
 ```
 
 We can get a quick overview of the model by printing the `bolasso`
@@ -152,11 +162,11 @@ system.time({
   )
 })
 #>    user  system elapsed 
-#>    0.10    0.05    5.59
+#>    0.16    0.03    5.33
 ```
 
 ## References
 
-<a id="1">\[1\]</a>Bach, Francis. “Bolasso: Model Consistent Lasso
+<a id="1">\[1\]</a> Bach, Francis. “Bolasso: Model Consistent Lasso
 Estimation through the Bootstrap.” ArXiv:0804.1302 \[Cs, Math, Stat\],
 April 8, 2008. <http://arxiv.org/abs/0804.1302>.
