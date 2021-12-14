@@ -11,6 +11,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "75%"
 )
+
+set.seed(123) # Reproducible results
 ```
 
 # bolasso <a href='https://dmolitor.github.io/bolasso/'><img src='man/figures/logo.png' align="right" height="139" /></a>
@@ -18,6 +20,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg)](https://github.com/dmolitor/bolasso/actions)
+[![pkgdown](https://github.com/dmolitor/bolasso/workflows/pkgdown/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 <!-- badges: end -->
 
 The goal of bolasso is to implement model-consistent Lasso estimation via the 
@@ -34,37 +37,34 @@ devtools::install_github("dmolitor/bolasso")
 ## Variable selection with bolasso
 
 To illustrate the usage of bolasso, we'll use the 
-[Pima Indians Diabetes dataset](https://github.com/jbrownlee/Datasets/blob/master/pima-indians-diabetes.names)
+[Pima Indians Diabetes dataset](http://math.furman.edu/~dcs/courses/math47/R/library/mlbench/html/PimaIndiansDiabetes.html)
 to determine which factors are important predictors of testing positive
 for diabetes. For a full description of the input variables, see the link above.
 
 ### Load requisite packages and data
 
-```{r echo=TRUE, message=FALSE, warning=FALSE, results='hide'}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 library(bolasso)
-library(readr)
 
-diabetes <- read_csv(
-  "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.csv",
-  col_names = c(paste0("V", 1:8), "outcome")
-)
+data(PimaIndiansDiabetes, package = "mlbench")
+
+# Quick overview of the dataset
+str(PimaIndiansDiabetes)
 ```
 
 First, we run 100-fold bootstrapped Lasso with the `glmnet` implementation. We
-can get a rough estimate of the elapsed time using `Sys.time()`.
+can get a rough estimate of the elapsed time using `system.time()`.
 
 ```{r}
-start.time <- Sys.time()
-
-model <- bolasso(
-  outcome ~ .,
-  data = diabetes,
-  n.boot = 100, 
-  implement = "glmnet",
-  family = "binomial"
-)
-
-Sys.time() - start.time
+system.time({
+  model <- bolasso(
+    diabetes ~ .,
+    data = PimaIndiansDiabetes,
+    n.boot = 100, 
+    implement = "glmnet",
+    family = "binomial"
+  )
+})
 ```
 
 We can get a quick overview of the model by printing the `bolasso` object.
@@ -118,20 +118,19 @@ future.apply::future_lapply(1:100, function(i) i)
 We can now run the code from above, unaltered, and it will execute in parallel.
 
 ```{r}
-start.time <- Sys.time()
-
-model <- bolasso(
-  outcome ~ .,
-  data = diabetes,
-  n.boot = 100, 
-  implement = "glmnet",
-  family = "binomial"
-)
-
-Sys.time() - start.time
+system.time({
+  model <- bolasso(
+    diabetes ~ .,
+    data = PimaIndiansDiabetes,
+    n.boot = 100, 
+    implement = "glmnet",
+    family = "binomial"
+  )
+})
 ```
 
 ## References
 
-<a id="1">[1]</a>
-Bach, Francis. “Bolasso: Model Consistent Lasso Estimation through the Bootstrap.” ArXiv:0804.1302 [Cs, Math, Stat], April 8, 2008. http://arxiv.org/abs/0804.1302.
+<a id="1">[1]</a> Bach, Francis. “Bolasso: Model Consistent Lasso Estimation 
+through the Bootstrap.” ArXiv:0804.1302 [Cs, Math, Stat], April 8, 2008. 
+http://arxiv.org/abs/0804.1302.

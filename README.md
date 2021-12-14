@@ -8,6 +8,7 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg)](https://github.com/dmolitor/bolasso/actions)
+[![pkgdown](https://github.com/dmolitor/bolasso/workflows/pkgdown/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 <!-- badges: end -->
 
 The goal of bolasso is to implement model-consistent Lasso estimation
@@ -26,7 +27,7 @@ devtools::install_github("dmolitor/bolasso")
 ## Variable selection with bolasso
 
 To illustrate the usage of bolasso, we’ll use the [Pima Indians Diabetes
-dataset](https://github.com/jbrownlee/Datasets/blob/master/pima-indians-diabetes.names)
+dataset](http://math.furman.edu/~dcs/courses/math47/R/library/mlbench/html/PimaIndiansDiabetes.html)
 to determine which factors are important predictors of testing positive
 for diabetes. For a full description of the input variables, see the
 link above.
@@ -35,31 +36,40 @@ link above.
 
 ``` r
 library(bolasso)
-library(readr)
 
-diabetes <- read_csv(
-  "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.csv",
-  col_names = c(paste0("V", 1:8), "outcome")
-)
+data(PimaIndiansDiabetes, package = "mlbench")
+
+# Quick overview of the dataset
+str(PimaIndiansDiabetes)
+#> 'data.frame':    768 obs. of  9 variables:
+#>  $ pregnant: num  6 1 8 1 0 5 3 10 2 8 ...
+#>  $ glucose : num  148 85 183 89 137 116 78 115 197 125 ...
+#>  $ pressure: num  72 66 64 66 40 74 50 0 70 96 ...
+#>  $ triceps : num  35 29 0 23 35 0 32 0 45 0 ...
+#>  $ insulin : num  0 0 0 94 168 0 88 0 543 0 ...
+#>  $ mass    : num  33.6 26.6 23.3 28.1 43.1 25.6 31 35.3 30.5 0 ...
+#>  $ pedigree: num  0.627 0.351 0.672 0.167 2.288 ...
+#>  $ age     : num  50 31 32 21 33 30 26 29 53 54 ...
+#>  $ diabetes: Factor w/ 2 levels "neg","pos": 2 1 2 1 2 1 2 1 2 2 ...
 ```
 
 First, we run 100-fold bootstrapped Lasso with the `glmnet`
 implementation. We can get a rough estimate of the elapsed time using
-`Sys.time()`.
+`system.time()`.
 
 ``` r
-start.time <- Sys.time()
-
-model <- bolasso(
-  outcome ~ .,
-  data = diabetes,
-  n.boot = 100, 
-  implement = "glmnet",
-  family = "binomial"
-)
-
-Sys.time() - start.time
-#> Time difference of 29.13701 secs
+system.time({
+  model <- bolasso(
+    diabetes ~ .,
+    data = PimaIndiansDiabetes,
+    n.boot = 100, 
+    implement = "glmnet",
+    family = "binomial"
+  )
+})
+#> Loaded glmnet 4.1-3
+#>    user  system elapsed 
+#>   19.83    0.12   19.96
 ```
 
 We can get a quick overview of the model by printing the `bolasso`
@@ -92,24 +102,25 @@ selected_vars(model,
 #> # A tibble: 7 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
-#> 1 Intercept   -8.20  
-#> 2 V1           0.120 
-#> 3 V2           0.0347
-#> 4 V3          -0.0118
-#> 5 V6           0.0866
-#> 6 V7           0.849 
-#> 7 V8           0.0139
+#> 1 Intercept   -8.15  
+#> 2 pregnant     0.119 
+#> 3 glucose      0.0348
+#> 4 pressure    -0.0113
+#> 5 mass         0.0821
+#> 6 pedigree     0.849 
+#> 7 age          0.0138
+
 selected_vars(model,
               threshold = 1,
               select = "lambda.min")
 #> # A tibble: 5 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
-#> 1 Intercept   -8.20  
-#> 2 V1           0.120 
-#> 3 V2           0.0347
-#> 4 V3          -0.0118
-#> 5 V6           0.0866
+#> 1 Intercept   -8.15  
+#> 2 pregnant     0.119 
+#> 3 glucose      0.0348
+#> 4 mass         0.0821
+#> 5 pedigree     0.849
 ```
 
 ### Plotting selected variables
@@ -144,18 +155,17 @@ We can now run the code from above, unaltered, and it will execute in
 parallel.
 
 ``` r
-start.time <- Sys.time()
-
-model <- bolasso(
-  outcome ~ .,
-  data = diabetes,
-  n.boot = 100, 
-  implement = "glmnet",
-  family = "binomial"
-)
-
-Sys.time() - start.time
-#> Time difference of 13.5281 secs
+system.time({
+  model <- bolasso(
+    diabetes ~ .,
+    data = PimaIndiansDiabetes,
+    n.boot = 100, 
+    implement = "glmnet",
+    family = "binomial"
+  )
+})
+#>    user  system elapsed 
+#>    0.12    0.05    5.55
 ```
 
 ## References
