@@ -8,6 +8,7 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg)](https://github.com/dmolitor/bolasso/actions)
+[![pkgdown](https://github.com/dmolitor/bolasso/workflows/pkgdown/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 <!-- badges: end -->
 
 The goal of bolasso is to implement model-consistent Lasso estimation
@@ -66,8 +67,9 @@ system.time({
     family = "binomial"
   )
 })
+#> Loaded glmnet 4.1-3
 #>    user  system elapsed 
-#>   18.16    0.04   18.20
+#>   19.83    0.12   19.96
 ```
 
 We can get a quick overview of the model by printing the `bolasso`
@@ -107,6 +109,7 @@ selected_vars(model,
 #> 5 mass         0.0821
 #> 6 pedigree     0.849 
 #> 7 age          0.0138
+
 selected_vars(model,
               threshold = 1,
               select = "lambda.min")
@@ -162,7 +165,7 @@ system.time({
   )
 })
 #>    user  system elapsed 
-#>    0.16    0.03    5.33
+#>    0.12    0.05    5.55
 ```
 
 ## References

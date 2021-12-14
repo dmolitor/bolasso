@@ -35,7 +35,8 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
       pb()
       g
     },
-    future.seed = TRUE
+    future.seed = TRUE,
+    future.packages = c("Matrix", implement, "progressr")
   )
 }
 
