@@ -30,6 +30,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -42,18 +44,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">bolasso</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -70,50 +66,59 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="bolasso-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#bolasso-" class="anchor"></a>bolasso <a href="https://dmolitor.github.io/bolasso/"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<div class="section level1">
+<div class="page-header"><h1 id="bolasso-">bolasso <a href="https://dmolitor.github.io/bolasso/" class="external-link"><img src="reference/figures/logo.png" align="right" height="139"></a>
+<a class="anchor" aria-label="anchor" href="#bolasso-"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of bolasso is to implement model-consistent Lasso estimation via the bootstrap <a href="#1"><br><span class="math display">1</span><br></a>.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<p>The goal of bolasso is to implement model-consistent Lasso estimation via the bootstrap <a href="#1">[1]</a>.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"dmolitor/bolasso"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="variable-selection-with-bolasso" class="section level2">
-<h2 class="hasAnchor">
-<a href="#variable-selection-with-bolasso" class="anchor"></a>Variable selection with bolasso</h2>
-<p>To illustrate the usage of bolasso, we’ll use the <a href="https://github.com/jbrownlee/Datasets/blob/master/pima-indians-diabetes.names">Pima Indians Diabetes dataset</a> to determine which factors are important predictors of testing positive for diabetes. For a full description of the input variables, see the link above.</p>
-<div id="load-requisite-packages-and-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#load-requisite-packages-and-data" class="anchor"></a>Load requisite packages and data</h3>
+<div class="section level2">
+<h2 id="variable-selection-with-bolasso">Variable selection with bolasso<a class="anchor" aria-label="anchor" href="#variable-selection-with-bolasso"></a>
+</h2>
+<p>To illustrate the usage of bolasso, we’ll use the <a href="http://math.furman.edu/~dcs/courses/math47/R/library/mlbench/html/PimaIndiansDiabetes.html" class="external-link">Pima Indians Diabetes dataset</a> to determine which factors are important predictors of testing positive for diabetes. For a full description of the input variables, see the link above.</p>
+<div class="section level3">
+<h3 id="load-requisite-packages-and-data">Load requisite packages and data<a class="anchor" aria-label="anchor" href="#load-requisite-packages-and-data"></a>
+</h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">bolasso</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">readr</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">bolasso</span><span class="op">)</span>
 
-<span class="va">diabetes</span> <span class="op">&lt;-</span> <span class="fu">read_csv</span><span class="op">(</span>
-  <span class="st">"https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.csv"</span>,
-  col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"V"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span>, <span class="st">"outcome"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
-<p>First, we run 100-fold bootstrapped Lasso with the <code>glmnet</code> implementation. We can get a rough estimate of the elapsed time using <code><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time()</a></code>.</p>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">PimaIndiansDiabetes</span>, package <span class="op">=</span> <span class="st">"mlbench"</span><span class="op">)</span>
+
+<span class="co"># Quick overview of the dataset</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">PimaIndiansDiabetes</span><span class="op">)</span>
+<span class="co">#&gt; 'data.frame':    768 obs. of  9 variables:</span>
+<span class="co">#&gt;  $ pregnant: num  6 1 8 1 0 5 3 10 2 8 ...</span>
+<span class="co">#&gt;  $ glucose : num  148 85 183 89 137 116 78 115 197 125 ...</span>
+<span class="co">#&gt;  $ pressure: num  72 66 64 66 40 74 50 0 70 96 ...</span>
+<span class="co">#&gt;  $ triceps : num  35 29 0 23 35 0 32 0 45 0 ...</span>
+<span class="co">#&gt;  $ insulin : num  0 0 0 94 168 0 88 0 543 0 ...</span>
+<span class="co">#&gt;  $ mass    : num  33.6 26.6 23.3 28.1 43.1 25.6 31 35.3 30.5 0 ...</span>
+<span class="co">#&gt;  $ pedigree: num  0.627 0.351 0.672 0.167 2.288 ...</span>
+<span class="co">#&gt;  $ age     : num  50 31 32 21 33 30 26 29 53 54 ...</span>
+<span class="co">#&gt;  $ diabetes: Factor w/ 2 levels "neg","pos": 2 1 2 1 2 1 2 1 2 2 ...</span></code></pre></div>
+<p>First, we run 100-fold bootstrapped Lasso with the <code>glmnet</code> implementation. We can get a rough estimate of the elapsed time using <code><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time()</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">start.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span>
-  <span class="va">outcome</span> <span class="op">~</span> <span class="va">.</span>,
-  data <span class="op">=</span> <span class="va">diabetes</span>,
-  n.boot <span class="op">=</span> <span class="fl">100</span>, 
-  implement <span class="op">=</span> <span class="st">"glmnet"</span>,
-  family <span class="op">=</span> <span class="st">"binomial"</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start.time</span>
-<span class="co">#&gt; Time difference of 29.13701 secs</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span>
+  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span>
+    <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,
+    data <span class="op">=</span> <span class="va">PimaIndiansDiabetes</span>,
+    n.boot <span class="op">=</span> <span class="fl">100</span>, 
+    implement <span class="op">=</span> <span class="st">"glmnet"</span>,
+    family <span class="op">=</span> <span class="st">"binomial"</span>
+  <span class="op">)</span>
+<span class="op">}</span><span class="op">)</span>
+<span class="co">#&gt; Loaded glmnet 4.1-3</span>
+<span class="co">#&gt;    user  system elapsed </span>
+<span class="co">#&gt;   19.83    0.12   19.96</span></code></pre></div>
 <p>We can get a quick overview of the model by printing the <code>bolasso</code> object.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span>
@@ -127,9 +132,9 @@
 <span class="co">#&gt;    - 6/8 predictors selected with 90% threshold</span>
 <span class="co">#&gt;    - 4/8 predictors selected with 100% threshold</span></code></pre></div>
 </div>
-<div id="extracting-selected-variables" class="section level3">
-<h3 class="hasAnchor">
-<a href="#extracting-selected-variables" class="anchor"></a>Extracting selected variables</h3>
+<div class="section level3">
+<h3 id="extracting-selected-variables">Extracting selected variables<a class="anchor" aria-label="anchor" href="#extracting-selected-variables"></a>
+</h3>
 <p>Next, we can extract all variables that were selected in 90% and 100% of the bootstrapped Lasso models. We can also pass any relevant arguments to <code>predict</code> on the <code>cv.glmnet</code> or <code>cv.gamlr</code> model objects. In this case we will use the lambda value that minimizes OOS error.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>,
@@ -138,98 +143,111 @@
 <span class="co">#&gt; # A tibble: 7 x 2</span>
 <span class="co">#&gt;   variable  mean_coef</span>
 <span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 Intercept   -8.20  </span>
-<span class="co">#&gt; 2 V1           0.120 </span>
-<span class="co">#&gt; 3 V2           0.0347</span>
-<span class="co">#&gt; 4 V3          -0.0118</span>
-<span class="co">#&gt; 5 V6           0.0866</span>
-<span class="co">#&gt; 6 V7           0.849 </span>
-<span class="co">#&gt; 7 V8           0.0139</span>
+<span class="co">#&gt; 1 Intercept   -8.15  </span>
+<span class="co">#&gt; 2 pregnant     0.119 </span>
+<span class="co">#&gt; 3 glucose      0.0348</span>
+<span class="co">#&gt; 4 pressure    -0.0113</span>
+<span class="co">#&gt; 5 mass         0.0821</span>
+<span class="co">#&gt; 6 pedigree     0.849 </span>
+<span class="co">#&gt; 7 age          0.0138</span>
+
 <span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>,
               threshold <span class="op">=</span> <span class="fl">1</span>,
               select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 5 x 2</span>
 <span class="co">#&gt;   variable  mean_coef</span>
 <span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 Intercept   -8.20  </span>
-<span class="co">#&gt; 2 V1           0.120 </span>
-<span class="co">#&gt; 3 V2           0.0347</span>
-<span class="co">#&gt; 4 V3          -0.0118</span>
-<span class="co">#&gt; 5 V6           0.0866</span></code></pre></div>
+<span class="co">#&gt; 1 Intercept   -8.15  </span>
+<span class="co">#&gt; 2 pregnant     0.119 </span>
+<span class="co">#&gt; 3 glucose      0.0348</span>
+<span class="co">#&gt; 4 mass         0.0821</span>
+<span class="co">#&gt; 5 pedigree     0.849</span></code></pre></div>
 </div>
-<div id="plotting-selected-variables" class="section level3">
-<h3 class="hasAnchor">
-<a href="#plotting-selected-variables" class="anchor"></a>Plotting selected variables</h3>
+<div class="section level3">
+<h3 id="plotting-selected-variables">Plotting selected variables<a class="anchor" aria-label="anchor" href="#plotting-selected-variables"></a>
+</h3>
 <p>We can also quickly plot the selected variables at the 90% and 100% threshold values.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="75%"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-2.png" width="75%"></p>
 </div>
-<div id="parallelizing-bolasso" class="section level3">
-<h3 class="hasAnchor">
-<a href="#parallelizing-bolasso" class="anchor"></a>Parallelizing bolasso</h3>
-<p>We can execute <code>bolasso</code> in parallel via the <a href="https://cran.r-project.org/web/packages/future/index.html">future</a> package. To do so we can copy the code from above with only one minor tweak shown below.</p>
+<div class="section level3">
+<h3 id="parallelizing-bolasso">Parallelizing bolasso<a class="anchor" aria-label="anchor" href="#parallelizing-bolasso"></a>
+</h3>
+<p>We can execute <code>bolasso</code> in parallel via the <a href="https://cran.r-project.org/web/packages/future/index.html" class="external-link">future</a> package. To do so we can copy the code from above with only one minor tweak shown below.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="st">"multisession"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"multisession"</span><span class="op">)</span></code></pre></div>
 <p>We can now run the code from above, unaltered, and it will execute in parallel.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">start.time</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span>
-  <span class="va">outcome</span> <span class="op">~</span> <span class="va">.</span>,
-  data <span class="op">=</span> <span class="va">diabetes</span>,
-  n.boot <span class="op">=</span> <span class="fl">100</span>, 
-  implement <span class="op">=</span> <span class="st">"glmnet"</span>,
-  family <span class="op">=</span> <span class="st">"binomial"</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="va">start.time</span>
-<span class="co">#&gt; Time difference of 13.5281 secs</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span>
+  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span>
+    <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,
+    data <span class="op">=</span> <span class="va">PimaIndiansDiabetes</span>,
+    n.boot <span class="op">=</span> <span class="fl">100</span>, 
+    implement <span class="op">=</span> <span class="st">"glmnet"</span>,
+    family <span class="op">=</span> <span class="st">"binomial"</span>
+  <span class="op">)</span>
+<span class="op">}</span><span class="op">)</span>
+<span class="co">#&gt;    user  system elapsed </span>
+<span class="co">#&gt;    0.12    0.05    5.55</span></code></pre></div>
 </div>
 </div>
-<div id="references" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
-<p><a id="1"><br><span class="math display">1</span><br></a> Bach, Francis. “Bolasso: Model Consistent Lasso Estimation through the Bootstrap.” ArXiv:0804.1302 <br><span class="math display"><em>C</em><em>s</em>, <em>M</em><em>a</em><em>t</em><em>h</em>, <em>S</em><em>t</em><em>a</em><em>t</em></span><br>, April 8, 2008. <a href="http://arxiv.org/abs/0804.1302" class="uri">http://arxiv.org/abs/0804.1302</a>.</p>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p><a id="1">[1]</a> Bach, Francis. “Bolasso: Model Consistent Lasso Estimation through the Bootstrap.” ArXiv:0804.1302 [Cs, Math, Stat], April 8, 2008. <a href="http://arxiv.org/abs/0804.1302" class="external-link uri">http://arxiv.org/abs/0804.1302</a>.</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing bolasso</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Daniel Molitor <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://github.com/dmolitor/bolasso/actions"><img src="https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://github.com/dmolitor/bolasso/actions" class="external-link"><img src="https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://github.com/dmolitor/bolasso/actions" class="external-link"><img src="https://github.com/dmolitor/bolasso/workflows/pkgdown/badge.svg" alt="pkgdown"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Daniel Molitor.</p>
+  <p></p>
+<p>Developed by Daniel Molitor.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -237,6 +255,8 @@
 
   
 
+
+  
 
   </body>
 </html>
