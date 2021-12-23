@@ -1,6 +1,6 @@
 Package: bolasso
 Title: Model Consistent Lasso Estimation through the Bootstrap
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: 
     person(given = "Daniel",
            family = "Molitor",
@@ -24,6 +24,7 @@ Imports:
     stats,
     tibble
 Suggests:
+    testthat (>= 3.0.0),
     mlbench
 RdMacros: Rdpack
 License: MIT + file LICENSE
@@ -31,3 +32,4 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
+Config/testthat/edition: 3
