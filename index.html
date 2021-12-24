@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="Implements the bolasso algorithm for consistent variable selection 
     and estimation accuracy. Includes support for many parallel backends via the 
-    future package. For details see: Bach (2008 DBLP), 
+    future package. For details see: Bach (2008),
     Bolasso: model consistent Lasso estimation through the bootstrap, 
     &lt;arXiv:0804.1302&gt;.">
 <title>Model Consistent Lasso Estimation Through the Bootstrap • bolasso</title>
@@ -24,7 +24,7 @@
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Model Consistent Lasso Estimation Through the Bootstrap">
 <meta property="og:description" content="Implements the bolasso algorithm for consistent variable selection 
     and estimation accuracy. Includes support for many parallel backends via the 
-    future package. For details see: Bach (2008 DBLP), 
+    future package. For details see: Bach (2008),
     Bolasso: model consistent Lasso estimation through the bootstrap, 
     &lt;arXiv:0804.1302&gt;.">
 <meta property="og:image" content="/logo.png">
@@ -119,7 +119,7 @@
 <span class="op">}</span><span class="op">)</span>
 <span class="co">#&gt; Loaded glmnet 4.1-3</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   19.71    0.07   19.79</span></code></pre></div>
+<span class="co">#&gt;   42.32    0.11   43.00</span></code></pre></div>
 <p>We can get a quick overview of the model by printing the <code>bolasso</code> object.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span>
@@ -178,7 +178,7 @@
 <div class="section level3">
 <h3 id="parallelizing-bolasso">Parallelizing bolasso<a class="anchor" aria-label="anchor" href="#parallelizing-bolasso"></a>
 </h3>
-<p>We can execute <code>bolasso</code> in parallel via the <a href="https://cran.r-project.org/web/packages/future/index.html" class="external-link">future</a> package. To do so we can copy the code from above with only one minor tweak shown below.</p>
+<p>We can execute <code>bolasso</code> in parallel via the <a href="https://CRAN.R-project.org/package=future" class="external-link">future</a> package. To do so we can copy the code from above with only one minor tweak shown below.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"multisession"</span><span class="op">)</span></code></pre></div>
 <p>We can now run the code from above, unaltered, and it will execute in parallel.</p>
@@ -193,13 +193,13 @@
   <span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;    0.14    0.02    5.45</span></code></pre></div>
+<span class="co">#&gt;    0.17    0.02    5.56</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p><a id="1">[1]</a> Bach, Francis. “Bolasso: Model Consistent Lasso Estimation through the Bootstrap.” ArXiv:0804.1302 [Cs, Math, Stat], April 8, 2008. <a href="http://arxiv.org/abs/0804.1302" class="external-link uri">http://arxiv.org/abs/0804.1302</a>.</p>
+<p><a id="1">[1]</a> Bach, Francis. “Bolasso: Model Consistent Lasso Estimation through the Bootstrap.” ArXiv:0804.1302 [Cs, Math, Stat], April 8, 2008. <a href="https://arxiv.org/abs/0804.1302" class="external-link uri">https://arxiv.org/abs/0804.1302</a>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
@@ -228,10 +228,10 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://github.com/dmolitor/bolasso/actions" class="external-link"><img src="https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://github.com/dmolitor/bolasso/actions" class="external-link"><img src="https://github.com/dmolitor/bolasso/workflows/pkgdown/badge.svg" alt="pkgdown"></a></li>
 <li><a href="https://app.codecov.io/gh/dmolitor/bolasso?branch=main" class="external-link"><img src="https://codecov.io/gh/dmolitor/bolasso/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://CRAN.R-project.org/package=bolasso" class="external-link"><img src="https://www.r-pkg.org/badges/version/bolasso" alt="CRAN status"></a></li>
 </ul>
 </div>
 
