@@ -139,59 +139,61 @@ respective implementations and arguments that can be passed to <code>...</code>.
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Extract selected variables</span></span>
 <span class="r-in"><span class="fu"><a href="selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">bolasso_form</span>, threshold <span class="op">=</span> <span class="fl">0.9</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   variable  mean_coef</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Intercept      21.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Intercept   27.2   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hp          -<span style="color: #BB0000;">0.047</span><span style="color: #BB0000; text-decoration: underline;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> wt          -<span style="color: #BB0000;">4.08</span>  </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Bagged ensemble prediction on test data</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bolasso_form</span>,</span>
 <span class="r-in">        new.data <span class="op">=</span> <span class="va">mtcars_test</span>,</span>
 <span class="r-in">        select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                         boot1    boot2     boot3    boot4     boot5    boot6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           23.634490 19.46660 23.296169 20.56045 21.677787 18.51405</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       21.759530 19.26401 22.570195 20.28997 20.796195 18.11381</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 230            19.949583 25.00192 22.993488 21.85809 22.031604 22.60310</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SE          14.061720 17.32012 14.736112 16.24978 14.891545 15.15425</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cadillac Fleetwood   3.657769 14.69768 10.404302 13.56352  9.415715 12.91504</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental  2.083518 14.66249  9.560039 13.36735  8.701481 12.48709</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic         32.261736 26.78052 31.015617 25.71117 28.397999 25.67822</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla      33.378988 26.64524 28.374035 25.39437 27.436726 25.13162</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    12.480466 16.43225 17.112815 15.75973 15.143321 15.58482</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       11.670668 17.50094 12.903572 16.73753 13.832950 16.54293</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                         boot7    boot8    boot9    boot10   boot11   boot12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           34.859714 20.76775 13.94173 20.099603 20.82233 21.03660</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       31.828643 22.97999 13.94173 18.564172 21.39068 21.03660</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 230            13.558236 39.90981 22.67618 24.778018 29.94412 23.42378</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SE          12.278013 14.58890 15.88135 15.212310 16.65399 17.12126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cadillac Fleetwood   1.118233 12.46900 13.64593  6.650690 14.96588 15.00030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental -2.691499 12.75933 13.68024  5.405353 14.80349 14.90787</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic         45.748121 42.91090 23.72618 32.063378 31.97065 27.45300</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla      37.188355 35.40062 23.65791 27.904968 30.90393 25.73329</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    24.697402 16.36203 14.65126 16.037816 17.99115 17.25733</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       -2.499668 16.08049 15.96478 12.181541 19.50916 15.47433</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       boot13   boot14   boot15   boot16   boot17    boot18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           19.25972 23.42131 21.03323 21.65285 21.09482 23.370558</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       18.93583 23.34711 20.58433 21.01387 20.60457 22.272929</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 230            23.96029 22.55895 21.45382 20.81391 23.04185 20.529456</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SE          14.59418 17.46229 18.04171 15.63514 16.81188 14.603523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cadillac Fleetwood  13.07610 15.69865 15.80769 11.83318 14.00928  7.451267</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental 12.85509 15.07990 15.43867 11.05912 13.46115  6.606850</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic         25.90994 28.43412 24.42565 26.13187 26.91145 29.105203</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla      23.60458 27.63156 23.95685 25.14113 26.21080 27.973030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    16.90589 17.81182 18.46915 16.36797 17.35125 14.385401</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       16.31376 11.78768 17.94995 12.58402 14.46218 14.434864</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         boot1     boot2     boot3     boot4    boot5     boot6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       23.644560 21.388571 20.358116 20.972528 22.68057 20.787645</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental  8.784877  8.597955  9.343796  8.777839 11.19919  6.840606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial    8.171548  8.289624  9.388172  8.656452 10.93344  6.836580</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona       26.752496 31.351424 25.791595 27.184781 25.96792 27.023569</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dodge Challenger    19.120912 18.659944 18.060018 17.468552 19.31797 17.603522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AMC Javelin         19.513047 22.985234 18.370341 18.487985 19.58160 18.363549</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28          14.136871 12.674783 14.638664 13.842982 15.09053 13.517010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    15.991929 16.893282 16.466754 16.008954 17.45866 15.683764</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9           33.007133 31.701820 28.230900 28.473714 28.66737 29.488317</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       11.034076 -6.817640 14.867625 14.172756 12.86328 13.788139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         boot7     boot8    boot9    boot10    boot11    boot12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       20.586708 20.560185 21.01413 22.163923 19.666553 20.829037</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental  9.529867  9.411719 12.13900  7.683959  8.713384  7.994905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial    9.354100  9.102798 11.85880  7.593633  7.997630  7.312644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona       27.050695 25.089718 28.94630 25.908285 30.415963 31.995634</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dodge Challenger    17.596372 18.991315 18.66873 18.676292 15.702424 17.329441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AMC Javelin         18.551067 19.285890 19.01541 19.101450 15.690219 18.633026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28          13.862294 13.735809 17.39459 13.931444 14.168614 11.713639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    15.913358 16.893828 16.33920 16.070140 12.277919 15.194288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9           29.074728 28.759828 32.64050 29.426901 33.322289 30.868247</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       11.125636 11.804403 11.50749 12.209294  8.360078  9.479482</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       boot13    boot14    boot15    boot16    boot17   boot18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       20.81270 20.732359 20.440081 20.156246 15.886862 20.87350</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental 10.52967  9.941445  9.856206  4.975690  8.029345 12.14497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial   10.41874 10.024477 10.966962  4.961956  6.781118 12.12705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona       24.14251 28.063701 24.927970 26.518899 28.989700 28.52693</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dodge Challenger    17.89458 17.493347 16.080131 17.534670 15.077864 17.76562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AMC Javelin         18.15507 18.209491 21.038380 18.387893 17.010905 18.01619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28          14.67799 14.978282 19.420946 12.735231  9.498416 15.05392</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    16.31017 16.047028 14.428595 15.262942 12.711066 16.08315</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9           26.49638 29.532660 32.095662 28.438037 30.104215 30.36523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       13.38722 15.625099 -5.575738 12.886280  7.430002 14.05939</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                        boot19    boot20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           23.326044 19.963582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       21.932690 19.463530</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 230            21.105021 27.853275</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SE          13.781404 14.542168</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cadillac Fleetwood   5.599487  9.563645</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental  4.475102  8.551324</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic         30.542381 29.614284</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla      29.114558 31.300915</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    13.797473 14.154015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       13.200197 14.713361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       20.499438 22.593902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental  8.424775 10.029108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial    8.240081  9.836698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona       28.630112 26.232080</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dodge Challenger    17.501705 18.986417</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AMC Javelin         18.206477 19.293807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28          14.506161 14.801208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    15.329656 17.014267</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9           31.445301 29.136823</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       13.979657 12.909015</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co">## Alternal Matrix Interface</span></span>
 <span class="r-in"></span>
@@ -208,59 +210,61 @@ respective implementations and arguments that can be passed to <code>...</code>.
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Extract selected variables</span></span>
 <span class="r-in"><span class="fu"><a href="selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">bolasso_mat</span>, threshold <span class="op">=</span> <span class="fl">0.9</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 2</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   variable  mean_coef</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Intercept      21.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Intercept   27.2   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hp          -<span style="color: #BB0000;">0.047</span><span style="color: #BB0000; text-decoration: underline;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> wt          -<span style="color: #BB0000;">4.08</span>  </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Bagged ensemble prediction on test data</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bolasso_mat</span>,</span>
 <span class="r-in">        new.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="fl">1</span>, <span class="va">mtcars_test</span><span class="op">)</span>,</span>
 <span class="r-in">        select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                         boot1    boot2     boot3    boot4     boot5    boot6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           23.634490 19.46660 23.296169 20.56045 21.677787 18.51405</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       21.759530 19.26401 22.570195 20.28997 20.796195 18.11381</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 230            19.949583 25.00192 22.993488 21.85809 22.031604 22.60310</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SE          14.061720 17.32012 14.736112 16.24978 14.891545 15.15425</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cadillac Fleetwood   3.657769 14.69768 10.404302 13.56352  9.415715 12.91504</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental  2.083518 14.66249  9.560039 13.36735  8.701481 12.48709</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic         32.261736 26.78052 31.015617 25.71117 28.397999 25.67822</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla      33.378988 26.64524 28.374035 25.39437 27.436726 25.13162</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    12.480466 16.43225 17.112815 15.75973 15.143321 15.58482</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       11.670668 17.50094 12.903572 16.73753 13.832950 16.54293</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                         boot7    boot8    boot9    boot10   boot11   boot12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           34.859714 20.76775 13.94173 20.099603 20.82233 21.03660</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       31.828643 22.97999 13.94173 18.564172 21.39068 21.03660</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 230            13.558236 39.90981 22.67618 24.778018 29.94412 23.42378</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SE          12.278013 14.58890 15.88135 15.212310 16.65399 17.12126</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cadillac Fleetwood   1.118233 12.46900 13.64593  6.650690 14.96588 15.00030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental -2.691499 12.75933 13.68024  5.405353 14.80349 14.90787</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic         45.748121 42.91090 23.72618 32.063378 31.97065 27.45300</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla      37.188355 35.40062 23.65791 27.904968 30.90393 25.73329</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    24.697402 16.36203 14.65126 16.037816 17.99115 17.25733</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       -2.499668 16.08049 15.96478 12.181541 19.50916 15.47433</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       boot13   boot14   boot15   boot16   boot17    boot18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           19.25972 23.42131 21.03323 21.65285 21.09482 23.370558</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       18.93583 23.34711 20.58433 21.01387 20.60457 22.272929</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 230            23.96029 22.55895 21.45382 20.81391 23.04185 20.529456</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SE          14.59418 17.46229 18.04171 15.63514 16.81188 14.603523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cadillac Fleetwood  13.07610 15.69865 15.80769 11.83318 14.00928  7.451267</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental 12.85509 15.07990 15.43867 11.05912 13.46115  6.606850</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic         25.90994 28.43412 24.42565 26.13187 26.91145 29.105203</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla      23.60458 27.63156 23.95685 25.14113 26.21080 27.973030</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    16.90589 17.81182 18.46915 16.36797 17.35125 14.385401</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       16.31376 11.78768 17.94995 12.58402 14.46218 14.434864</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         boot1     boot2     boot3     boot4    boot5     boot6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       23.644560 21.388571 20.358116 20.972528 22.68057 20.787645</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental  8.784877  8.597955  9.343796  8.777839 11.19919  6.840606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial    8.171548  8.289624  9.388172  8.656452 10.93344  6.836580</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona       26.752496 31.351424 25.791595 27.184781 25.96792 27.023569</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dodge Challenger    19.120912 18.659944 18.060018 17.468552 19.31797 17.603522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AMC Javelin         19.513047 22.985234 18.370341 18.487985 19.58160 18.363549</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28          14.136871 12.674783 14.638664 13.842982 15.09053 13.517010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    15.991929 16.893282 16.466754 16.008954 17.45866 15.683764</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9           33.007133 31.701820 28.230900 28.473714 28.66737 29.488317</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       11.034076 -6.817640 14.867625 14.172756 12.86328 13.788139</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         boot7     boot8    boot9    boot10    boot11    boot12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       20.586708 20.560185 21.01413 22.163923 19.666553 20.829037</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental  9.529867  9.411719 12.13900  7.683959  8.713384  7.994905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial    9.354100  9.102798 11.85880  7.593633  7.997630  7.312644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona       27.050695 25.089718 28.94630 25.908285 30.415963 31.995634</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dodge Challenger    17.596372 18.991315 18.66873 18.676292 15.702424 17.329441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AMC Javelin         18.551067 19.285890 19.01541 19.101450 15.690219 18.633026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28          13.862294 13.735809 17.39459 13.931444 14.168614 11.713639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    15.913358 16.893828 16.33920 16.070140 12.277919 15.194288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9           29.074728 28.759828 32.64050 29.426901 33.322289 30.868247</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       11.125636 11.804403 11.50749 12.209294  8.360078  9.479482</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       boot13    boot14    boot15    boot16    boot17   boot18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       20.81270 20.732359 20.440081 20.156246 15.886862 20.87350</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental 10.52967  9.941445  9.856206  4.975690  8.029345 12.14497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial   10.41874 10.024477 10.966962  4.961956  6.781118 12.12705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona       24.14251 28.063701 24.927970 26.518899 28.989700 28.52693</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dodge Challenger    17.89458 17.493347 16.080131 17.534670 15.077864 17.76562</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AMC Javelin         18.15507 18.209491 21.038380 18.387893 17.010905 18.01619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28          14.67799 14.978282 19.420946 12.735231  9.498416 15.05392</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    16.31017 16.047028 14.428595 15.262942 12.711066 16.08315</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9           26.49638 29.532660 32.095662 28.438037 30.104215 30.36523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       13.38722 15.625099 -5.575738 12.886280  7.430002 14.05939</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                        boot19    boot20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           23.326044 19.963582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       21.932690 19.463530</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 230            21.105021 27.853275</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SE          13.781404 14.542168</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cadillac Fleetwood   5.599487  9.563645</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental  4.475102  8.551324</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic         30.542381 29.614284</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla      29.114558 31.300915</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    13.797473 14.154015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       13.200197 14.713361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       20.499438 22.593902</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Lincoln Continental  8.424775 10.029108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial    8.240081  9.836698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona       28.630112 26.232080</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dodge Challenger    17.501705 18.986417</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AMC Javelin         18.206477 19.293807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28          14.506161 14.801208</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird    15.329656 17.014267</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9           31.445301 29.136823</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       13.979657 12.909015</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
