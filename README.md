@@ -9,6 +9,9 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 [![pkgdown](https://github.com/dmolitor/bolasso/workflows/pkgdown/badge.svg)](https://github.com/dmolitor/bolasso/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/dmolitor/bolasso/branch/main/graph/badge.svg)](https://app.codecov.io/gh/dmolitor/bolasso?branch=main)
+[![test-coverage](https://github.com/dmolitor/bolasso/workflows/test-coverage/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 <!-- badges: end -->
 
 The goal of bolasso is to implement model-consistent Lasso estimation
@@ -69,7 +72,7 @@ system.time({
 })
 #> Loaded glmnet 4.1-3
 #>    user  system elapsed 
-#>   19.83    0.12   19.96
+#>   19.94    0.11   20.25
 ```
 
 We can get a quick overview of the model by printing the `bolasso`
@@ -165,7 +168,7 @@ system.time({
   )
 })
 #>    user  system elapsed 
-#>    0.12    0.05    5.55
+#>    0.13    0.06    5.53
 ```
 
 ## References

@@ -25,7 +25,8 @@ Imports:
     tibble
 Suggests:
     testthat (>= 3.0.0),
-    mlbench
+    mlbench,
+    covr
 RdMacros: Rdpack
 License: MIT + file LICENSE
 Encoding: UTF-8
