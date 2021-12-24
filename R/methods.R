@@ -86,7 +86,7 @@ plot.bolasso <- function(x, threshold = 0.9, ...) {
   coef_range <- range(s$mean_coef)
   coef_diff <- coef_range[[2]] - coef_range[[1]]
   if (nrow(s) >= 10) {
-    s <- rbind(s[1:5, ], s[(nrow(s) - 5):nrow(s), ])
+    s <- rbind(s[1:5, ], s[(nrow(s) - 4):nrow(s), ])
   }
   ggplot2::ggplot(data = s,
                   ggplot2::aes(x = get("variable"),
