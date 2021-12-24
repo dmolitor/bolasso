@@ -5,7 +5,7 @@ test_that("bootstraps works", {
   expect_type(boots, "list")
   expect_length(boots, 5)
   expect_equal(
-    vapply(boots, \(x) all(x %in% 1:nrow(mtcars)), logical(1)),
+    vapply(boots, function (x) all(x %in% 1:nrow(mtcars)), logical(1)),
     rep(TRUE, 5)
   )
   expect_error(bootstraps(mtcars, 5))

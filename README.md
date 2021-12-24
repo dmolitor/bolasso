@@ -11,7 +11,6 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![pkgdown](https://github.com/dmolitor/bolasso/workflows/pkgdown/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/dmolitor/bolasso/branch/main/graph/badge.svg)](https://app.codecov.io/gh/dmolitor/bolasso?branch=main)
-[![test-coverage](https://github.com/dmolitor/bolasso/workflows/test-coverage/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 <!-- badges: end -->
 
 The goal of bolasso is to implement model-consistent Lasso estimation
@@ -27,7 +26,7 @@ You can install the development version from
 devtools::install_github("dmolitor/bolasso")
 ```
 
-## Variable selection with bolasso
+## Usage
 
 To illustrate the usage of bolasso, we’ll use the [Pima Indians Diabetes
 dataset](http://math.furman.edu/~dcs/courses/math47/R/library/mlbench/html/PimaIndiansDiabetes.html)
@@ -72,7 +71,7 @@ system.time({
 })
 #> Loaded glmnet 4.1-3
 #>    user  system elapsed 
-#>   19.94    0.11   20.25
+#>   19.71    0.07   19.79
 ```
 
 We can get a quick overview of the model by printing the `bolasso`
@@ -168,7 +167,7 @@ system.time({
   )
 })
 #>    user  system elapsed 
-#>    0.13    0.06    5.53
+#>    0.14    0.02    5.45
 ```
 
 ## References

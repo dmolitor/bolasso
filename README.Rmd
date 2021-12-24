@@ -22,7 +22,6 @@ set.seed(123) # Reproducible results
 [![R-CMD-check](https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 [![pkgdown](https://github.com/dmolitor/bolasso/workflows/pkgdown/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 [![Codecov test coverage](https://codecov.io/gh/dmolitor/bolasso/branch/main/graph/badge.svg)](https://app.codecov.io/gh/dmolitor/bolasso?branch=main)
-[![test-coverage](https://github.com/dmolitor/bolasso/workflows/test-coverage/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 <!-- badges: end -->
 
 The goal of bolasso is to implement model-consistent Lasso estimation via the 
@@ -36,7 +35,7 @@ You can install the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("dmolitor/bolasso")
 ```
-## Variable selection with bolasso
+## Usage
 
 To illustrate the usage of bolasso, we'll use the 
 [Pima Indians Diabetes dataset](http://math.furman.edu/~dcs/courses/math47/R/library/mlbench/html/PimaIndiansDiabetes.html)
