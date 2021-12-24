@@ -8,7 +8,7 @@ Authors@R:
            email = "molitdj97@gmail.com")
 Description: Implements the bolasso algorithm for consistent variable selection 
     and estimation accuracy. Includes support for many parallel backends via the 
-    future package. For details see: Bach (2008 DBLP), 
+    future package. For details see: Bach (2008),
     'Bolasso: model consistent Lasso estimation through the bootstrap', 
     <arXiv:0804.1302>.
 Depends:

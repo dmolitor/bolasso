@@ -18,10 +18,10 @@ set.seed(123) # Reproducible results
 # bolasso <a href='https://dmolitor.github.io/bolasso/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 [![pkgdown](https://github.com/dmolitor/bolasso/workflows/pkgdown/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 [![Codecov test coverage](https://codecov.io/gh/dmolitor/bolasso/branch/main/graph/badge.svg)](https://app.codecov.io/gh/dmolitor/bolasso?branch=main)
+[![CRAN status](https://www.r-pkg.org/badges/version/bolasso)](https://CRAN.R-project.org/package=bolasso)
 <!-- badges: end -->
 
 The goal of bolasso is to implement model-consistent Lasso estimation via the 
@@ -104,7 +104,7 @@ plot(model, threshold = 1)
 ### Parallelizing bolasso
 
 We can execute `bolasso` in parallel via the 
-[future](https://cran.r-project.org/web/packages/future/index.html) package. To
+[future](https://CRAN.R-project.org/package=future) package. To
 do so we can copy the code from above with only one minor tweak shown below.
 
 ```{r}
@@ -134,4 +134,4 @@ system.time({
 
 <a id="1">[1]</a> Bach, Francis. “Bolasso: Model Consistent Lasso Estimation 
 through the Bootstrap.” ArXiv:0804.1302 [Cs, Math, Stat], April 8, 2008. 
-http://arxiv.org/abs/0804.1302.
+https://arxiv.org/abs/0804.1302.

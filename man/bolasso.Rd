@@ -47,7 +47,7 @@ An object of class \code{bolasso}. This object is a list of length
 \description{
 This function implements model-consistent Lasso estimation through the
 bootstrap. It supports parallel processing by way of the
-\href{https://cran.r-project.org/web/packages/future/index.html}{future}
+\href{https://CRAN.R-project.org/package=future}{future}
 package, allowing the user to flexibly specify many parallelization methods.
 This method was developed as a variable-selection algorithm, but this package
 also supports making ensemble predictions on new data using the bagged Lasso

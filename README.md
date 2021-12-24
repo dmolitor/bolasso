@@ -5,12 +5,12 @@
 
 <!-- badges: start -->
 
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 [![pkgdown](https://github.com/dmolitor/bolasso/workflows/pkgdown/badge.svg)](https://github.com/dmolitor/bolasso/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/dmolitor/bolasso/branch/main/graph/badge.svg)](https://app.codecov.io/gh/dmolitor/bolasso?branch=main)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/bolasso)](https://CRAN.R-project.org/package=bolasso)
 <!-- badges: end -->
 
 The goal of bolasso is to implement model-consistent Lasso estimation
@@ -71,7 +71,7 @@ system.time({
 })
 #> Loaded glmnet 4.1-3
 #>    user  system elapsed 
-#>   19.71    0.07   19.79
+#>   42.32    0.11   43.00
 ```
 
 We can get a quick overview of the model by printing the `bolasso`
@@ -145,9 +145,8 @@ plot(model, threshold = 1)
 ### Parallelizing bolasso
 
 We can execute `bolasso` in parallel via the
-[future](https://cran.r-project.org/web/packages/future/index.html)
-package. To do so we can copy the code from above with only one minor
-tweak shown below.
+[future](https://CRAN.R-project.org/package=future) package. To do so we
+can copy the code from above with only one minor tweak shown below.
 
 ``` r
 future::plan("multisession")
@@ -167,11 +166,11 @@ system.time({
   )
 })
 #>    user  system elapsed 
-#>    0.14    0.02    5.45
+#>    0.17    0.02    5.56
 ```
 
 ## References
 
 <a id="1">\[1\]</a> Bach, Francis. “Bolasso: Model Consistent Lasso
 Estimation through the Bootstrap.” ArXiv:0804.1302 \[Cs, Math, Stat\],
-April 8, 2008. <http://arxiv.org/abs/0804.1302>.
+April 8, 2008. <https://arxiv.org/abs/0804.1302>.
