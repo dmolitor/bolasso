@@ -77,8 +77,11 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install the canonical version from <a href="https://CRAN.R-project.org/package=bolasso" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"bolasso"</span><span class="op">)</span></code></pre></div>
+<p>Or install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"dmolitor/bolasso"</span><span class="op">)</span></code></pre></div>
 </div>
@@ -89,7 +92,7 @@
 <div class="section level3">
 <h3 id="load-requisite-packages-and-data">Load requisite packages and data<a class="anchor" aria-label="anchor" href="#load-requisite-packages-and-data"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dmolitor.github.io/bolasso/" class="external-link">bolasso</a></span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">PimaIndiansDiabetes</span>, package <span class="op">=</span> <span class="st">"mlbench"</span><span class="op">)</span>
@@ -107,7 +110,7 @@
 <span class="co">#&gt;  $ age     : num  50 31 32 21 33 30 26 29 53 54 ...</span>
 <span class="co">#&gt;  $ diabetes: Factor w/ 2 levels "neg","pos": 2 1 2 1 2 1 2 1 2 2 ...</span></code></pre></div>
 <p>First, we run 100-fold bootstrapped Lasso with the <code>glmnet</code> implementation. We can get a rough estimate of the elapsed time using <code><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time()</a></code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span>
     <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,
@@ -121,7 +124,7 @@
 <span class="co">#&gt;    user  system elapsed </span>
 <span class="co">#&gt;   42.32    0.11   43.00</span></code></pre></div>
 <p>We can get a quick overview of the model by printing the <code>bolasso</code> object.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span>
 <span class="co">#&gt; ------------- 100-fold bootstrapped Lasso -------------</span>
 <span class="co">#&gt; </span>
@@ -137,7 +140,7 @@
 <h3 id="extracting-selected-variables">Extracting selected variables<a class="anchor" aria-label="anchor" href="#extracting-selected-variables"></a>
 </h3>
 <p>Next, we can extract all variables that were selected in 90% and 100% of the bootstrapped Lasso models. We can also pass any relevant arguments to <code>predict</code> on the <code>cv.glmnet</code> or <code>cv.gamlr</code> model objects. In this case we will use the lambda value that minimizes OOS error.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>,
               threshold <span class="op">=</span> <span class="fl">0.9</span>,
               select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span>
@@ -168,10 +171,10 @@
 <h3 id="plotting-selected-variables">Plotting selected variables<a class="anchor" aria-label="anchor" href="#plotting-selected-variables"></a>
 </h3>
 <p>We can also quickly plot the selected variables at the 90% and 100% threshold values.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="75%"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-2.png" width="75%"></p>
 </div>
@@ -179,10 +182,10 @@
 <h3 id="parallelizing-bolasso">Parallelizing bolasso<a class="anchor" aria-label="anchor" href="#parallelizing-bolasso"></a>
 </h3>
 <p>We can execute <code>bolasso</code> in parallel via the <a href="https://CRAN.R-project.org/package=future" class="external-link">future</a> package. To do so we can copy the code from above with only one minor tweak shown below.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"multisession"</span><span class="op">)</span></code></pre></div>
 <p>We can now run the code from above, unaltered, and it will execute in parallel.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span>
     <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,
