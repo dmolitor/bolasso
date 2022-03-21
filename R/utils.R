@@ -12,7 +12,7 @@ formula_lhs <- function(form) {
     error = function(e) stop("Invalid formula", call. = FALSE)
   )
   if (length(form) < 3) stop("Formula is missing LHS variable", call. = FALSE)
-  deparse(form[[2]])
+  deparse(form[[2]], width.cutoff = 500L)
 }
 
 formula_rhs <- function(form) {
@@ -21,9 +21,9 @@ formula_rhs <- function(form) {
     error = function(e) stop("Invalid formula", call. = FALSE)
   )
   if (length(form) < 3) {
-    deparse(form[[2]])
+    deparse(form[[2]], width.cutoff = 500L)
   } else {
-    deparse(form[[3]])
+    deparse(form[[3]], width.cutoff = 500L)
   }
 }
 

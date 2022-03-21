@@ -2,18 +2,20 @@
 #' @export
 coef.bolasso <- function(object, select = c("lambda.min", "lambda.1se"), ...) {
   implement <- attributes(object)$implement
-  c <- lapply(
+  coefs <- future.apply::future_lapply(
     object,
     function(i) {
       do.call(
         stats::coef,
         translate_coef(implement, i, select[[1]], ...)
       )
-    }
+    },
+    future.seed = TRUE,
+    future.packages = c("Matrix", implement)
   )
-  c <- do.call(cbind, c)
-  colnames(c) <- paste0("boot", 1:ncol(c))
-  Matrix::t(c)
+  coefs <- do.call(cbind, coefs)
+  colnames(coefs) <- paste0("boot", 1:ncol(coefs))
+  Matrix::t(coefs)
 }
 
 #' @method predict bolasso
@@ -21,21 +23,23 @@ coef.bolasso <- function(object, select = c("lambda.min", "lambda.1se"), ...) {
 predict.bolasso <- function(object, new.data, select = c("min", "1se"), ...) {
   varnames <- attributes(object)$varnames
   implement <- attributes(object)$implement
-  form <- attributes(object)$call$form
+  form <- eval(attributes(object)$call$form)
   if (!is.null(form)) {
     new.data <- model_matrix(form = form, data = new.data, prediction = TRUE)$x
   } else {
     new.data <- model_matrix(x = new.data, y = 1)$x
   }
   validate_varnames(x = varnames, y = colnames(new.data))
-  p <- lapply(
+  p <- future.apply::future_lapply(
     object,
     function(i) {
       do.call(
         stats::predict,
         translate_predict(implement, i, new.data, select[[1]], ...)
       )
-    }
+    },
+    future.seed = TRUE,
+    future.packages = c("Matrix", implement)
   )
   p <- do.call(cbind, p)
   colnames(p) <- paste0("boot", 1:ncol(p))
