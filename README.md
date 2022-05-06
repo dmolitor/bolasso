@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# bolasso <a href='https://dmolitor.github.io/bolasso/'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# bolasso <a href='https://www.dmolitor.com/bolasso/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 
@@ -18,14 +18,7 @@ via the bootstrap [\[1\]](#1).
 
 ## Installation
 
-You can install the canonical version from 
-[CRAN](https://CRAN.R-project.org/package=bolasso) with:
-
-``` r
-install.packages("bolasso")
-```
-
-Or install the development version from
+You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -78,7 +71,7 @@ system.time({
 })
 #> Loaded glmnet 4.1-3
 #>    user  system elapsed 
-#>   42.32    0.11   43.00
+#>   19.32    0.14   19.58
 ```
 
 We can get a quick overview of the model by printing the `bolasso`
@@ -105,9 +98,7 @@ to `predict` on the `cv.glmnet` or `cv.gamlr` model objects. In this
 case we will use the lambda value that minimizes OOS error.
 
 ``` r
-selected_vars(model,
-              threshold = 0.9,
-              select = "lambda.min")
+selected_vars(model, threshold = 0.9, select = "lambda.min")
 #> # A tibble: 7 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
@@ -119,9 +110,7 @@ selected_vars(model,
 #> 6 pedigree     0.849 
 #> 7 age          0.0138
 
-selected_vars(model,
-              threshold = 1,
-              select = "lambda.min")
+selected_vars(model, threshold = 1, select = "lambda.min")
 #> # A tibble: 5 x 2
 #>   variable  mean_coef
 #>   <chr>         <dbl>
@@ -173,7 +162,7 @@ system.time({
   )
 })
 #>    user  system elapsed 
-#>    0.17    0.02    5.56
+#>    0.17    0.03    5.58
 ```
 
 ## References
