@@ -17,7 +17,12 @@ via the bootstrap [\[1\]](#1).
 
 ## Installation
 
-You can install the development version from
+You can install from [CRAN](https://cran.r-project.org/web/packages/bolasso/index.html) with:
+```r
+install.packages("bolasso")
+```
+
+or install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
