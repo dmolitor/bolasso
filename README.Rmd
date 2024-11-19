@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 set.seed(123) # Reproducible results
 ```
 
-# bolasso <a href='https://dmolitor.github.io/bolasso/'><img src='man/figures/logo.png' align="right" height="139" /></a>
+# bolasso <a href='https://www.dmolitor.com/bolasso/'><img src='man/figures/logo.png' align="right" height="139" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/dmolitor/bolasso/workflows/R-CMD-check/badge.svg)](https://github.com/dmolitor/bolasso/actions)
@@ -81,13 +81,9 @@ on the `cv.glmnet` or `cv.gamlr` model objects. In this case we will use the
 lambda value that minimizes OOS error.
 
 ```{r}
-selected_vars(model,
-              threshold = 0.9,
-              select = "lambda.min")
+selected_vars(model, threshold = 0.9, select = "lambda.min")
 
-selected_vars(model,
-              threshold = 1,
-              select = "lambda.min")
+selected_vars(model, threshold = 1, select = "lambda.min")
 ```
 
 ### Plotting selected variables

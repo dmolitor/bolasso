@@ -2,7 +2,7 @@ test_that("bolasso glmnet functionality works sequentially", {
   # glmnet formula
   set.seed(123)
   model_form_glmnet <- bolasso(
-    form = mpg ~ .,
+    formula = mpg ~ .,
     data = mtcars,
     n.boot = 5,
     implement = "glmnet"
@@ -29,7 +29,7 @@ test_that("bolasso gamlr functionality works sequentially", {
   # gamlr formula
   set.seed(123)
   model_form_gamlr <- bolasso(
-    form = mpg ~ .,
+    formula = mpg ~ .,
     data = mtcars,
     n.boot = 5,
     implement = "gamlr"

@@ -1,6 +1,6 @@
 Package: bolasso
 Title: Model Consistent Lasso Estimation Through the Bootstrap
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
     person(given = "Daniel",
            family = "Molitor",
@@ -33,5 +33,5 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-URL: https://dmolitor.github.io/bolasso/
+URL: https://www.dmolitor.com/bolasso/
 Config/testthat/edition: 3

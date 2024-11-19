@@ -50,7 +50,7 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
 #' also supports making ensemble predictions on new data using the bagged Lasso
 #' models.
 #'
-#' @param form An optional object of class \link{formula} (or one that can be
+#' @param formula An optional object of class \link{formula} (or one that can be
 #'   coerced to that class): a symbolic description of the model to be fitted.
 #'   Can be omitted when `x` and `y` are non-missing.
 #' @param data An optional object of class \link{data.frame} that contains the
@@ -124,7 +124,7 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
 #' `n.boot` of `cv.glmnet` or `cv.gamlr` objects.
 #'
 #' @export
-bolasso <- function(form,
+bolasso <- function(formula,
                     data,
                     n.boot = 100,
                     progress = TRUE,
@@ -132,7 +132,7 @@ bolasso <- function(form,
                     x = NULL,
                     y = NULL,
                     ...) {
-  data <- model_matrix(form = form, data = data, x = x, y = y)
+  data <- model_matrix(form = formula, data = data, x = x, y = y)
   if (progress) {
     progressr::with_progress(
       models <- bolasso.fit(x = data$x,

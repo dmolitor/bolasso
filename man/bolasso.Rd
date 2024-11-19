@@ -5,7 +5,7 @@
 \title{Bootsrap-enhanced Lasso}
 \usage{
 bolasso(
-  form,
+  formula,
   data,
   n.boot = 100,
   progress = TRUE,
@@ -16,7 +16,7 @@ bolasso(
 )
 }
 \arguments{
-\item{form}{An optional object of class \link{formula} (or one that can be
+\item{formula}{An optional object of class \link{formula} (or one that can be
 coerced to that class): a symbolic description of the model to be fitted.
 Can be omitted when \code{x} and \code{y} are non-missing.}
 

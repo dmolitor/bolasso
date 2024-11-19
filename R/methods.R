@@ -23,7 +23,7 @@ coef.bolasso <- function(object, select = c("lambda.min", "lambda.1se"), ...) {
 predict.bolasso <- function(object, new.data, select = c("min", "1se"), ...) {
   varnames <- attributes(object)$varnames
   implement <- attributes(object)$implement
-  form <- eval(attributes(object)$call$form)
+  form <- eval(attributes(object)$call$formula)
   if (!is.null(form)) {
     new.data <- model_matrix(form = form, data = new.data, prediction = TRUE)$x
   } else {
