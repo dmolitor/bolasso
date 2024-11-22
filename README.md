@@ -31,7 +31,7 @@ You can install the development version from
 
 ``` r
 # install.packages("pak")
-pak::pkg_install("tidyverse/tibble")
+pak::pkg_install("dmolitor/bolasso@dev")
 ```
 
 ## Usage
@@ -482,8 +482,8 @@ cat(
   "\nSequential bolasso time (seconds):",
   round(time_sequential[[3]], 3)
 )
-#> Parallel bolasso time (seconds): 10.614 
-#> Sequential bolasso time (seconds): 42.022
+#> Parallel bolasso time (seconds): 10.667 
+#> Sequential bolasso time (seconds): 41.962
 ```
 
 ## References
