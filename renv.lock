@@ -220,6 +220,17 @@
       ],
       "Hash": "a36183e7b730d42b90f3afe79cbd1602"
     },
+    "generics": {
+      "Package": "generics",
+      "Version": "0.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "methods"
+      ],
+      "Hash": "15e9634c0fcd294799e9b2e929ed1b86"
+    },
     "ggplot2": {
       "Package": "ggplot2",
       "Version": "3.5.1",
