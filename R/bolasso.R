@@ -1,18 +1,32 @@
 #' @import Matrix
 
-new_bolasso <- function(x, implement, varnames, nboot, dimensions, fun.call) {
+new_bolasso <- function(
+  x,
+  implement,
+  varnames,
+  nboot,
+  dimensions,
+  fun.call,
+  fast = FALSE
+) {
   stopifnot(
     is.list(x),
     all(
       vapply(
         x,
-        function(i) inherits(i, "cv.gamlr") || inherits(i, "cv.glmnet"),
+        function(i) {
+          ifelse(
+            fast,
+            inherits(i, "glmnet"),
+            inherits(i, "cv.gamlr") || inherits(i, "cv.glmnet")
+          )
+        },
         logical(1)
       )
     ),
     implement %in% c("gamlr", "glmnet")
   )
-  class(x) <- "bolasso"
+  class(x) <- if (fast) c("bolasso_fast", "bolasso") else "bolasso"
   attr(x, "implement") <- implement
   attr(x, "call") <- fun.call
   attr(x, "varnames") <- varnames
@@ -40,6 +54,7 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
   )
 }
 
+
 #' Bootsrap-enhanced Lasso
 #'
 #' This function implements model-consistent Lasso estimation through the
@@ -64,6 +79,12 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
 #'   `glmnet::cv.glmnet` or `gamlr::cv.gamlr`.
 #' @param x An optional predictor matrix in lieu of `form` and `data`.
 #' @param y An optional response vector in lieu of `form` and `data`.
+#' @param fast A boolean. Whether or not to fit a "fast" bootstrap procedure.
+#'   If `fast == TRUE`, `bolasso` will fit [glmnet::cv.glmnet] on the entire
+#'   dataset. It will then fit all bootstrapped models with the value of lambda
+#'   (regularization parameter) that minimized cross-validation loss in the
+#'   full model. If `fast == FALSE` (the default), `bolasso` will use
+#'   cross-validation to find the optimal lambda for each bootstrap model.
 #' @param ... Additional parameters to pass to either
 #'   `glmnet::cv.glmnet` or `gamlr::cv.gamlr`.
 #'
@@ -91,6 +112,9 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
 #'   implement = "glmnet"
 #' )
 #'
+#' # Retrieve a tidy tibble of bootstrap coefficients for each covariate
+#' tidy(bolasso_form)
+#' 
 #' # Extract selected variables
 #' selected_vars(bolasso_form, threshold = 0.9, select = "lambda.min")
 #'
@@ -112,9 +136,6 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
 #'   implement = "glmnet"
 #' )
 #'
-#' # Extract selected variables
-#' selected_vars(bolasso_mat, threshold = 0.9, select = "lambda.min")
-#'
 #' # Bagged ensemble prediction on test data
 #' predict(bolasso_mat,
 #'         new.data = model.matrix(mpg ~ . - 1, mtcars_test),
@@ -128,25 +149,55 @@ bolasso <- function(formula,
                     data,
                     n.boot = 100,
                     progress = TRUE,
-                    implement = "glmnet",
+                    implement = c("glmnet", "gamlr"),
                     x = NULL,
                     y = NULL,
+                    fast = FALSE,
                     ...) {
+  implement <- match.arg(implement)
+  if (fast && implement == "gamlr") {
+    message("Fast mode isn't compatible with `gamlr`; defaulting to `glmnet`")
+    implement <- "glmnet"
+  }
   data <- model_matrix(form = formula, data = data, x = x, y = y)
   if (progress) {
-    progressr::with_progress(
-      models <- bolasso.fit(x = data$x,
-                            y = data$y,
-                            n.boot = n.boot,
-                            implement = implement,
-                            ...)
-    )
+    if (fast) {
+      progressr::with_progress(
+        models <- bolasso_fast.fit(
+          x = data$x,
+          y = data$y,
+          n.boot = n.boot,
+          ...
+        )
+      )
+    } else {
+      progressr::with_progress(
+        models <- bolasso.fit(
+          x = data$x,
+          y = data$y,
+          n.boot = n.boot,
+          implement = implement,
+          ...
+        )
+      )
+    }
   } else {
-    models <- bolasso.fit(x = data$x,
-                          y = data$y,
-                          n.boot = n.boot,
-                          implement = implement,
-                          ...)
+    if (fast) {
+      models <- bolasso_fast.fit(
+        x = data$x,
+        y = data$y,
+        n.boot = n.boot,
+        ...
+      )
+    } else {
+      models <- bolasso.fit(
+        x = data$x,
+        y = data$y,
+        n.boot = n.boot,
+        implement = implement,
+        ...
+      )
+    }
   }
   new_bolasso(
     models,
@@ -154,6 +205,7 @@ bolasso <- function(formula,
     varnames = colnames(data$x),
     nboot = n.boot,
     dimensions = dim(data$x),
-    fun.call = match.call()
+    fun.call = match.call(),
+    fast = fast
   )
 }
