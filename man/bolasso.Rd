@@ -9,9 +9,10 @@ bolasso(
   data,
   n.boot = 100,
   progress = TRUE,
-  implement = "glmnet",
+  implement = c("glmnet", "gamlr"),
   x = NULL,
   y = NULL,
+  fast = FALSE,
   ...
 )
 }
@@ -36,6 +37,13 @@ Lasso implementation to utilize. For specific modeling details, see
 \item{x}{An optional predictor matrix in lieu of \code{form} and \code{data}.}
 
 \item{y}{An optional response vector in lieu of \code{form} and \code{data}.}
+
+\item{fast}{A boolean. Whether or not to fit a "fast" bootstrap procedure.
+If \code{fast == TRUE}, \code{bolasso} will fit \link[glmnet:cv.glmnet]{glmnet::cv.glmnet} on the entire
+dataset. It will then fit all bootstrapped models with the value of lambda
+(regularization parameter) that minimized cross-validation loss in the
+full model. If \code{fast == FALSE} (the default), \code{bolasso} will use
+cross-validation to find the optimal lambda for each bootstrap model.}
 
 \item{...}{Additional parameters to pass to either
 \code{glmnet::cv.glmnet} or \code{gamlr::cv.gamlr}.}
@@ -71,6 +79,9 @@ bolasso_form <- bolasso(
   implement = "glmnet"
 )
 
+# Retrieve a tidy tibble of bootstrap coefficients for each covariate
+tidy(bolasso_form)
+
 # Extract selected variables
 selected_vars(bolasso_form, threshold = 0.9, select = "lambda.min")
 
@@ -91,9 +102,6 @@ bolasso_mat <- bolasso(
   nfolds = 5,
   implement = "glmnet"
 )
-
-# Extract selected variables
-selected_vars(bolasso_mat, threshold = 0.9, select = "lambda.min")
 
 # Bagged ensemble prediction on test data
 predict(bolasso_mat,
