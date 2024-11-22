@@ -16,13 +16,13 @@ status](https://www.r-pkg.org/badges/version/bolasso)](https://CRAN.R-project.or
 The goal of bolasso is to implement bootstrap-enhanced Lasso (and more
 generally, penalized regression) estimation, as proposed originally in
 [Bach (2008)](#2) and extended by [Bunea et al. (2011)](#3) and [Abram
-et al.](#1). These methods focus primarily on variable selection and
-propose two similar, but slightly different, variable selection
-algorithms; the variable inclusion probability (VIP) algorithm (Bach,
-2008; Bunea et al., 2011), and the bootstrap distribution quantile (QNT)
-algorithm (Abram et al., 2016). Beyond implementing both these variable
-selection methods, bolasso also provides utilities for making bagged
-predictions, examining coefficient distributions, and plotting.
+et al. (2016)](#1). These methods focus primarily on variable selection
+and propose two similar, but slightly different, variable selection
+algorithms; the variable inclusion probability (VIP) algorithm (Bach;
+Bunea et al.), and the bootstrap distribution quantile (QNT) algorithm
+(Abram et al.). Beyond implementing both these variable selection
+methods, bolasso also provides utilities for making bagged predictions,
+examining coefficient distributions, and plotting.
 
 ## Installation
 
@@ -86,10 +86,10 @@ model <- bolasso(
 ### Variable selection
 
 Next, using a threshold of 0.95 we can extract the selected variables
-using the VIP method ([Bach](#2) and [Bunea et al.](#3)), which selects
-all variables that were selected (non-zero coefficient) in \>= 95% of
-the bootstrapped models. We’ll use the regularization parameter lambda
-that minimizes cross-validation error.
+using the VIP method, which extracts all variables that were selected
+(had non-zero coefficients) in \>= 95% of the bootstrapped models. We’ll
+use the regularization parameter `lambda.min` that minimizes
+cross-validation error.
 
 ``` r
 selected_variables(model, threshold = 0.95, method = "vip", select = "lambda.min")
@@ -120,8 +120,8 @@ selected_variables(model, 0.95, "vip", var_names_only = TRUE)
 ```
 
 We can compare the selected variables using the VIP method to the QNT
-method ([Abram et al., 2016](#1)), which selects all variables that have
-a 95% bootstrap confidence interval that does not contain 0:
+method, which selects all variables that have a 95% bootstrap confidence
+interval that does not contain 0:
 
 ``` r
 selected_variables(model, 0.95, "qnt", var_names_only = TRUE)
@@ -225,7 +225,7 @@ coefficients.
 #### Selected variable coefficients
 
 If we want to plot the coefficient distributions for only the selected
-variables, we can use the `plot_selected_variables` which will give us
+variables, we can use `plot_selected_variables` which will give us
 pretty much the same thing as `plot`.
 
 ``` r
@@ -321,7 +321,7 @@ expensive and slow, especially when using many bootstrap replicates. For
 example, with 1,000 bootstrap replicates, this results in estimating
 models on 10,000 cross-validation sets.
 
-To address this, we can activate the `fast = TRUE` flag in bolasso.
+To address this, we can activate the `fast = TRUE` argument in bolasso.
 Instead of using cross-validation to find the optimal lambda for each
 bootstrap model, fast bolasso runs a single cross-validated regression
 on the full dataset to identify the optimal lambda. Then each
@@ -482,21 +482,21 @@ cat(
   "\nSequential bolasso time (seconds):",
   round(time_sequential[[3]], 3)
 )
-#> Parallel bolasso time (seconds): 10.547 
-#> Sequential bolasso time (seconds): 41.705
+#> Parallel bolasso time (seconds): 10.614 
+#> Sequential bolasso time (seconds): 42.022
 ```
 
 ## References
 
-<a id="1">\[3\]</a>Abram, Samantha V et al. “Bootstrap Enhanced
+<a id="1">\[1\]</a>Abram, Samantha V et al. “Bootstrap Enhanced
 Penalized Regression for Variable Selection with Neuroimaging Data.”
 Frontiers in neuroscience vol. 10 344. 28 Jul. 2016,
 <doi:10.3389/fnins.2016.00344>
 
-<a id="2">\[1\]</a>Bach, Francis. “Bolasso: Model Consistent Lasso
+<a id="2">\[2\]</a>Bach, Francis. “Bolasso: Model Consistent Lasso
 Estimation through the Bootstrap.” ArXiv:0804.1302 \[Cs, Math, Stat\],
 2008. <https://arxiv.org/abs/0804.1302>.
 
-<a id="3">\[2\]</a>Bunea, Florentina et al. “Penalized least squares
+<a id="3">\[3\]</a>Bunea, Florentina et al. “Penalized least squares
 regression methods and applications to neuroimaging.” NeuroImage
 vol. 55,4 (2011): 1519-27. <doi:10.1016/j.neuroimage.2010.12.028>
