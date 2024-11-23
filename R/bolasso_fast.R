@@ -56,7 +56,8 @@ predict.bolasso_fast <- function(object, new.data, ...) {
       stats::predict(
         object = i,
         newx = new.data,
-        s = global_lambda
+        s = global_lambda,
+        ...
       )
     }
   )
