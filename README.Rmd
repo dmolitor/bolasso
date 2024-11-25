@@ -72,7 +72,7 @@ test <- PimaIndiansDiabetes[-train_idx, ]
 
 model <- bolasso(
   diabetes ~ .,
-  data = PimaIndiansDiabetes,
+  data = train,
   n.boot = 100,
   progress = FALSE,
   family = "binomial"
@@ -170,7 +170,7 @@ Just like `plot` we can also focus on a subset of our selected variables.
 ```{r}
 plot_selected_variables(
   model,
-  covariates = c(pregnant, pressure),
+  covariates = c(pregnant, mass),
   threshold = 0.95,
   method = "vip",
   select = "lambda.min"
@@ -310,7 +310,8 @@ model_fast_preds <- ifelse(
   no = 0
 )
 truth <- as.integer(test$diabetes) - 1
-
+```
+```{r, echo = FALSE}
 cat(
   "Standard Bolasso accuracy:",
   round(100*sum(model_standard_preds == truth)/length(truth), 2),
@@ -352,16 +353,52 @@ time_sequential <- system.time({
     diabetes ~ .,
     data = train,
     n.boot = 1000,
-    progress = TRUE,
+    progress = FALSE,
     family = "binomial"
   )
 })
-
+```
+```{r, echo = FALSE}
 cat(
   "Parallel bolasso time (seconds):",
   round(time_parallel[[3]], 3),
-  "\nSequential bolasso time (seconds):",
+  "\n\rSequential bolasso time (seconds):",
   round(time_sequential[[3]], 3)
+)
+```
+
+### Beyond the Lasso
+
+bolasso also allows us to fit penalized regression models beyond the Lasso.
+For example, suppose we want to fit a bootstrap-enhanced elasticnet model
+with a mixing parameter of 0.5 (an even mix of the Ridge and Lasso
+regularization terms). We can simply pass the underlying `glmnet::glmnet`
+argument `alpha = 0.5` through bolasso. The following code compares selected
+variables between the Lasso and elasticnet models.
+```{r}
+lasso <- bolasso(
+  diabetes ~ .,
+  data = train,
+  n.boot = 100,
+  progress = FALSE,
+  family = "binomial"
+)
+
+elnet <- bolasso(
+  diabetes ~ .,
+  data = train,
+  n.boot = 100,
+  progress = FALSE,
+  family = "binomial",
+  alpha = 0.5
+)
+```
+```{r, echo = FALSE}
+cat(
+  "Lasso selected variables:",
+  selected_variables(lasso, 0.95, var_names_only = TRUE),
+  "\n\rElnet selected variables:",
+  selected_variables(elnet, 0.95, var_names_only = TRUE)
 )
 ```
 

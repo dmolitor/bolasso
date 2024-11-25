@@ -52,7 +52,7 @@ print.bolasso <- function(x, ...) {
   nobs <- attributes(x)$dimensions[[1]]
   cat("-----",
       paste0(nboot, "-fold"),
-      "bootstrapped Lasso -----\n")
+      "bootstrapped model -----\n")
   cat(
     "Model matrix dimensions:\n",
     "  -", npred, "Predictors\n",

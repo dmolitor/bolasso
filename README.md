@@ -75,7 +75,7 @@ test <- PimaIndiansDiabetes[-train_idx, ]
 
 model <- bolasso(
   diabetes ~ .,
-  data = PimaIndiansDiabetes,
+  data = train,
   n.boot = 100,
   progress = FALSE,
   family = "binomial"
@@ -93,19 +93,19 @@ cross-validation error.
 
 ``` r
 selected_variables(model, threshold = 0.95, method = "vip", select = "lambda.min")
-#> # A tibble: 100 × 6
-#>    id     pregnant glucose pressure   mass pedigree
-#>    <chr>     <dbl>   <dbl>    <dbl>  <dbl>    <dbl>
-#>  1 boot1    0.0997  0.0341 -0.0182  0.0744    0.629
-#>  2 boot2    0.118   0.0406 -0.0133  0.0659    1.45 
-#>  3 boot3    0.127   0.0354 -0.00767 0.0894    0.534
-#>  4 boot4    0.172   0.0349 -0.0118  0.0658    0.950
-#>  5 boot5    0.123   0.0330 -0.0121  0.0760    0.667
-#>  6 boot6    0.152   0.0342 -0.0112  0.0777    0.828
-#>  7 boot7    0.0689  0.0374 -0.0119  0.0874    0.748
-#>  8 boot8    0.145   0.0338 -0.0124  0.0881    0.977
-#>  9 boot9    0.155   0.0331 -0.00740 0.0623    1.52 
-#> 10 boot10   0.144   0.0403 -0.00748 0.0519    0.651
+#> # A tibble: 100 × 5
+#>    id     pregnant glucose   mass pedigree
+#>    <chr>     <dbl>   <dbl>  <dbl>    <dbl>
+#>  1 boot1    0.0957  0.0428 0.0811    0.845
+#>  2 boot2    0       0.0367 0.0850    0.193
+#>  3 boot3    0.0713  0.0258 0.0833    0.667
+#>  4 boot4    0.0908  0.0349 0.0649    0.573
+#>  5 boot5    0.217   0.0462 0.0680    0.813
+#>  6 boot6    0.0930  0.0305 0.0814    0.372
+#>  7 boot7    0.0516  0.0404 0.0875    1.18 
+#>  8 boot8    0.0582  0.0327 0.0567    0.722
+#>  9 boot9    0.0617  0.0360 0.104     0.353
+#> 10 boot10   0.0389  0.0353 0.0721    0    
 #> # ℹ 90 more rows
 ```
 
@@ -116,7 +116,7 @@ want to simply return only the variable names, you can add the
 
 ``` r
 selected_variables(model, 0.95, "vip", var_names_only = TRUE)
-#> [1] "pregnant" "glucose"  "pressure" "mass"     "pedigree"
+#> [1] "pregnant" "glucose"  "mass"     "pedigree"
 ```
 
 We can compare the selected variables using the VIP method to the QNT
@@ -125,7 +125,7 @@ interval that does not contain 0:
 
 ``` r
 selected_variables(model, 0.95, "qnt", var_names_only = TRUE)
-#> [1] "pregnant" "glucose"  "pressure" "mass"     "pedigree"
+#> [1] "pregnant" "glucose"  "mass"     "pedigree"
 ```
 
 Note that the number of selected variables with QNT will always be \<=
@@ -151,22 +151,22 @@ selection_thresholds(model, select = "lambda.min")
 #> # A tibble: 16 × 5
 #>    covariate method threshold  alpha covariate_id
 #>    <chr>     <chr>      <dbl>  <dbl>        <int>
-#>  1 age       QNT         0.73 0.27              8
+#>  1 age       QNT         0.77 0.23              8
 #>  2 glucose   QNT         1    0                 2
-#>  3 insulin   QNT         0.55 0.45              5
+#>  3 insulin   QNT         0.37 0.63              5
 #>  4 mass      QNT         1    0                 6
-#>  5 pedigree  QNT         1    0                 7
-#>  6 pregnant  QNT         1    0                 1
-#>  7 pressure  QNT         0.95 0.0500            3
+#>  5 pedigree  QNT         0.95 0.0500            7
+#>  6 pregnant  QNT         0.99 0.0100            1
+#>  7 pressure  QNT         0.83 0.17              3
 #>  8 triceps   QNT         0    1                 4
-#>  9 age       VIP         0.86 0.14              8
+#>  9 age       VIP         0.9  0.1               8
 #> 10 glucose   VIP         1    0                 2
-#> 11 insulin   VIP         0.82 0.18              5
+#> 11 insulin   VIP         0.76 0.24              5
 #> 12 mass      VIP         1    0                 6
-#> 13 pedigree  VIP         1    0                 7
-#> 14 pregnant  VIP         1    0                 1
-#> 15 pressure  VIP         0.97 0.0300            3
-#> 16 triceps   VIP         0.67 0.33              4
+#> 13 pedigree  VIP         0.97 0.0300            7
+#> 14 pregnant  VIP         0.99 0.0100            1
+#> 15 pressure  VIP         0.93 0.0700            3
+#> 16 triceps   VIP         0.59 0.41              4
 ```
 
 ### Coefficients
@@ -181,18 +181,18 @@ fold, and the values are the corresponding estimated coefficients.
 ``` r
 tidy(model, select = "lambda.min")
 #> # A tibble: 100 × 10
-#>    id     Intercept pregnant glucose pressure   triceps  insulin   mass pedigree
-#>    <chr>      <dbl>    <dbl>   <dbl>    <dbl>     <dbl>    <dbl>  <dbl>    <dbl>
-#>  1 boot1      -7.61   0.0997  0.0341 -0.0182   0.00410  -2.66e-3 0.0744    0.629
-#>  2 boot2      -9.01   0.118   0.0406 -0.0133   0.0140   -2.44e-3 0.0659    1.45 
-#>  3 boot3      -8.67   0.127   0.0354 -0.00767 -0.00250  -9.96e-4 0.0894    0.534
-#>  4 boot4      -7.29   0.172   0.0349 -0.0118  -0.00461  -3.65e-4 0.0658    0.950
-#>  5 boot5      -7.78   0.123   0.0330 -0.0121  -0.00291  -6.54e-4 0.0760    0.667
-#>  6 boot6      -7.73   0.152   0.0342 -0.0112   0.00558  -1.58e-3 0.0777    0.828
-#>  7 boot7      -7.99   0.0689  0.0374 -0.0119  -0.000679 -1.36e-3 0.0874    0.748
-#>  8 boot8      -8.14   0.145   0.0338 -0.0124  -0.00252  -3.05e-4 0.0881    0.977
-#>  9 boot9      -7.69   0.155   0.0331 -0.00740 -0.00191  -8.19e-4 0.0623    1.52 
-#> 10 boot10     -7.60   0.144   0.0403 -0.00748  0        -8.98e-4 0.0519    0.651
+#>    id     Intercept pregnant glucose pressure  triceps   insulin   mass pedigree
+#>    <chr>      <dbl>    <dbl>   <dbl>    <dbl>    <dbl>     <dbl>  <dbl>    <dbl>
+#>  1 boot1      -9.91   0.0957  0.0428 -0.00212 -0.00254 -0.00429  0.0811    0.845
+#>  2 boot2      -7.77   0       0.0367 -0.00859 -0.00789 -0.00100  0.0850    0.193
+#>  3 boot3      -7.26   0.0713  0.0258 -0.00562  0       -0.000884 0.0833    0.667
+#>  4 boot4      -7.92   0.0908  0.0349 -0.0115   0.0153   0        0.0649    0.573
+#>  5 boot5      -8.48   0.217   0.0462 -0.0128  -0.00260 -0.00137  0.0680    0.813
+#>  6 boot6      -8.20   0.0930  0.0305 -0.00585  0.0121  -0.00186  0.0814    0.372
+#>  7 boot7     -10.2    0.0516  0.0404  0.00272 -0.00765 -0.00179  0.0875    1.18 
+#>  8 boot8      -7.29   0.0582  0.0327 -0.00830  0       -0.00185  0.0567    0.722
+#>  9 boot9      -8.96   0.0617  0.0360 -0.0201   0       -0.000922 0.104     0.353
+#> 10 boot10     -8.23   0.0389  0.0353  0        0        0        0.0721    0    
 #> # ℹ 90 more rows
 #> # ℹ 1 more variable: age <dbl>
 ```
@@ -245,7 +245,7 @@ variables.
 ``` r
 plot_selected_variables(
   model,
-  covariates = c(pregnant, pressure),
+  covariates = c(pregnant, mass),
   threshold = 0.95,
   method = "vip",
   select = "lambda.min"
@@ -265,16 +265,16 @@ as_tibble(predict(model, test, select = "lambda.min", type = "response"))
 #> # A tibble: 230 × 100
 #>     boot1  boot2  boot3  boot4  boot5  boot6  boot7  boot8  boot9 boot10 boot11
 #>     <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-#>  1 0.772  0.823  0.663  0.700  0.701  0.682  0.662  0.682  0.643  0.697  0.769 
-#>  2 0.794  0.855  0.765  0.879  0.792  0.801  0.786  0.803  0.834  0.890  0.728 
-#>  3 0.0464 0.0300 0.0400 0.0541 0.0486 0.0487 0.0539 0.0445 0.0394 0.0528 0.0479
-#>  4 0.665  0.746  0.704  0.733  0.755  0.604  0.710  0.725  0.559  0.785  0.851 
-#>  5 0.652  0.721  0.586  0.682  0.658  0.555  0.584  0.622  0.592  0.696  0.703 
-#>  6 0.294  0.334  0.333  0.303  0.328  0.327  0.403  0.370  0.271  0.279  0.421 
-#>  7 0.207  0.145  0.201  0.279  0.225  0.210  0.183  0.215  0.201  0.243  0.169 
-#>  8 0.348  0.252  0.316  0.352  0.357  0.270  0.238  0.324  0.269  0.269  0.337 
-#>  9 0.744  0.680  0.741  0.752  0.740  0.687  0.707  0.732  0.633  0.725  0.781 
-#> 10 0.0457 0.0388 0.0401 0.0707 0.0544 0.0506 0.0569 0.0522 0.0590 0.0659 0.0428
+#>  1 0.818  0.635  0.634  0.729  0.716  0.789  0.735  0.699  0.755  0.676  0.628 
+#>  2 0.877  0.736  0.631  0.724  0.937  0.698  0.811  0.767  0.701  0.715  0.784 
+#>  3 0.0276 0.0700 0.0704 0.0567 0.0338 0.0625 0.0292 0.0556 0.0380 0.0715 0.0682
+#>  4 0.578  0.809  0.630  0.891  0.722  0.773  0.729  0.686  0.861  0.896  0.579 
+#>  5 0.697  0.625  0.531  0.684  0.683  0.654  0.690  0.646  0.683  0.689  0.543 
+#>  6 0.262  0.435  0.439  0.457  0.214  0.474  0.379  0.305  0.418  0.478  0.296 
+#>  7 0.218  0.196  0.211  0.149  0.256  0.214  0.168  0.197  0.157  0.202  0.258 
+#>  8 0.403  0.276  0.343  0.226  0.261  0.395  0.337  0.308  0.343  0.313  0.309 
+#>  9 0.830  0.744  0.669  0.622  0.786  0.743  0.768  0.675  0.778  0.733  0.682 
+#> 10 0.0296 0.0682 0.0695 0.0590 0.0427 0.0523 0.0382 0.0642 0.0342 0.0683 0.0710
 #> # ℹ 220 more rows
 #> # ℹ 89 more variables: boot12 <dbl>, boot13 <dbl>, boot14 <dbl>, boot15 <dbl>,
 #> #   boot16 <dbl>, boot17 <dbl>, boot18 <dbl>, boot19 <dbl>, boot20 <dbl>,
@@ -299,16 +299,16 @@ tibble(
 #> # A tibble: 230 × 1
 #>    predictions
 #>          <dbl>
-#>  1      0.701 
-#>  2      0.790 
-#>  3      0.0479
-#>  4      0.724 
-#>  5      0.631 
-#>  6      0.371 
-#>  7      0.205 
-#>  8      0.311 
+#>  1      0.696 
+#>  2      0.744 
+#>  3      0.0533
+#>  4      0.747 
+#>  5      0.623 
+#>  6      0.397 
+#>  7      0.196 
+#>  8      0.309 
 #>  9      0.722 
-#> 10      0.0532
+#> 10      0.0536
 #> # ℹ 220 more rows
 ```
 
@@ -426,18 +426,10 @@ model_fast_preds <- ifelse(
   no = 0
 )
 truth <- as.integer(test$diabetes) - 1
-
-cat(
-  "Standard Bolasso accuracy:",
-  round(100*sum(model_standard_preds == truth)/length(truth), 2),
-  "%\n",
-  "\rFast Bolasso accuracy:",
-  round(100*sum(model_fast_preds == truth)/length(truth), 2),
-  "%\n"
-)
-#> Standard Bolasso accuracy: 77.39 %
-#>  Fast Bolasso accuracy: 76.52 %
 ```
+
+    #> Standard Bolasso accuracy: 77.39 %
+    #>  Fast Bolasso accuracy: 78.7 %
 
 It’s important to note that fast bolasso should be thought of more as a
 rough-and-ready algorithm that is better for quick iteration and might
@@ -471,20 +463,46 @@ time_sequential <- system.time({
     diabetes ~ .,
     data = train,
     n.boot = 1000,
-    progress = TRUE,
+    progress = FALSE,
     family = "binomial"
   )
 })
-
-cat(
-  "Parallel bolasso time (seconds):",
-  round(time_parallel[[3]], 3),
-  "\nSequential bolasso time (seconds):",
-  round(time_sequential[[3]], 3)
-)
-#> Parallel bolasso time (seconds): 10.667 
-#> Sequential bolasso time (seconds): 41.962
 ```
+
+    #> Parallel bolasso time (seconds): 10.827 
+    #> Sequential bolasso time (seconds): 41.749
+
+### Beyond the Lasso
+
+bolasso also allows us to fit penalized regression models beyond the
+Lasso. For example, suppose we want to fit a bootstrap-enhanced
+elasticnet model with a mixing parameter of 0.5 (an even mix of the
+Ridge and Lasso regularization terms). We can simply pass the underlying
+`glmnet::glmnet` argument `alpha = 0.5` through bolasso. The following
+code compares selected variables between the Lasso and elasticnet
+models.
+
+``` r
+lasso <- bolasso(
+  diabetes ~ .,
+  data = train,
+  n.boot = 100,
+  progress = FALSE,
+  family = "binomial"
+)
+
+elnet <- bolasso(
+  diabetes ~ .,
+  data = train,
+  n.boot = 100,
+  progress = FALSE,
+  family = "binomial",
+  alpha = 0.5
+)
+```
+
+    #> Lasso selected variables: pregnant glucose mass 
+    #> Elnet selected variables: pregnant glucose pressure mass pedigree age
 
 ## References
 
