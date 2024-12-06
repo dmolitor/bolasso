@@ -108,22 +108,21 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
 #'   form = mpg ~ .,
 #'   data = mtcars_train,
 #'   n.boot = 20,
-#'   nfolds = 5,
-#'   implement = "glmnet"
+#'   nfolds = 5
 #' )
 #'
 #' # Retrieve a tidy tibble of bootstrap coefficients for each covariate
 #' tidy(bolasso_form)
 #' 
 #' # Extract selected variables
-#' selected_vars(bolasso_form, threshold = 0.9, select = "lambda.min")
+#' selected_variables(bolasso_form, threshold = 0.9, select = "lambda.min")
 #'
 #' # Bagged ensemble prediction on test data
 #' predict(bolasso_form,
 #'         new.data = mtcars_test,
 #'         select = "lambda.min")
 #'
-#' ## Alternal Matrix Interface
+#' ## Alternate Matrix Interface
 #'
 #' # Train model
 #' set.seed(123)
@@ -132,8 +131,7 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
 #'   y = mtcars_train[, 1],
 #'   data = mtcars_train,
 #'   n.boot = 20,
-#'   nfolds = 5,
-#'   implement = "glmnet"
+#'   nfolds = 5
 #' )
 #'
 #' # Bagged ensemble prediction on test data
@@ -145,15 +143,17 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
 #' `n.boot` of `cv.glmnet` or `cv.gamlr` objects.
 #'
 #' @export
-bolasso <- function(formula,
-                    data,
-                    n.boot = 100,
-                    progress = TRUE,
-                    implement = c("glmnet", "gamlr"),
-                    x = NULL,
-                    y = NULL,
-                    fast = FALSE,
-                    ...) {
+bolasso <- function(
+  formula,
+  data,
+  n.boot = 100,
+  progress = TRUE,
+  implement = c("glmnet", "gamlr"),
+  x = NULL,
+  y = NULL,
+  fast = FALSE,
+  ...
+) {
   implement <- match.arg(implement)
   if (fast && implement == "gamlr") {
     message("Fast mode isn't compatible with `gamlr`; defaulting to `glmnet`")

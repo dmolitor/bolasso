@@ -75,22 +75,21 @@ bolasso_form <- bolasso(
   form = mpg ~ .,
   data = mtcars_train,
   n.boot = 20,
-  nfolds = 5,
-  implement = "glmnet"
+  nfolds = 5
 )
 
 # Retrieve a tidy tibble of bootstrap coefficients for each covariate
 tidy(bolasso_form)
 
 # Extract selected variables
-selected_vars(bolasso_form, threshold = 0.9, select = "lambda.min")
+selected_variables(bolasso_form, threshold = 0.9, select = "lambda.min")
 
 # Bagged ensemble prediction on test data
 predict(bolasso_form,
         new.data = mtcars_test,
         select = "lambda.min")
 
-## Alternal Matrix Interface
+## Alternate Matrix Interface
 
 # Train model
 set.seed(123)
@@ -99,8 +98,7 @@ bolasso_mat <- bolasso(
   y = mtcars_train[, 1],
   data = mtcars_train,
   n.boot = 20,
-  nfolds = 5,
-  implement = "glmnet"
+  nfolds = 5
 )
 
 # Bagged ensemble prediction on test data
