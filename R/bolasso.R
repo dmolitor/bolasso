@@ -91,9 +91,6 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
 #' @seealso [glmnet::cv.glmnet] and [gamlr::cv.gamlr] for full details on the
 #'   respective implementations and arguments that can be passed to `...`.
 #'
-#' @references
-#' \insertRef{DBLP:journals/corr/abs-0804-1302}{bolasso}
-#'
 #' @examples
 #' mtcars[, c(2, 10:11)] <- lapply(mtcars[, c(2, 10:11)], as.factor)
 #' idx <- sample(nrow(mtcars), 22)

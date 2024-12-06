@@ -107,9 +107,6 @@ predict(bolasso_mat,
         select = "lambda.min")
 
 }
-\references{
-\insertRef{DBLP:journals/corr/abs-0804-1302}{bolasso}
-}
 \seealso{
 \link[glmnet:cv.glmnet]{glmnet::cv.glmnet} and \link[gamlr:cv.gamlr]{gamlr::cv.gamlr} for full details on the
 respective implementations and arguments that can be passed to \code{...}.

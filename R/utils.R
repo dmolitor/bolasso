@@ -1,5 +1,3 @@
-#' @importFrom Rdpack reprompt
-
 bootstraps <- function(dat, n) {
   stopifnot(is.matrix(dat) || inherits(dat, "sparseMatrix"),
             is.numeric(n) && n >= 1)
