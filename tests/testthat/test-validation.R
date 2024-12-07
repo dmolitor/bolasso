@@ -19,4 +19,7 @@ test_that("validate_data works correctly", {
     validate_data(x = mtcars[, -1], y = mtcars[, 1]),
     "`x` must be of class `matrix` or `sparseMatrix`"
   )
+  expect_null(
+    validate_data(mpg ~ ., data = mtcars)
+  )
 })

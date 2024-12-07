@@ -23,6 +23,10 @@ test_that("bolasso glmnet functionality works sequentially", {
   expect_equal(selected_vars(model_form_glmnet), selected_vars(model_xy_glmnet))
   expect_s3_class(plot(model_form_glmnet), "ggplot")
   expect_s3_class(plot(model_xy_glmnet), "ggplot")
+  expect_s3_class(plot_selected_variables(model_form_glmnet), "ggplot")
+  expect_s3_class(plot_selected_variables(model_xy_glmnet), "ggplot")
+  expect_s3_class(plot_selection_thresholds(model_form_glmnet), "ggplot")
+  expect_s3_class(plot_selection_thresholds(model_xy_glmnet), "ggplot")
 })
 
 test_that("bolasso gamlr functionality works sequentially", {
@@ -34,7 +38,7 @@ test_that("bolasso gamlr functionality works sequentially", {
     n.boot = 5,
     implement = "gamlr"
   )
-  # glmnet matrix interface
+  # gamlr matrix interface
   x <- model.matrix(mpg ~ . - 1, mtcars)
   y <- mtcars[["mpg"]]
   set.seed(123)
@@ -50,4 +54,48 @@ test_that("bolasso gamlr functionality works sequentially", {
   expect_equal(selected_vars(model_form_gamlr), selected_vars(model_xy_gamlr))
   expect_s3_class(plot(model_form_gamlr), "ggplot")
   expect_s3_class(plot(model_xy_gamlr), "ggplot")
+  expect_s3_class(plot_selected_variables(model_form_gamlr), "ggplot")
+  expect_s3_class(plot_selected_variables(model_xy_gamlr), "ggplot")
+  expect_s3_class(plot_selection_thresholds(model_form_gamlr), "ggplot")
+  expect_s3_class(plot_selection_thresholds(model_xy_gamlr), "ggplot")
+})
+
+test_that("bolasso fast functionality works", {
+  # formula
+  set.seed(123)
+  model_fast <- bolasso(
+    formula = mpg ~ .,
+    data = mtcars,
+    n.boot = 5,
+    fast = TRUE
+  )
+  # matrix interface
+  x <- model.matrix(mpg ~ . - 1, mtcars)
+  y <- mtcars[["mpg"]]
+  set.seed(123)
+  model_xy_fast <- bolasso(
+    x = x,
+    y = y,
+    n.boot = 5,
+    fast = TRUE
+  )
+
+  expect_message({
+    model_form_gamlr <- bolasso(
+      formula = mpg ~ .,
+      data = mtcars,
+      n.boot = 5,
+      implement = "gamlr",
+      fast = TRUE
+    )
+  }, regexp = "Fast mode isn't compatible with `gamlr`")
+  expect_equal(coef(model_fast), coef(model_xy_fast))
+  expect_equal(predict(model_fast, mtcars), predict(model_xy_fast, x))
+  expect_equal(selected_vars(model_fast), selected_vars(model_xy_fast))
+  expect_s3_class(plot(model_fast), "ggplot")
+  expect_s3_class(plot(model_xy_fast), "ggplot")
+  expect_s3_class(plot_selected_variables(model_fast), "ggplot")
+  expect_s3_class(plot_selected_variables(model_xy_fast), "ggplot")
+  expect_s3_class(plot_selection_thresholds(model_fast), "ggplot")
+  expect_s3_class(plot_selection_thresholds(model_xy_fast), "ggplot")
 })
