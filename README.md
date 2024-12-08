@@ -94,18 +94,18 @@ cross-validation error.
 ``` r
 selected_variables(model, threshold = 0.95, method = "vip", select = "lambda.min")
 #> # A tibble: 100 × 5
-#>    id     pregnant glucose   mass pedigree
-#>    <chr>     <dbl>   <dbl>  <dbl>    <dbl>
-#>  1 boot1    0.0957  0.0428 0.0811    0.845
-#>  2 boot2    0       0.0367 0.0850    0.193
-#>  3 boot3    0.0713  0.0258 0.0833    0.667
-#>  4 boot4    0.0908  0.0349 0.0649    0.573
-#>  5 boot5    0.217   0.0462 0.0680    0.813
-#>  6 boot6    0.0930  0.0305 0.0814    0.372
-#>  7 boot7    0.0516  0.0404 0.0875    1.18 
-#>  8 boot8    0.0582  0.0327 0.0567    0.722
-#>  9 boot9    0.0617  0.0360 0.104     0.353
-#> 10 boot10   0.0389  0.0353 0.0721    0    
+#>    id     pregnant glucose   mass    age
+#>    <chr>     <dbl>   <dbl>  <dbl>  <dbl>
+#>  1 boot1    0.117   0.0384 0.0800 0.0145
+#>  2 boot2    0.112   0.0331 0.0675 0.0115
+#>  3 boot3    0.143   0.0257 0.112  0.0135
+#>  4 boot4    0.130   0.0240 0.0789 0.0240
+#>  5 boot5    0.0473  0.0215 0.0793 0.0183
+#>  6 boot6    0.0634  0.0247 0.0666 0.0346
+#>  7 boot7    0.101   0.0326 0.0656 0.0194
+#>  8 boot8    0.0761  0.0258 0.0937 0.0359
+#>  9 boot9    0.202   0.0238 0.0613 0.0113
+#> 10 boot10   0.0926  0.0337 0.0779 0.0293
 #> # ℹ 90 more rows
 ```
 
@@ -116,7 +116,7 @@ want to simply return only the variable names, you can add the
 
 ``` r
 selected_variables(model, 0.95, "vip", var_names_only = TRUE)
-#> [1] "pregnant" "glucose"  "mass"     "pedigree"
+#> [1] "pregnant" "glucose"  "mass"     "age"
 ```
 
 We can compare the selected variables using the VIP method to the QNT
@@ -125,7 +125,7 @@ interval that does not contain 0:
 
 ``` r
 selected_variables(model, 0.95, "qnt", var_names_only = TRUE)
-#> [1] "pregnant" "glucose"  "mass"     "pedigree"
+#> [1] "pregnant" "glucose"  "mass"
 ```
 
 Note that the number of selected variables with QNT will always be \<=
@@ -151,22 +151,22 @@ selection_thresholds(model, select = "lambda.min")
 #> # A tibble: 16 × 5
 #>    covariate method threshold  alpha covariate_id
 #>    <chr>     <chr>      <dbl>  <dbl>        <int>
-#>  1 age       QNT         0.77 0.23              8
+#>  1 age       QNT         0.93 0.0700            8
 #>  2 glucose   QNT         1    0                 2
-#>  3 insulin   QNT         0.37 0.63              5
+#>  3 insulin   QNT         0.39 0.61              5
 #>  4 mass      QNT         1    0                 6
-#>  5 pedigree  QNT         0.95 0.0500            7
-#>  6 pregnant  QNT         0.99 0.0100            1
-#>  7 pressure  QNT         0.83 0.17              3
+#>  5 pedigree  QNT         0.77 0.23              7
+#>  6 pregnant  QNT         1    0                 1
+#>  7 pressure  QNT         0.65 0.35              3
 #>  8 triceps   QNT         0    1                 4
-#>  9 age       VIP         0.9  0.1               8
+#>  9 age       VIP         0.97 0.0300            8
 #> 10 glucose   VIP         1    0                 2
-#> 11 insulin   VIP         0.76 0.24              5
+#> 11 insulin   VIP         0.78 0.22              5
 #> 12 mass      VIP         1    0                 6
-#> 13 pedigree  VIP         0.97 0.0300            7
-#> 14 pregnant  VIP         0.99 0.0100            1
-#> 15 pressure  VIP         0.93 0.0700            3
-#> 16 triceps   VIP         0.59 0.41              4
+#> 13 pedigree  VIP         0.9  0.1               7
+#> 14 pregnant  VIP         1    0                 1
+#> 15 pressure  VIP         0.84 0.16              3
+#> 16 triceps   VIP         0.69 0.31              4
 ```
 
 ### Coefficients
@@ -181,18 +181,18 @@ fold, and the values are the corresponding estimated coefficients.
 ``` r
 tidy(model, select = "lambda.min")
 #> # A tibble: 100 × 10
-#>    id     Intercept pregnant glucose pressure  triceps   insulin   mass pedigree
-#>    <chr>      <dbl>    <dbl>   <dbl>    <dbl>    <dbl>     <dbl>  <dbl>    <dbl>
-#>  1 boot1      -9.91   0.0957  0.0428 -0.00212 -0.00254 -0.00429  0.0811    0.845
-#>  2 boot2      -7.77   0       0.0367 -0.00859 -0.00789 -0.00100  0.0850    0.193
-#>  3 boot3      -7.26   0.0713  0.0258 -0.00562  0       -0.000884 0.0833    0.667
-#>  4 boot4      -7.92   0.0908  0.0349 -0.0115   0.0153   0        0.0649    0.573
-#>  5 boot5      -8.48   0.217   0.0462 -0.0128  -0.00260 -0.00137  0.0680    0.813
-#>  6 boot6      -8.20   0.0930  0.0305 -0.00585  0.0121  -0.00186  0.0814    0.372
-#>  7 boot7     -10.2    0.0516  0.0404  0.00272 -0.00765 -0.00179  0.0875    1.18 
-#>  8 boot8      -7.29   0.0582  0.0327 -0.00830  0       -0.00185  0.0567    0.722
-#>  9 boot9      -8.96   0.0617  0.0360 -0.0201   0       -0.000922 0.104     0.353
-#> 10 boot10     -8.23   0.0389  0.0353  0        0        0        0.0721    0    
+#>    id     Intercept pregnant glucose pressure triceps   insulin   mass pedigree
+#>    <chr>      <dbl>    <dbl>   <dbl>    <dbl>   <dbl>     <dbl>  <dbl>    <dbl>
+#>  1 boot1      -8.80   0.117   0.0384 -0.00768 0.00459 -0.00313  0.0800  1.08   
+#>  2 boot2      -7.26   0.112   0.0331 -0.00633 0.00873 -0.00246  0.0675  0.00375
+#>  3 boot3      -7.17   0.143   0.0257 -0.0221  0.00815 -0.00262  0.112   0.717  
+#>  4 boot4      -7.08   0.130   0.0240 -0.0133  0.00517  0        0.0789  0.716  
+#>  5 boot5      -6.14   0.0473  0.0215 -0.00661 0.00237 -0.00173  0.0793  0.305  
+#>  6 boot6      -7.92   0.0634  0.0247  0       0       -0.000142 0.0666  1.10   
+#>  7 boot7      -6.88   0.101   0.0326 -0.0224  0.0129  -0.00100  0.0656  1.16   
+#>  8 boot8      -7.93   0.0761  0.0258 -0.0141  0.0102  -0.00103  0.0937  0.471  
+#>  9 boot9      -6.37   0.202   0.0238 -0.00875 0.0106  -0.000555 0.0613  0      
+#> 10 boot10     -8.39   0.0926  0.0337 -0.0104  0.00500 -0.000949 0.0779  0.793  
 #> # ℹ 90 more rows
 #> # ℹ 1 more variable: age <dbl>
 ```
@@ -263,25 +263,25 @@ probabilites on our `test` data.
 ``` r
 as_tibble(predict(model, test, select = "lambda.min", type = "response"))
 #> # A tibble: 230 × 100
-#>     boot1  boot2  boot3  boot4  boot5  boot6  boot7  boot8  boot9 boot10 boot11
-#>     <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-#>  1 0.818  0.635  0.634  0.729  0.716  0.789  0.735  0.699  0.755  0.676  0.628 
-#>  2 0.877  0.736  0.631  0.724  0.937  0.698  0.811  0.767  0.701  0.715  0.784 
-#>  3 0.0276 0.0700 0.0704 0.0567 0.0338 0.0625 0.0292 0.0556 0.0380 0.0715 0.0682
-#>  4 0.578  0.809  0.630  0.891  0.722  0.773  0.729  0.686  0.861  0.896  0.579 
-#>  5 0.697  0.625  0.531  0.684  0.683  0.654  0.690  0.646  0.683  0.689  0.543 
-#>  6 0.262  0.435  0.439  0.457  0.214  0.474  0.379  0.305  0.418  0.478  0.296 
-#>  7 0.218  0.196  0.211  0.149  0.256  0.214  0.168  0.197  0.157  0.202  0.258 
-#>  8 0.403  0.276  0.343  0.226  0.261  0.395  0.337  0.308  0.343  0.313  0.309 
-#>  9 0.830  0.744  0.669  0.622  0.786  0.743  0.768  0.675  0.778  0.733  0.682 
-#> 10 0.0296 0.0682 0.0695 0.0590 0.0427 0.0523 0.0382 0.0642 0.0342 0.0683 0.0710
+#>    boot1 boot2 boot3 boot4 boot5 boot6 boot7 boot8 boot9 boot10 boot11 boot12
+#>    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>  <dbl>  <dbl>
+#>  1 0.784 0.732 0.747 0.687 0.669 0.684 0.783 0.717 0.675  0.763  0.643  0.768
+#>  2 0.239 0.295 0.260 0.212 0.353 0.232 0.156 0.199 0.249  0.215  0.268  0.161
+#>  3 0.644 0.600 0.482 0.595 0.523 0.646 0.700 0.566 0.555  0.696  0.581  0.661
+#>  4 0.321 0.316 0.633 0.431 0.367 0.203 0.558 0.349 0.407  0.331  0.369  0.376
+#>  5 0.239 0.259 0.283 0.253 0.335 0.262 0.308 0.265 0.215  0.264  0.242  0.285
+#>  6 0.370 0.362 0.389 0.410 0.413 0.419 0.441 0.371 0.373  0.407  0.357  0.367
+#>  7 0.958 0.931 0.903 0.858 0.865 0.873 0.893 0.860 0.861  0.931  0.874  0.862
+#>  8 0.355 0.445 0.385 0.320 0.334 0.234 0.338 0.257 0.514  0.294  0.352  0.272
+#>  9 0.427 0.517 0.508 0.505 0.426 0.378 0.480 0.426 0.644  0.460  0.481  0.393
+#> 10 0.465 0.446 0.536 0.500 0.532 0.541 0.496 0.564 0.435  0.526  0.432  0.567
 #> # ℹ 220 more rows
-#> # ℹ 89 more variables: boot12 <dbl>, boot13 <dbl>, boot14 <dbl>, boot15 <dbl>,
-#> #   boot16 <dbl>, boot17 <dbl>, boot18 <dbl>, boot19 <dbl>, boot20 <dbl>,
-#> #   boot21 <dbl>, boot22 <dbl>, boot23 <dbl>, boot24 <dbl>, boot25 <dbl>,
-#> #   boot26 <dbl>, boot27 <dbl>, boot28 <dbl>, boot29 <dbl>, boot30 <dbl>,
-#> #   boot31 <dbl>, boot32 <dbl>, boot33 <dbl>, boot34 <dbl>, boot35 <dbl>,
-#> #   boot36 <dbl>, boot37 <dbl>, boot38 <dbl>, boot39 <dbl>, boot40 <dbl>, …
+#> # ℹ 88 more variables: boot13 <dbl>, boot14 <dbl>, boot15 <dbl>, boot16 <dbl>,
+#> #   boot17 <dbl>, boot18 <dbl>, boot19 <dbl>, boot20 <dbl>, boot21 <dbl>,
+#> #   boot22 <dbl>, boot23 <dbl>, boot24 <dbl>, boot25 <dbl>, boot26 <dbl>,
+#> #   boot27 <dbl>, boot28 <dbl>, boot29 <dbl>, boot30 <dbl>, boot31 <dbl>,
+#> #   boot32 <dbl>, boot33 <dbl>, boot34 <dbl>, boot35 <dbl>, boot36 <dbl>,
+#> #   boot37 <dbl>, boot38 <dbl>, boot39 <dbl>, boot40 <dbl>, boot41 <dbl>, …
 ```
 
 Note that this outputs an (n x p) matrix of predictions where n is the
@@ -299,16 +299,16 @@ tibble(
 #> # A tibble: 230 × 1
 #>    predictions
 #>          <dbl>
-#>  1      0.696 
-#>  2      0.744 
-#>  3      0.0533
-#>  4      0.747 
-#>  5      0.623 
-#>  6      0.397 
-#>  7      0.196 
-#>  8      0.309 
-#>  9      0.722 
-#> 10      0.0536
+#>  1       0.704
+#>  2       0.254
+#>  3       0.637
+#>  4       0.372
+#>  5       0.268
+#>  6       0.395
+#>  7       0.906
+#>  8       0.328
+#>  9       0.465
+#> 10       0.470
 #> # ℹ 220 more rows
 ```
 
@@ -428,8 +428,8 @@ model_fast_preds <- ifelse(
 truth <- as.integer(test$diabetes) - 1
 ```
 
-    #> Standard Bolasso accuracy: 77.39 %
-    #>  Fast Bolasso accuracy: 78.7 %
+    #> Standard Bolasso accuracy: 80.87 %
+    #>  Fast Bolasso accuracy: 80.43 %
 
 It’s important to note that fast bolasso should be thought of more as a
 rough-and-ready algorithm that is better for quick iteration and might
@@ -469,8 +469,8 @@ time_sequential <- system.time({
 })
 ```
 
-    #> Parallel bolasso time (seconds): 10.827 
-    #> Sequential bolasso time (seconds): 41.749
+    #> Parallel bolasso time (seconds): 10.921 
+    #> Sequential bolasso time (seconds): 42.562
 
 ### Beyond the Lasso
 
@@ -501,8 +501,8 @@ elnet <- bolasso(
 )
 ```
 
-    #> Lasso selected variables: pregnant glucose mass 
-    #> Elnet selected variables: pregnant glucose pressure mass pedigree age
+    #> Lasso selected variables: pregnant glucose mass age 
+    #> Elnet selected variables: pregnant glucose mass pedigree age
 
 ## References
 
