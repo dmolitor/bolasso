@@ -7,6 +7,13 @@
 <url><loc>/news/index.html</loc></url>
 <url><loc>/reference/bolasso.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
-<url><loc>/reference/selected_vars.html</loc></url>
+<url><loc>/reference/plot.bolasso.html</loc></url>
+<url><loc>/reference/plot_selected_variables.html</loc></url>
+<url><loc>/reference/plot_selection_thresholds.html</loc></url>
+<url><loc>/reference/reexports.html</loc></url>
+<url><loc>/reference/selected_variables.html</loc></url>
+<url><loc>/reference/selection_thresholds.html</loc></url>
+<url><loc>/reference/tidy.bolasso.html</loc></url>
+<url><loc>/reference/transactions.html</loc></url>
 </urlset>
 

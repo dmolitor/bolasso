@@ -8,11 +8,11 @@
 <title>Model Consistent Lasso Estimation Through the Bootstrap • bolasso</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Model Consistent Lasso Estimation Through the Bootstrap">
-<meta name="description" content="Implements the bolasso algorithm for consistent variable selection and estimation accuracy. Includes support for many parallel backends via the future package. For details see: Bach (2008), Bolasso: model consistent Lasso estimation through the bootstrap, &lt;arXiv:0804.1302&gt;.">
-<meta property="og:description" content="Implements the bolasso algorithm for consistent variable selection and estimation accuracy. Includes support for many parallel backends via the future package. For details see: Bach (2008), Bolasso: model consistent Lasso estimation through the bootstrap, &lt;arXiv:0804.1302&gt;.">
+<meta name="description" content="Implements the bolasso algorithm for consistent variable selection and estimation accuracy. Includes support for many parallel backends via the future package. For details see: Bach (2008), Bolasso: model consistent Lasso estimation through the bootstrap, &lt;doi:10.48550/arXiv.0804.1302&gt;.">
+<meta property="og:description" content="Implements the bolasso algorithm for consistent variable selection and estimation accuracy. Includes support for many parallel backends via the future package. For details see: Bach (2008), Bolasso: model consistent Lasso estimation through the bootstrap, &lt;doi:10.48550/arXiv.0804.1302&gt;.">
 <meta property="og:image" content="/logo.png">
 </head>
 <body>
@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">bolasso</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,6 +39,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/dmolitor/bolasso/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -54,17 +55,14 @@
 </div>
 <!-- badges: start -->
 
-<p>The goal of bolasso is to implement model-consistent Lasso estimation via the bootstrap <a href="#id_1">[1]</a>.</p>
+<p>The goal of bolasso is to implement bootstrap-enhanced Lasso (and more generally, penalized regression) estimation, as proposed originally in <a href="#id_2">Bach (2008)</a> and extended by <a href="#id_3">Bunea et al. (2011)</a> and <a href="#id_1">Abram et al. (2016)</a>. These methods focus primarily on variable selection and propose two similar, but slightly different, variable selection algorithms; the variable inclusion probability (VIP) algorithm (Bach; Bunea et al.), and the bootstrap distribution quantile (QNT) algorithm (Abram et al.). Beyond implementing both these variable selection methods, bolasso also provides utilities for making bagged predictions, examining coefficient distributions, and plotting.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install from <a href="https://cran.r-project.org/web/packages/bolasso/index.html" class="external-link">CRAN</a> with:</p>
+<p>You can install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"bolasso"</span><span class="op">)</span></span></code></pre></div>
-<p>or install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"dmolitor/bolasso"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"dmolitor/bolasso@dev"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -73,8 +71,10 @@
 <div class="section level3">
 <h3 id="load-requisite-packages-and-data">Load requisite packages and data<a class="anchor" aria-label="anchor" href="#load-requisite-packages-and-data"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.dmolitor.com/bolasso/" class="external-link">bolasso</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">PimaIndiansDiabetes</span>, package <span class="op">=</span> <span class="st">"mlbench"</span><span class="op">)</span></span>
 <span></span>
@@ -90,102 +90,353 @@
 <span><span class="co">#&gt;  $ pedigree: num  0.627 0.351 0.672 0.167 2.288 ...</span></span>
 <span><span class="co">#&gt;  $ age     : num  50 31 32 21 33 30 26 29 53 54 ...</span></span>
 <span><span class="co">#&gt;  $ diabetes: Factor w/ 2 levels "neg","pos": 2 1 2 1 2 1 2 1 2 2 ...</span></span></code></pre></div>
-<p>First, we run 100-fold bootstrapped Lasso with the <code>glmnet</code> implementation. We can get a rough estimate of the elapsed time using <code><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time()</a></code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
-<span>    <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
-<span>    data <span class="op">=</span> <span class="va">PimaIndiansDiabetes</span>,</span>
-<span>    n.boot <span class="op">=</span> <span class="fl">100</span>, </span>
-<span>    implement <span class="op">=</span> <span class="st">"glmnet"</span>,</span>
-<span>    family <span class="op">=</span> <span class="st">"binomial"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loaded glmnet 4.1-3</span></span>
-<span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;   19.32    0.14   19.58</span></span></code></pre></div>
-<p>We can get a quick overview of the model by printing the <code>bolasso</code> object.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span></span>
-<span><span class="co">#&gt; ------------- 100-fold bootstrapped Lasso -------------</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Model matrix dimensions:</span></span>
-<span><span class="co">#&gt;    - 8 Predictors</span></span>
-<span><span class="co">#&gt;    - 768 Observations</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Selected variables:</span></span>
-<span><span class="co">#&gt;    - 6/8 predictors selected with 90% threshold</span></span>
-<span><span class="co">#&gt;    - 4/8 predictors selected with 100% threshold</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="extracting-selected-variables">Extracting selected variables<a class="anchor" aria-label="anchor" href="#extracting-selected-variables"></a>
-</h3>
-<p>Next, we can extract all variables that were selected in 90% and 100% of the bootstrapped Lasso models. We can also pass any relevant arguments to <code>predict</code> on the <code>cv.glmnet</code> or <code>cv.gamlr</code> model objects. In this case we will use the lambda value that minimizes OOS error.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">0.9</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 7 x 2</span></span>
-<span><span class="co">#&gt;   variable  mean_coef</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 Intercept   -8.15  </span></span>
-<span><span class="co">#&gt; 2 pregnant     0.119 </span></span>
-<span><span class="co">#&gt; 3 glucose      0.0348</span></span>
-<span><span class="co">#&gt; 4 pressure    -0.0113</span></span>
-<span><span class="co">#&gt; 5 mass         0.0821</span></span>
-<span><span class="co">#&gt; 6 pedigree     0.849 </span></span>
-<span><span class="co">#&gt; 7 age          0.0138</span></span>
+<p>First, let’s create a train/test split of our data, and then run 100-fold bootstrapped Lasso with <code>glmnet</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">train_idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">PimaIndiansDiabetes</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">0.7</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">PimaIndiansDiabetes</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">PimaIndiansDiabetes</span><span class="op">[</span><span class="va">train_idx</span>, <span class="op">]</span></span>
+<span><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">PimaIndiansDiabetes</span><span class="op">[</span><span class="op">-</span><span class="va">train_idx</span>, <span class="op">]</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/selected_vars.html">selected_vars</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">1</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 5 x 2</span></span>
-<span><span class="co">#&gt;   variable  mean_coef</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 Intercept   -8.15  </span></span>
-<span><span class="co">#&gt; 2 pregnant     0.119 </span></span>
-<span><span class="co">#&gt; 3 glucose      0.0348</span></span>
-<span><span class="co">#&gt; 4 mass         0.0821</span></span>
-<span><span class="co">#&gt; 5 pedigree     0.849</span></span></code></pre></div>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
+<span>  <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">train</span>,</span>
+<span>  n.boot <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  family <span class="op">=</span> <span class="st">"binomial"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loaded glmnet 4.1-8</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="plotting-selected-variables">Plotting selected variables<a class="anchor" aria-label="anchor" href="#plotting-selected-variables"></a>
+<h3 id="variable-selection">Variable selection<a class="anchor" aria-label="anchor" href="#variable-selection"></a>
 </h3>
-<p>We can also quickly plot the selected variables at the 90% and 100% threshold values.</p>
+<p>Next, using a threshold of 0.95 we can extract the selected variables using the VIP method, which extracts all variables that were selected (had non-zero coefficients) in &gt;= 95% of the bootstrapped models. We’ll use the regularization parameter <code>lambda.min</code> that minimizes cross-validation error.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/selected_variables.html">selected_variables</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">0.95</span>, method <span class="op">=</span> <span class="st">"vip"</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 100 × 5</span></span>
+<span><span class="co">#&gt;    id     pregnant glucose   mass    age</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 boot1    0.117   0.0384 0.0800 0.0145</span></span>
+<span><span class="co">#&gt;  2 boot2    0.112   0.0331 0.0675 0.0115</span></span>
+<span><span class="co">#&gt;  3 boot3    0.143   0.0257 0.112  0.0135</span></span>
+<span><span class="co">#&gt;  4 boot4    0.130   0.0240 0.0789 0.0240</span></span>
+<span><span class="co">#&gt;  5 boot5    0.0473  0.0215 0.0793 0.0183</span></span>
+<span><span class="co">#&gt;  6 boot6    0.0634  0.0247 0.0666 0.0346</span></span>
+<span><span class="co">#&gt;  7 boot7    0.101   0.0326 0.0656 0.0194</span></span>
+<span><span class="co">#&gt;  8 boot8    0.0761  0.0258 0.0937 0.0359</span></span>
+<span><span class="co">#&gt;  9 boot9    0.202   0.0238 0.0613 0.0113</span></span>
+<span><span class="co">#&gt; 10 boot10   0.0926  0.0337 0.0779 0.0293</span></span>
+<span><span class="co">#&gt; # ℹ 90 more rows</span></span></code></pre></div>
+<p>Note that this returned a tibble with the selected variables as columns and the coefficients for each of the bootstrapped models as rows. If you want to simply return only the variable names, you can add the <code>var_names_only</code> argument:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/selected_variables.html">selected_variables</a></span><span class="op">(</span><span class="va">model</span>, <span class="fl">0.95</span>, <span class="st">"vip"</span>, var_names_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "pregnant" "glucose"  "mass"     "age"</span></span></code></pre></div>
+<p>We can compare the selected variables using the VIP method to the QNT method, which selects all variables that have a 95% bootstrap confidence interval that does not contain 0:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/selected_variables.html">selected_variables</a></span><span class="op">(</span><span class="va">model</span>, <span class="fl">0.95</span>, <span class="st">"qnt"</span>, var_names_only <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "pregnant" "glucose"  "mass"</span></span></code></pre></div>
+<p>Note that the number of selected variables with QNT will always be &lt;= than with VIP. The default method for bolasso is <code>method = "vip"</code>.</p>
+<div class="section level4">
+<h4 id="variable-selection-thresholds">Variable selection thresholds<a class="anchor" aria-label="anchor" href="#variable-selection-thresholds"></a>
+</h4>
+<p>It may be that, instead of selecting variables for a given threshold and method, we want to see the largest threshold at which each variable would be selected by both the VIP and QNT methods. We can quickly visualize this with the <code>plot_selection_thresholds</code> function.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="75%"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/plot_selection_thresholds.html">plot_selection_thresholds</a></span><span class="op">(</span><span class="va">model</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="75%"></p>
+<p>You can also get these thresholds in a tibble:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-6-2.png" width="75%"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/selection_thresholds.html">selection_thresholds</a></span><span class="op">(</span><span class="va">model</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 16 × 5</span></span>
+<span><span class="co">#&gt;    covariate method threshold  alpha covariate_id</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;     &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;        &lt;int&gt;</span></span>
+<span><span class="co">#&gt;  1 age       QNT         0.93 0.0700            8</span></span>
+<span><span class="co">#&gt;  2 glucose   QNT         1    0                 2</span></span>
+<span><span class="co">#&gt;  3 insulin   QNT         0.39 0.61              5</span></span>
+<span><span class="co">#&gt;  4 mass      QNT         1    0                 6</span></span>
+<span><span class="co">#&gt;  5 pedigree  QNT         0.77 0.23              7</span></span>
+<span><span class="co">#&gt;  6 pregnant  QNT         1    0                 1</span></span>
+<span><span class="co">#&gt;  7 pressure  QNT         0.65 0.35              3</span></span>
+<span><span class="co">#&gt;  8 triceps   QNT         0    1                 4</span></span>
+<span><span class="co">#&gt;  9 age       VIP         0.97 0.0300            8</span></span>
+<span><span class="co">#&gt; 10 glucose   VIP         1    0                 2</span></span>
+<span><span class="co">#&gt; 11 insulin   VIP         0.78 0.22              5</span></span>
+<span><span class="co">#&gt; 12 mass      VIP         1    0                 6</span></span>
+<span><span class="co">#&gt; 13 pedigree  VIP         0.9  0.1               7</span></span>
+<span><span class="co">#&gt; 14 pregnant  VIP         1    0                 1</span></span>
+<span><span class="co">#&gt; 15 pressure  VIP         0.84 0.16              3</span></span>
+<span><span class="co">#&gt; 16 triceps   VIP         0.69 0.31              4</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level3">
-<h3 id="parallelizing-bolasso">Parallelizing bolasso<a class="anchor" aria-label="anchor" href="#parallelizing-bolasso"></a>
+<h3 id="coefficients">Coefficients<a class="anchor" aria-label="anchor" href="#coefficients"></a>
 </h3>
-<p>We can execute <code>bolasso</code> in parallel via the <a href="https://CRAN.R-project.org/package=future" class="external-link">future</a> package. To do so we can copy the code from above with only one minor tweak shown below.</p>
+<div class="section level4">
+<h4 id="all-coefficients">All coefficients<a class="anchor" aria-label="anchor" href="#all-coefficients"></a>
+</h4>
+<p>bolasso also supports moving beyond variable selection and understanding the bootstrapped variable coefficients. We can extract a tidy tibble where each variable is a column, and each row represents a bootstrap fold, and the values are the corresponding estimated coefficients.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"multisession"</span><span class="op">)</span></span></code></pre></div>
-<p>We can now run the code from above, unaltered, and it will execute in parallel.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">model</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 100 × 10</span></span>
+<span><span class="co">#&gt;    id     Intercept pregnant glucose pressure triceps   insulin   mass pedigree</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;      &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 boot1      -8.80   0.117   0.0384 -0.00768 0.00459 -0.00313  0.0800  1.08   </span></span>
+<span><span class="co">#&gt;  2 boot2      -7.26   0.112   0.0331 -0.00633 0.00873 -0.00246  0.0675  0.00375</span></span>
+<span><span class="co">#&gt;  3 boot3      -7.17   0.143   0.0257 -0.0221  0.00815 -0.00262  0.112   0.717  </span></span>
+<span><span class="co">#&gt;  4 boot4      -7.08   0.130   0.0240 -0.0133  0.00517  0        0.0789  0.716  </span></span>
+<span><span class="co">#&gt;  5 boot5      -6.14   0.0473  0.0215 -0.00661 0.00237 -0.00173  0.0793  0.305  </span></span>
+<span><span class="co">#&gt;  6 boot6      -7.92   0.0634  0.0247  0       0       -0.000142 0.0666  1.10   </span></span>
+<span><span class="co">#&gt;  7 boot7      -6.88   0.101   0.0326 -0.0224  0.0129  -0.00100  0.0656  1.16   </span></span>
+<span><span class="co">#&gt;  8 boot8      -7.93   0.0761  0.0258 -0.0141  0.0102  -0.00103  0.0937  0.471  </span></span>
+<span><span class="co">#&gt;  9 boot9      -6.37   0.202   0.0238 -0.00875 0.0106  -0.000555 0.0613  0      </span></span>
+<span><span class="co">#&gt; 10 boot10     -8.39   0.0926  0.0337 -0.0104  0.00500 -0.000949 0.0779  0.793  </span></span>
+<span><span class="co">#&gt; # ℹ 90 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 1 more variable: age &lt;dbl&gt;</span></span></code></pre></div>
+<p>bolasso also allows us to plot the bootstrap distribution of variable coefficients. Suppose that we want to quickly inspect this distribution for each of our variables. We can achieve this by simply plotting our model.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-10-1.png" width="75%"></p>
+<p>Now, suppose for example we are particularly interested in the coefficient distributions for the <code>triceps</code>, <code>pressure</code>, and <code>glucose</code> variables. We can plot the distributions for just these variables:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span>, covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">glucose</span>, <span class="va">pressure</span>, <span class="va">triceps</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-11-1.png" width="75%"></p>
+<p>Note: If there are more than 30 variables included in our model, then this will plot the 30 variables with the largest absolute mean coefficients.</p>
+</div>
+<div class="section level4">
+<h4 id="selected-variable-coefficients">Selected variable coefficients<a class="anchor" aria-label="anchor" href="#selected-variable-coefficients"></a>
+</h4>
+<p>If we want to plot the coefficient distributions for only the selected variables, we can use <code>plot_selected_variables</code> which will give us pretty much the same thing as <code>plot</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/plot_selected_variables.html">plot_selected_variables</a></span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  threshold <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"vip"</span>,</span>
+<span>  select <span class="op">=</span> <span class="st">"lambda.min"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-12-1.png" width="75%"></p>
+<p>Just like <code>plot</code> we can also focus on a subset of our selected variables.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/plot_selected_variables.html">plot_selected_variables</a></span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">pregnant</span>, <span class="va">mass</span><span class="op">)</span>,</span>
+<span>  threshold <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"vip"</span>,</span>
+<span>  select <span class="op">=</span> <span class="st">"lambda.min"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-13-1.png" width="75%"></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="predictions">Predictions<a class="anchor" aria-label="anchor" href="#predictions"></a>
+</h3>
+<p>Finally, we can make predictions using our bolasso model on new data. For example, the following code shows how we would generate predicted probabilites on our <code>test</code> data.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">test</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 230 × 100</span></span>
+<span><span class="co">#&gt;    boot1 boot2 boot3 boot4 boot5 boot6 boot7 boot8 boot9 boot10 boot11 boot12</span></span>
+<span><span class="co">#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1 0.784 0.732 0.747 0.687 0.669 0.684 0.783 0.717 0.675  0.763  0.643  0.768</span></span>
+<span><span class="co">#&gt;  2 0.239 0.295 0.260 0.212 0.353 0.232 0.156 0.199 0.249  0.215  0.268  0.161</span></span>
+<span><span class="co">#&gt;  3 0.644 0.600 0.482 0.595 0.523 0.646 0.700 0.566 0.555  0.696  0.581  0.661</span></span>
+<span><span class="co">#&gt;  4 0.321 0.316 0.633 0.431 0.367 0.203 0.558 0.349 0.407  0.331  0.369  0.376</span></span>
+<span><span class="co">#&gt;  5 0.239 0.259 0.283 0.253 0.335 0.262 0.308 0.265 0.215  0.264  0.242  0.285</span></span>
+<span><span class="co">#&gt;  6 0.370 0.362 0.389 0.410 0.413 0.419 0.441 0.371 0.373  0.407  0.357  0.367</span></span>
+<span><span class="co">#&gt;  7 0.958 0.931 0.903 0.858 0.865 0.873 0.893 0.860 0.861  0.931  0.874  0.862</span></span>
+<span><span class="co">#&gt;  8 0.355 0.445 0.385 0.320 0.334 0.234 0.338 0.257 0.514  0.294  0.352  0.272</span></span>
+<span><span class="co">#&gt;  9 0.427 0.517 0.508 0.505 0.426 0.378 0.480 0.426 0.644  0.460  0.481  0.393</span></span>
+<span><span class="co">#&gt; 10 0.465 0.446 0.536 0.500 0.532 0.541 0.496 0.564 0.435  0.526  0.432  0.567</span></span>
+<span><span class="co">#&gt; # ℹ 220 more rows</span></span>
+<span><span class="co">#&gt; # ℹ 88 more variables: boot13 &lt;dbl&gt;, boot14 &lt;dbl&gt;, boot15 &lt;dbl&gt;, boot16 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   boot17 &lt;dbl&gt;, boot18 &lt;dbl&gt;, boot19 &lt;dbl&gt;, boot20 &lt;dbl&gt;, boot21 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   boot22 &lt;dbl&gt;, boot23 &lt;dbl&gt;, boot24 &lt;dbl&gt;, boot25 &lt;dbl&gt;, boot26 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   boot27 &lt;dbl&gt;, boot28 &lt;dbl&gt;, boot29 &lt;dbl&gt;, boot30 &lt;dbl&gt;, boot31 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   boot32 &lt;dbl&gt;, boot33 &lt;dbl&gt;, boot34 &lt;dbl&gt;, boot35 &lt;dbl&gt;, boot36 &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   boot37 &lt;dbl&gt;, boot38 &lt;dbl&gt;, boot39 &lt;dbl&gt;, boot40 &lt;dbl&gt;, boot41 &lt;dbl&gt;, …</span></span></code></pre></div>
+<p>Note that this outputs an (n x p) matrix of predictions where n is the number of rows in our test set, p is the number of bootstraps, and each column represents the predictions from one of our bootstrapped models. To combine these into a single prediction per observation, we could take the average for each observation across the models:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  predictions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums-methods.html" class="external-link">rowMeans</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">test</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; # A tibble: 230 × 1</span></span>
+<span><span class="co">#&gt;    predictions</span></span>
+<span><span class="co">#&gt;          &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1       0.704</span></span>
+<span><span class="co">#&gt;  2       0.254</span></span>
+<span><span class="co">#&gt;  3       0.637</span></span>
+<span><span class="co">#&gt;  4       0.372</span></span>
+<span><span class="co">#&gt;  5       0.268</span></span>
+<span><span class="co">#&gt;  6       0.395</span></span>
+<span><span class="co">#&gt;  7       0.906</span></span>
+<span><span class="co">#&gt;  8       0.328</span></span>
+<span><span class="co">#&gt;  9       0.465</span></span>
+<span><span class="co">#&gt; 10       0.470</span></span>
+<span><span class="co">#&gt; # ℹ 220 more rows</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="fast-estimation-️">Fast estimation 🏎️💨<a class="anchor" aria-label="anchor" href="#fast-estimation-%EF%B8%8F"></a>
+</h3>
+<p>For each bootstrapped model, bolasso uses cross-validation to find the optimal regularization parameter lambda. In glmnet, the default number of cross-validation folds is 10. This can quickly become computationally expensive and slow, especially when using many bootstrap replicates. For example, with 1,000 bootstrap replicates, this results in estimating models on 10,000 cross-validation sets.</p>
+<p>To address this, we can activate the <code>fast = TRUE</code> argument in bolasso. Instead of using cross-validation to find the optimal lambda for each bootstrap model, fast bolasso runs a single cross-validated regression on the full dataset to identify the optimal lambda. Then each bootstrapped model uses that lambda as its regularization parameter.</p>
+<p>The following comparison shows the computation time of standard bolasso vs fast bolasso across increasing bootstrap replicates. The plot displays the number of seconds each algorithm takes to complete.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Compare standard vs. fast bolasso across different bootstrap values</span></span>
+<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">400</span>, <span class="fl">500</span>, <span class="fl">600</span>, <span class="fl">700</span>, <span class="fl">800</span>, <span class="fl">900</span>, <span class="fl">1e3</span><span class="op">)</span>,</span>
+<span>  \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">time_standard</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
+<span>        <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
+<span>        data <span class="op">=</span> <span class="va">train</span>,</span>
+<span>        n.boot <span class="op">=</span> <span class="va">x</span>,</span>
+<span>        progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>        family <span class="op">=</span> <span class="st">"binomial"</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="va">time_fast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
+<span>        <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
+<span>        data <span class="op">=</span> <span class="va">train</span>,</span>
+<span>        n.boot <span class="op">=</span> <span class="va">x</span>,</span>
+<span>        progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>        family <span class="op">=</span> <span class="st">"binomial"</span>,</span>
+<span>        fast <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span></span>
+<span>      <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="st">"regular"</span> <span class="op">=</span> <span class="va">time_standard</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, <span class="st">"fast"</span> <span class="op">=</span> <span class="va">time_fast</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Make a data.frame out of the times</span></span>
+<span><span class="va">times_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">times</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span></span>
+<span>    id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">11</span>,</span>
+<span>    n_bootstrap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">200</span>, <span class="fl">300</span>, <span class="fl">400</span>, <span class="fl">500</span>, <span class="fl">600</span>, <span class="fl">700</span>, <span class="fl">800</span>, <span class="fl">900</span>, <span class="fl">1e3</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/reshape.html" class="external-link">reshape</a></span><span class="op">(</span></span>
+<span>    varying <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"regular"</span>, <span class="st">"fast"</span><span class="op">)</span>,</span>
+<span>    v.names <span class="op">=</span> <span class="st">"time"</span>,</span>
+<span>    times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"regular"</span>, <span class="st">"fast"</span><span class="op">)</span>,</span>
+<span>    timevar <span class="op">=</span> <span class="st">"algorithm"</span>,</span>
+<span>    idvar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"n_bootstrap"</span><span class="op">)</span>,</span>
+<span>    direction <span class="op">=</span> <span class="st">"long"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot it!</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">times_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">n_bootstrap</span>, y <span class="op">=</span> <span class="va">time</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">algorithm</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"N Bootstraps"</span>, y <span class="op">=</span> <span class="st">"Time (seconds)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-16-1.png" width="75%"></p>
+<p>Fast bolasso clearly achieves some pretty massive speedups over the standard version! This difference in speed will only be more accentuated when estimating on larger datasets.</p>
+<div class="section level4">
+<h4 id="what-do-we-lose-with-standard-vs-fast">What do we lose with standard vs. fast?<a class="anchor" aria-label="anchor" href="#what-do-we-lose-with-standard-vs-fast"></a>
+</h4>
+<p>There’s never a free lunch, so to be clear about the tradeoffs between the standard and fast versions of bolasso, the following shows the difference in predictive accuracy on our hold-out test set.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model_standard</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
+<span>  <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">train</span>,</span>
+<span>  n.boot <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  family <span class="op">=</span> <span class="st">"binomial"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">model_fast</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
+<span>  <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">train</span>,</span>
+<span>  n.boot <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  family <span class="op">=</span> <span class="st">"binomial"</span>,</span>
+<span>  fast <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model_standard_preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums-methods.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model_standard</span>, <span class="va">test</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">0.5</span>,</span>
+<span>  yes <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  no <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">model_fast_preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums-methods.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model_fast</span>, <span class="va">test</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;=</span> <span class="fl">0.5</span>,</span>
+<span>  yes <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  no <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">truth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">test</span><span class="op">$</span><span class="va">diabetes</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co">#&gt; Standard Bolasso accuracy: 80.87 %</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&gt;  Fast Bolasso accuracy: 80.43 %</span></span></code></pre></div>
+<p>It’s important to note that fast bolasso should be thought of more as a rough-and-ready algorithm that is better for quick iteration and might have worse empirical performance than the standard algorithm.</p>
+</div>
+<div class="section level4">
+<h4 id="parallelizing-bolasso">Parallelizing bolasso<a class="anchor" aria-label="anchor" href="#parallelizing-bolasso"></a>
+</h4>
+<p>We can also fit bolasso bootstrap models in parallel via the <a href="https://CRAN.R-project.org/package=future" class="external-link">future</a> package. The future package supports a wide variety of parallelization, from local multi-core to remote compute clusters. Parallelizing bolasso is as simple as initializing the parallel method prior to executing the bolasso function. For example, the following setup will execute bolasso in parallel R sessions.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"multisession"</span><span class="op">)</span></span>
+<span><span class="va">time_parallel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
 <span>    <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
-<span>    data <span class="op">=</span> <span class="va">PimaIndiansDiabetes</span>,</span>
-<span>    n.boot <span class="op">=</span> <span class="fl">100</span>, </span>
-<span>    implement <span class="op">=</span> <span class="st">"glmnet"</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">train</span>,</span>
+<span>    n.boot <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>    progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    family <span class="op">=</span> <span class="st">"binomial"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    user  system elapsed </span></span>
-<span><span class="co">#&gt;    0.17    0.03    5.58</span></span></code></pre></div>
+<span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="st">"sequential"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">time_sequential</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
+<span>    <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">train</span>,</span>
+<span>    n.boot <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>    progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    family <span class="op">=</span> <span class="st">"binomial"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co">#&gt; Parallel bolasso time (seconds): 10.921 </span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&gt; Sequential bolasso time (seconds): 42.562</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="beyond-the-lasso">Beyond the Lasso<a class="anchor" aria-label="anchor" href="#beyond-the-lasso"></a>
+</h3>
+<p>bolasso also allows us to fit penalized regression models beyond the Lasso. For example, suppose we want to fit a bootstrap-enhanced elasticnet model with a mixing parameter of 0.5 (an even mix of the Ridge and Lasso regularization terms). We can simply pass the underlying <code><a href="https://glmnet.stanford.edu/reference/glmnet.html" class="external-link">glmnet::glmnet</a></code> argument <code>alpha = 0.5</code> through bolasso. The following code compares selected variables between the Lasso and elasticnet models.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lasso</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
+<span>  <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">train</span>,</span>
+<span>  n.boot <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  family <span class="op">=</span> <span class="st">"binomial"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">elnet</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
+<span>  <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">train</span>,</span>
+<span>  n.boot <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  family <span class="op">=</span> <span class="st">"binomial"</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.5</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co">#&gt; Lasso selected variables: pregnant glucose mass age </span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="co">#&gt; Elnet selected variables: pregnant glucose mass pedigree age</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<p><a id="1">[1]</a> Bach, Francis. “Bolasso: Model Consistent Lasso Estimation through the Bootstrap.” ArXiv:0804.1302 [Cs, Math, Stat], April 8, 2008. <a href="https://arxiv.org/abs/0804.1302" class="external-link uri">https://arxiv.org/abs/0804.1302</a>.</p>
+<p><a id="1">[1]</a>Abram, Samantha V et al. “Bootstrap Enhanced Penalized Regression for Variable Selection with Neuroimaging Data.” Frontiers in neuroscience vol. 10 344. 28 Jul. 2016, <a href="doi:10.3389/fnins.2016.00344" class="uri">doi:10.3389/fnins.2016.00344</a></p>
+<p><a id="2">[2]</a>Bach, Francis. “Bolasso: Model Consistent Lasso Estimation through the Bootstrap.” ArXiv:0804.1302 [Cs, Math, Stat], 2008. <a href="https://arxiv.org/abs/0804.1302" class="external-link uri">https://arxiv.org/abs/0804.1302</a>.</p>
+<p><a id="3">[3]</a>Bunea, Florentina et al. “Penalized least squares regression methods and applications to neuroimaging.” NeuroImage vol. 55,4 (2011): 1519-27. <a href="doi:10.1016/j.neuroimage.2010.12.028" class="uri">doi:10.1016/j.neuroimage.2010.12.028</a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=bolasso" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/dmolitor/bolasso/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/dmolitor/bolasso/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -231,7 +482,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
