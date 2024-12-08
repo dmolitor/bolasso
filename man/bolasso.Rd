@@ -9,9 +9,10 @@ bolasso(
   data,
   n.boot = 100,
   progress = TRUE,
-  implement = "glmnet",
+  implement = c("glmnet", "gamlr"),
   x = NULL,
   y = NULL,
+  fast = FALSE,
   ...
 )
 }
@@ -36,6 +37,13 @@ Lasso implementation to utilize. For specific modeling details, see
 \item{x}{An optional predictor matrix in lieu of \code{form} and \code{data}.}
 
 \item{y}{An optional response vector in lieu of \code{form} and \code{data}.}
+
+\item{fast}{A boolean. Whether or not to fit a "fast" bootstrap procedure.
+If \code{fast == TRUE}, \code{bolasso} will fit \link[glmnet:cv.glmnet]{glmnet::cv.glmnet} on the entire
+dataset. It will then fit all bootstrapped models with the value of lambda
+(regularization parameter) that minimized cross-validation loss in the
+full model. If \code{fast == FALSE} (the default), \code{bolasso} will use
+cross-validation to find the optimal lambda for each bootstrap model.}
 
 \item{...}{Additional parameters to pass to either
 \code{glmnet::cv.glmnet} or \code{gamlr::cv.gamlr}.}
@@ -67,19 +75,21 @@ bolasso_form <- bolasso(
   form = mpg ~ .,
   data = mtcars_train,
   n.boot = 20,
-  nfolds = 5,
-  implement = "glmnet"
+  nfolds = 5
 )
 
+# Retrieve a tidy tibble of bootstrap coefficients for each covariate
+tidy(bolasso_form)
+
 # Extract selected variables
-selected_vars(bolasso_form, threshold = 0.9, select = "lambda.min")
+selected_variables(bolasso_form, threshold = 0.9, select = "lambda.min")
 
 # Bagged ensemble prediction on test data
 predict(bolasso_form,
         new.data = mtcars_test,
         select = "lambda.min")
 
-## Alternal Matrix Interface
+## Alternate Matrix Interface
 
 # Train model
 set.seed(123)
@@ -88,21 +98,14 @@ bolasso_mat <- bolasso(
   y = mtcars_train[, 1],
   data = mtcars_train,
   n.boot = 20,
-  nfolds = 5,
-  implement = "glmnet"
+  nfolds = 5
 )
-
-# Extract selected variables
-selected_vars(bolasso_mat, threshold = 0.9, select = "lambda.min")
 
 # Bagged ensemble prediction on test data
 predict(bolasso_mat,
         new.data = model.matrix(mpg ~ . - 1, mtcars_test),
         select = "lambda.min")
 
-}
-\references{
-\insertRef{DBLP:journals/corr/abs-0804-1302}{bolasso}
 }
 \seealso{
 \link[glmnet:cv.glmnet]{glmnet::cv.glmnet} and \link[gamlr:cv.gamlr]{gamlr::cv.gamlr} for full details on the
