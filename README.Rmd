@@ -36,9 +36,13 @@ making bagged predictions, examining coefficient distributions, and plotting.
 
 ## Installation
 
-You can install the development version from [GitHub](https://github.com/) with:
+Install bolasso from CRAN:
+```r
+install.packages("bolasso")
+```
 
-``` r
+Or install the development version from GitHub with:
+```r
 # install.packages("pak")
 pak::pkg_install("dmolitor/bolasso@dev")
 ```

@@ -26,8 +26,13 @@ examining coefficient distributions, and plotting.
 
 ## Installation
 
-You can install the development version from
-[GitHub](https://github.com/) with:
+Install bolasso from CRAN:
+
+``` r
+install.packages("bolasso")
+```
+
+Or install the development version from GitHub with:
 
 ``` r
 # install.packages("pak")
@@ -469,8 +474,8 @@ time_sequential <- system.time({
 })
 ```
 
-    #> Parallel bolasso time (seconds): 10.921 
-    #> Sequential bolasso time (seconds): 42.562
+    #> Parallel bolasso time (seconds): 10.699 
+    #> Sequential bolasso time (seconds): 41.497
 
 ### Beyond the Lasso
 
