@@ -9,7 +9,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "75%"
+  out.width = "85%",
+  dpi = 300
 )
 
 set.seed(321) # Reproducible results

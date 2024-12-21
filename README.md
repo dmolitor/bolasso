@@ -147,7 +147,7 @@ visualize this with the `plot_selection_thresholds` function.
 plot_selection_thresholds(model, select = "lambda.min")
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="75%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="85%" />
 
 You can also get these thresholds in a tibble:
 
@@ -211,7 +211,7 @@ model.
 plot(model, select = "lambda.min")
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="75%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="85%" />
 
 Now, suppose for example we are particularly interested in the
 coefficient distributions for the `triceps`, `pressure`, and `glucose`
@@ -221,7 +221,7 @@ variables. We can plot the distributions for just these variables:
 plot(model, covariates = c(glucose, pressure, triceps))
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="75%" />
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="85%" />
 
 Note: If there are more than 30 variables included in our model, then
 this will plot the 30 variables with the largest absolute mean
@@ -242,7 +242,7 @@ plot_selected_variables(
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-12-1.png" width="75%" />
+<img src="man/figures/README-unnamed-chunk-12-1.png" width="85%" />
 
 Just like `plot` we can also focus on a subset of our selected
 variables.
@@ -257,7 +257,7 @@ plot_selected_variables(
 )
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="75%" />
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="85%" />
 
 ### Predictions
 
@@ -391,7 +391,7 @@ ggplot(times_df, aes(x = n_bootstrap, y = time, color = factor(algorithm))) +
   theme(legend.title = element_blank())
 ```
 
-<img src="man/figures/README-unnamed-chunk-16-1.png" width="75%" />
+<img src="man/figures/README-unnamed-chunk-16-1.png" width="85%" />
 
 Fast bolasso clearly achieves some pretty massive speedups over the
 standard version! This difference in speed will only be more accentuated
@@ -474,8 +474,8 @@ time_sequential <- system.time({
 })
 ```
 
-    #> Parallel bolasso time (seconds): 10.699 
-    #> Sequential bolasso time (seconds): 41.497
+    #> Parallel bolasso time (seconds): 10.815 
+    #> Sequential bolasso time (seconds): 42.909
 
 ### Beyond the Lasso
 
