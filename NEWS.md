@@ -1,3 +1,7 @@
+# bolasso 0.4.0
+
+- Allows the user to extract the bootstrap indices with `bootstrap_samples()`.
+
 # bolasso 0.3.0
 
 ## New Features
