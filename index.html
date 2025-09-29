@@ -23,7 +23,7 @@
 
     <a class="navbar-brand me-2" href="index.html">bolasso</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -404,7 +404,7 @@
 <div class="section level3">
 <h3 id="beyond-the-lasso">Beyond the Lasso<a class="anchor" aria-label="anchor" href="#beyond-the-lasso"></a>
 </h3>
-<p>bolasso also allows us to fit penalized regression models beyond the Lasso. For example, suppose we want to fit a bootstrap-enhanced elasticnet model with a mixing parameter of 0.5 (an even mix of the Ridge and Lasso regularization terms). We can simply pass the underlying <code><a href="https://rdrr.io/pkg/glmnet/man/glmnet.html" class="external-link">glmnet::glmnet</a></code> argument <code>alpha = 0.5</code> through bolasso. The following code compares selected variables between the Lasso and elasticnet models.</p>
+<p>bolasso also allows us to fit penalized regression models beyond the Lasso. For example, suppose we want to fit a bootstrap-enhanced elasticnet model with a mixing parameter of 0.5 (an even mix of the Ridge and Lasso regularization terms). We can simply pass the underlying <code><a href="https://glmnet.stanford.edu/reference/glmnet.html" class="external-link">glmnet::glmnet</a></code> argument <code>alpha = 0.5</code> through bolasso. The following code compares selected variables between the Lasso and elasticnet models.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lasso</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
 <span>  <span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
@@ -462,7 +462,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Daniel Molitor <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Daniel Molitor <br><small class="roles"> Author, maintainer </small>   </li>
 </ul>
 </div>
 
@@ -485,7 +485,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

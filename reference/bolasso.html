@@ -19,7 +19,7 @@ models."><meta property="og:image" content="/logo.png"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">bolasso</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,7 +97,7 @@ bootstrap folds.</p></dd>
 <dt id="arg-implement">implement<a class="anchor" aria-label="anchor" href="#arg-implement"></a></dt>
 <dd><p>A character; either 'glmnet' or 'gamlr', specifying which
 Lasso implementation to utilize. For specific modeling details, see
-<code><a href="https://rdrr.io/pkg/glmnet/man/cv.glmnet.html" class="external-link">glmnet::cv.glmnet</a></code> or <code><a href="https://rdrr.io/pkg/gamlr/man/cv.gamlr.html" class="external-link">gamlr::cv.gamlr</a></code>.</p></dd>
+<code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">glmnet::cv.glmnet</a></code> or <code><a href="https://rdrr.io/pkg/gamlr/man/cv.gamlr.html" class="external-link">gamlr::cv.gamlr</a></code>.</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
@@ -110,7 +110,7 @@ Lasso implementation to utilize. For specific modeling details, see
 
 <dt id="arg-fast">fast<a class="anchor" aria-label="anchor" href="#arg-fast"></a></dt>
 <dd><p>A boolean. Whether or not to fit a "fast" bootstrap procedure.
-If <code>fast == TRUE</code>, <code>bolasso</code> will fit <a href="https://rdrr.io/pkg/glmnet/man/cv.glmnet.html" class="external-link">glmnet::cv.glmnet</a> on the entire
+If <code>fast == TRUE</code>, <code>bolasso</code> will fit <a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">glmnet::cv.glmnet</a> on the entire
 dataset. It will then fit all bootstrapped models with the value of lambda
 (regularization parameter) that minimized cross-validation loss in the
 full model. If <code>fast == FALSE</code> (the default), <code>bolasso</code> will use
@@ -119,7 +119,7 @@ cross-validation to find the optimal lambda for each bootstrap model.</p></dd>
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional parameters to pass to either
-<code><a href="https://rdrr.io/pkg/glmnet/man/cv.glmnet.html" class="external-link">glmnet::cv.glmnet</a></code> or <code><a href="https://rdrr.io/pkg/gamlr/man/cv.gamlr.html" class="external-link">gamlr::cv.gamlr</a></code>.</p></dd>
+<code><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">glmnet::cv.glmnet</a></code> or <code><a href="https://rdrr.io/pkg/gamlr/man/cv.gamlr.html" class="external-link">gamlr::cv.gamlr</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -129,7 +129,7 @@ cross-validation to find the optimal lambda for each bootstrap model.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="https://rdrr.io/pkg/glmnet/man/cv.glmnet.html" class="external-link">glmnet::cv.glmnet</a> and <a href="https://rdrr.io/pkg/gamlr/man/cv.gamlr.html" class="external-link">gamlr::cv.gamlr</a> for full details on the
+    <div class="dont-index"><p><a href="https://glmnet.stanford.edu/reference/cv.glmnet.html" class="external-link">glmnet::cv.glmnet</a> and <a href="https://rdrr.io/pkg/gamlr/man/cv.gamlr.html" class="external-link">gamlr::cv.gamlr</a> for full details on the
 respective implementations and arguments that can be passed to <code>...</code>.</p></div>
     </div>
 
@@ -150,99 +150,109 @@ respective implementations and arguments that can be passed to <code>...</code>.
 <span class="r-in"><span>  n.boot <span class="op">=</span> <span class="fl">20</span>,</span></span>
 <span class="r-in"><span>  nfolds <span class="op">=</span> <span class="fl">5</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loaded glmnet 4.1-8</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Retrieve a tidy tibble of bootstrap coefficients for each covariate</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">bolasso_form</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 20 × 19</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id    Intercept  cyl4   cyl6     cyl8     disp       hp    drat     wt   qsec</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> boot1     33.2  0     -<span style="color: #BB0000;">1.49</span>   0   <span style="color: #949494;"> </span>    0       -<span style="color: #BB0000;">0.037</span><span style="color: #BB0000; text-decoration: underline;">9</span>  0   <span style="color: #949494;"> </span>   -<span style="color: #BB0000;">2.43</span>   0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> boot2     31.8  2.48   0     -<span style="color: #BB0000;">1.50</span><span style="color: #949494;">e</span>+0  0       -<span style="color: #BB0000;">0.007</span><span style="color: #BB0000; text-decoration: underline;">05</span> 0   <span style="color: #949494;"> </span>   -<span style="color: #BB0000;">3.70</span>   0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> boot3     22.0  5.55   0      0   <span style="color: #949494;"> </span>    0       -<span style="color: #BB0000;">0.013</span><span style="color: #BB0000; text-decoration: underline;">4</span>  0   <span style="color: #949494;"> </span>   -<span style="color: #BB0000;">0.911</span>  0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> boot4     27.0  0     -<span style="color: #BB0000;">1.22</span>   9.70<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span>  0       -<span style="color: #BB0000;">0.084</span><span style="color: #BB0000; text-decoration: underline;">0</span>  1.08<span style="color: #949494;">e</span>+0  0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> boot5     22.7  0      0      0   <span style="color: #949494;"> </span>   -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">80</span> -<span style="color: #BB0000;">0.036</span><span style="color: #BB0000; text-decoration: underline;">5</span>  1.65<span style="color: #949494;">e</span>+0 -<span style="color: #BB0000;">0.654</span>  0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> boot6     31.0  1.52   0      0   <span style="color: #949494;"> </span>    0       -<span style="color: #BB0000;">0.020</span><span style="color: #BB0000; text-decoration: underline;">1</span>  0   <span style="color: #949494;"> </span>   -<span style="color: #BB0000;">2.96</span>   0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> boot7     14.3  1.86   0     -<span style="color: #BB0000;">1.26</span><span style="color: #949494;">e</span>+0  0       -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">39</span> 7.41<span style="color: #949494;">e</span>+0  0     -<span style="color: #BB0000;">0.780</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> boot8     17.7  1.93   0      0   <span style="color: #949494;"> </span>    0        0       9.43<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> -<span style="color: #BB0000;">2.24</span>   0.393</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> boot9     36.1  0.998 -<span style="color: #BB0000;">0.109</span>  0   <span style="color: #949494;"> </span>    0       -<span style="color: #BB0000;">0.029</span><span style="color: #BB0000; text-decoration: underline;">5</span>  0   <span style="color: #949494;"> </span>   -<span style="color: #BB0000;">3.63</span>   0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> boot…     28.3  3.42   0      0   <span style="color: #949494;"> </span>    0        0       0   <span style="color: #949494;"> </span>   -<span style="color: #BB0000;">3.13</span>   0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> boot…     22.0  4.41   0      0   <span style="color: #949494;"> </span>    0        0       2.82<span style="color: #949494;">e</span>+0 -<span style="color: #BB0000;">0.617</span> -<span style="color: #BB0000;">0.690</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> boot…      7.85 0.894  0     -<span style="color: #BB0000;">2.71</span><span style="color: #949494;">e</span>+0  0        0       3.54<span style="color: #949494;">e</span>+0  0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> boot…      9.33 2.58   0     -<span style="color: #BB0000;">9.25</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span>  0        0       0   <span style="color: #949494;"> </span>   -<span style="color: #BB0000;">0.701</span>  0.401</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> boot…      8.65 0      0     -<span style="color: #BB0000;">5.72</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span>  0        0       2.59<span style="color: #949494;">e</span>+0  0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> boot…     23.0  2.40   0     -<span style="color: #BB0000;">3.00</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span>  0       -<span style="color: #BB0000;">0.035</span><span style="color: #BB0000; text-decoration: underline;">5</span>  0   <span style="color: #949494;"> </span>    0      0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> boot…     24.3  0.460  0     -<span style="color: #BB0000;">3.01</span><span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> -<span style="color: #BB0000;">0.010</span><span style="color: #BB0000; text-decoration: underline;">7</span>   0       1.96<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span> -<span style="color: #BB0000;">1.15</span>   0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> boot…     22.2  2.68   0     -<span style="color: #BB0000;">1.76</span><span style="color: #949494;">e</span>+0 -<span style="color: #BB0000;">0.005</span><span style="color: #BB0000; text-decoration: underline;">10</span>  0       0   <span style="color: #949494;"> </span>   -<span style="color: #BB0000;">1.05</span>   0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> boot…     33.7  1.08   0      0   <span style="color: #949494;"> </span>    0       -<span style="color: #BB0000;">0.025</span><span style="color: #BB0000; text-decoration: underline;">6</span>  0   <span style="color: #949494;"> </span>   -<span style="color: #BB0000;">3.20</span>   0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> boot…     30.8  1.84   0      0   <span style="color: #949494;"> </span>    0       -<span style="color: #BB0000;">0.024</span><span style="color: #BB0000; text-decoration: underline;">4</span>  0   <span style="color: #949494;"> </span>   -<span style="color: #BB0000;">2.78</span>   0    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">20</span> boot…     25.9  0      0     -<span style="color: #BB0000;">2.67</span><span style="color: #949494;">e</span>+0 -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">32</span> -<span style="color: #BB0000;">0.009</span><span style="color: #BB0000; text-decoration: underline;">89</span> 4.77<span style="color: #949494;">e</span><span style="color: #BB0000;">-1</span> -<span style="color: #BB0000;">1.69</span>   0    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id     Intercept   cyl4   cyl6   cyl8     disp       hp   drat     wt   qsec</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> boot1      33.6  0.342  -<span style="color: #BB0000;">0.541</span>  0      0       -<span style="color: #BB0000;">0.025</span><span style="color: #BB0000; text-decoration: underline;">1</span>   0     -<span style="color: #BB0000;">3.62</span>  0.090<span style="text-decoration: underline;">1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> boot2      29.3  2.05    0     -<span style="color: #BB0000;">1.07</span>   0       -<span style="color: #BB0000;">0.015</span><span style="color: #BB0000; text-decoration: underline;">5</span>   0     -<span style="color: #BB0000;">2.78</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> boot3      29.6  5.55    0      0      0       -<span style="color: #BB0000;">0.017</span><span style="color: #BB0000; text-decoration: underline;">3</span>   0     -<span style="color: #BB0000;">2.53</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> boot4      44.2  0      -<span style="color: #BB0000;">1.89</span>   3.54   0       -<span style="color: #BB0000;">0.060</span><span style="color: #BB0000; text-decoration: underline;">2</span>   0     -<span style="color: #BB0000;">4.11</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> boot5      22.4  2.29    0      0      0       -<span style="color: #BB0000;">0.003</span><span style="color: #BB0000; text-decoration: underline;">03</span>  0     -<span style="color: #BB0000;">3.98</span>  0.577 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> boot6      40.2  0.044<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">3.29</span>   0      0       -<span style="color: #BB0000;">0.023</span><span style="color: #BB0000; text-decoration: underline;">9</span>   0     -<span style="color: #BB0000;">5.21</span>  0.133 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> boot7       9.96 7.54    0     -<span style="color: #BB0000;">3.86</span>   0.040<span style="text-decoration: underline;">0</span>   0        2.49  -<span style="color: #BB0000;">2.16</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> boot8      25.9  5.42    0      0     -<span style="color: #BB0000;">0.021</span><span style="color: #BB0000; text-decoration: underline;">1</span>   0        0     -<span style="color: #BB0000;">0.841</span> 0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> boot9      34.3  4.36    0      0      0.007<span style="text-decoration: underline;">63</span>  0        0     -<span style="color: #BB0000;">5.42</span>  0.109 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> boot10     36.0  5.00   -<span style="color: #BB0000;">0.867</span>  0      0        0        0     -<span style="color: #BB0000;">4.79</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> boot11     34.0  5.57    0      0      0       -<span style="color: #BB0000;">0.031</span><span style="color: #BB0000; text-decoration: underline;">5</span>  -<span style="color: #BB0000;">0.671</span> -<span style="color: #BB0000;">2.43</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> boot12     30.4  4.20    0      0      0       -<span style="color: #BB0000;">0.006</span><span style="color: #BB0000; text-decoration: underline;">37</span>  0     -<span style="color: #BB0000;">3.39</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> boot13     33.6  2.02    0      0      0       -<span style="color: #BB0000;">0.012</span><span style="color: #BB0000; text-decoration: underline;">2</span>   0     -<span style="color: #BB0000;">3.89</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> boot14     34.1  2.95    0      0      0       -<span style="color: #BB0000;">0.026</span><span style="color: #BB0000; text-decoration: underline;">7</span>   0     -<span style="color: #BB0000;">3.18</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> boot15     31.6  2.07    0      0      0       -<span style="color: #BB0000;">0.017</span><span style="color: #BB0000; text-decoration: underline;">0</span>   0     -<span style="color: #BB0000;">3.13</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> boot16     38.5  1.89   -<span style="color: #BB0000;">4.23</span>   0      0.015<span style="text-decoration: underline;">8</span>   0        0.581 -<span style="color: #BB0000;">7.68</span>  0.248 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> boot17     33.7  3.84    0      0      0       -<span style="color: #BB0000;">0.022</span><span style="color: #BB0000; text-decoration: underline;">3</span>   0     -<span style="color: #BB0000;">3.50</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> boot18     43.9  0.395  -<span style="color: #BB0000;">3.74</span>   0      0       -<span style="color: #BB0000;">0.038</span><span style="color: #BB0000; text-decoration: underline;">4</span>   0     -<span style="color: #BB0000;">4.97</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> boot19     39.1  2.90   -<span style="color: #BB0000;">1.74</span>   0      0       -<span style="color: #BB0000;">0.029</span><span style="color: #BB0000; text-decoration: underline;">4</span>   0     -<span style="color: #BB0000;">4.01</span>  0     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">20</span> boot20     22.0  3.85    0     -<span style="color: #BB0000;">0.308</span>  0       -<span style="color: #BB0000;">0.002</span><span style="color: #BB0000; text-decoration: underline;">28</span>  0     -<span style="color: #BB0000;">4.36</span>  0.648 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 9 more variables: vs &lt;dbl&gt;, am &lt;dbl&gt;, gear4 &lt;dbl&gt;, gear5 &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   carb2 &lt;dbl&gt;, carb3 &lt;dbl&gt;, carb4 &lt;dbl&gt;, carb6 &lt;dbl&gt;, carb8 &lt;dbl&gt;</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract selected variables</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="selected_variables.html">selected_variables</a></span><span class="op">(</span><span class="va">bolasso_form</span>, threshold <span class="op">=</span> <span class="fl">0.9</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 20 × 1</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> boot1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> boot2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> boot3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> boot4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> boot5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> boot6 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> boot7 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> boot8 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> boot9 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> boot10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> boot11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> boot12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> boot13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> boot14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> boot15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> boot16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> boot17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> boot18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> boot19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">20</span> boot20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 20 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id       cyl4     wt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> boot1  0.342  -<span style="color: #BB0000;">3.62</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> boot2  2.05   -<span style="color: #BB0000;">2.78</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> boot3  5.55   -<span style="color: #BB0000;">2.53</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> boot4  0      -<span style="color: #BB0000;">4.11</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> boot5  2.29   -<span style="color: #BB0000;">3.98</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> boot6  0.044<span style="text-decoration: underline;">2</span> -<span style="color: #BB0000;">5.21</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> boot7  7.54   -<span style="color: #BB0000;">2.16</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> boot8  5.42   -<span style="color: #BB0000;">0.841</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> boot9  4.36   -<span style="color: #BB0000;">5.42</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> boot10 5.00   -<span style="color: #BB0000;">4.79</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> boot11 5.57   -<span style="color: #BB0000;">2.43</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> boot12 4.20   -<span style="color: #BB0000;">3.39</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> boot13 2.02   -<span style="color: #BB0000;">3.89</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> boot14 2.95   -<span style="color: #BB0000;">3.18</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> boot15 2.07   -<span style="color: #BB0000;">3.13</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> boot16 1.89   -<span style="color: #BB0000;">7.68</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> boot17 3.84   -<span style="color: #BB0000;">3.50</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> boot18 0.395  -<span style="color: #BB0000;">4.97</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> boot19 2.90   -<span style="color: #BB0000;">4.01</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">20</span> boot20 3.85   -<span style="color: #BB0000;">4.36</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Bagged ensemble prediction on test data</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bolasso_form</span>,</span></span>
 <span class="r-in"><span>        new.data <span class="op">=</span> <span class="va">mtcars_test</span>,</span></span>
 <span class="r-in"><span>        select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     boot1    boot2    boot3     boot4    boot5    boot6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4        23.53203 21.31155 20.38801 22.290720 22.27351 21.94408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710       26.39838 25.65987 30.73719 27.331865 23.36205 24.69222</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360       15.27134 15.34670 13.64426  8.423965 14.22472 15.46800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D        23.13465 22.65999 27.44668 21.980070 23.39864 21.78321</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280         18.72157 18.82589 18.99172 17.249912 21.24348 18.30049</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic      29.66803 28.55722 31.92853 28.131520 27.31862 27.60294</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla   28.63992 27.65163 31.55401 30.084933 25.56220 26.69050</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28       14.61451 14.34784 13.39836  8.986365 14.97222 14.66826</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird 17.25657 14.82313 16.19174 12.794893 16.11565 16.05771</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora    14.18150 14.71184 17.21216  8.396929 11.88185 14.61647</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     boot7    boot8    boot9   boot10   boot11   boot12   boot13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4        21.42965 18.82831 23.22819 20.14767 15.38615 21.52801 20.42563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710       31.17257 25.62445 25.92730 24.50229 26.38631 26.26061 29.43843</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360       13.31440 15.80368 15.89598 17.17782 15.19136 12.60124 10.22709</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D        23.64343 21.01089 23.67867 21.78253 24.44045 21.91810 26.32699</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280         18.29764 17.98024 19.86190 17.58422 18.97526 17.93253 17.81826</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic      35.80988 25.13158 29.70004 26.70624 29.92394 30.08307 32.93965</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla   33.05723 27.56742 28.51666 26.01848 26.83720 27.57016 30.29603</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28       17.50096 15.51962 14.91479 16.33376 16.78562 14.44168  9.86533</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird 17.97528 15.62626 16.96378 16.31812 16.54070 16.04707 15.59535</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora    20.20025 17.60688 13.24071 17.30561 19.69561 21.45137 17.86446</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    boot14   boot15   boot16   boot17   boot18   boot19   boot20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4        20.96366 23.00697 19.63938 20.72184 22.53705 21.92048 21.68905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710       29.04419 26.01095 21.00265 25.77933 25.60174 25.00468 22.52004</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360       12.14012 14.26750 16.01328 14.81375 15.41257 14.91257 15.08037</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D        22.16729 23.64211 19.49836 23.43581 22.98283 22.26822 21.15043</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280         18.50003 19.07564 18.52614 19.48435 18.95140 18.24974 20.15770</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic      31.84528 27.46691 22.16310 27.58397 28.90394 27.96428 24.74005</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla   30.00382 27.00526 21.95821 26.47687 27.86820 27.03570 23.91624</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28       13.48879 14.26750 15.80876 14.58134 14.54991 14.16212 14.90464</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird 16.06674 16.75329 15.26705 15.22047 16.91750 15.85567 15.11960</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora    24.75042 14.54118 16.73050 17.24715 14.33267 13.79177 14.54958</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       boot1     boot2    boot3     boot4    boot5     boot6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4         22.136000 21.355411 21.65471 21.967038 21.12178 22.780565</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710        24.928046 27.496720 28.58999 28.930573 25.90059 29.181294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360        15.793256 13.717993 15.98303 15.357355 16.57274 17.812836</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D         22.679659 23.689025 25.98446 23.622992 23.33223 22.625793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280          19.005454 19.172257 18.41674 17.702542 18.87890 19.248354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SLC       17.060371 16.829704 16.90419 17.391665 17.17946 17.918092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial  9.882457  9.014427 11.74785  8.959564 10.46209  9.129185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona     24.428651 25.191090 27.21624 28.093210 26.11878 28.516030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28        14.776491 12.967204 15.29944 14.246742 15.24961 16.348295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9         27.026104 28.985211 30.03050 32.140456 27.68260 31.871866</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      boot7    boot8    boot9   boot10    boot11   boot12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4         19.24550 20.98732 22.61251 22.54044 21.980552 24.63474</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710        33.14551 28.60832 29.34080 30.45956 31.539419 30.81072</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360        12.82984 15.34008 18.92005 18.85523 13.509988 16.71592</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D         29.75726 27.06058 22.34043 23.28057 24.354958 28.06333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280          17.82649 20.98565 18.80218 19.22500 17.507895 22.62863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SLC       16.93580 16.93810 17.90399 17.84905 17.115417 16.41933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial 12.24004 12.16036 10.07738 10.35062  9.651028 10.80312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona     26.16696 27.59887 28.79879 29.76482 28.791991 26.45173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28        13.13997 15.32367 17.33309 17.56157 12.504033 15.80196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9         33.39080 29.54351 31.23857 32.30423 33.172279 32.28603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     boot13   boot14   boot15   boot16   boot17    boot18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4         22.07862 22.83754 21.49454 23.03257 22.09494 22.240705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710        25.92231 27.20084 24.79358 31.42579 28.56655 29.236127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360        16.73828 16.20564 16.22302 22.57289 15.75047 16.072484</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D         22.91239 25.26060 22.02643 19.00373 24.06170 23.749863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280          19.18101 19.88035 18.70379 17.60249 20.13764 17.666961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SLC       16.71130 17.27470 16.66956 18.84311 16.46770 18.243150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial 10.01055 10.95750 10.91523 10.60293  9.86899  7.830309</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona     25.30916 26.63244 24.27119 30.76295 27.96931 28.361961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28        15.68715 15.34634 15.37686 20.53564 14.80482 14.731036</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9         27.74952 29.14782 26.45900 34.13086 30.51841 32.186810</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      boot19    boot20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4         21.946519 21.005058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710        30.002143 27.594649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360        15.903332 15.847325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D         23.546456 24.300253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280          18.273216 18.593329</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SLC       18.679698 16.479113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial  9.220408  9.169328</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona     29.302575 27.860143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28        14.819687 14.392258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9         32.341210 29.521835</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Alternate Matrix Interface</span></span></span>
 <span class="r-in"><span></span></span>
@@ -260,39 +270,113 @@ respective implementations and arguments that can be passed to <code>...</code>.
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">bolasso_mat</span>,</span></span>
 <span class="r-in"><span>        new.data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span> <span class="op">-</span> <span class="fl">1</span>, <span class="va">mtcars_test</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>        select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     boot1    boot2    boot3     boot4    boot5    boot6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4        23.53203 21.31155 20.38801 22.290720 22.27351 21.94408</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710       26.39838 25.65987 30.73719 27.331865 23.36205 24.69222</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360       15.27134 15.34670 13.64426  8.423965 14.22472 15.46800</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D        23.13465 22.65999 27.44668 21.980070 23.39864 21.78321</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280         18.72157 18.82589 18.99172 17.249912 21.24348 18.30049</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic      29.66803 28.55722 31.92853 28.131520 27.31862 27.60294</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla   28.63992 27.65163 31.55401 30.084933 25.56220 26.69050</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28       14.61451 14.34784 13.39836  8.986365 14.97222 14.66826</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird 17.25657 14.82313 16.19174 12.794893 16.11565 16.05771</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora    14.18150 14.71184 17.21216  8.396929 11.88185 14.61647</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     boot7    boot8    boot9   boot10   boot11   boot12   boot13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4        21.42965 18.82831 23.22819 20.14767 15.38615 21.52801 20.42563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710       31.17257 25.62445 25.92730 24.50229 26.38631 26.26061 29.43843</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360       13.31440 15.80368 15.89598 17.17782 15.19136 12.60124 10.22709</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D        23.64343 21.01089 23.67867 21.78253 24.44045 21.91810 26.32699</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280         18.29764 17.98024 19.86190 17.58422 18.97526 17.93253 17.81826</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic      35.80988 25.13158 29.70004 26.70624 29.92394 30.08307 32.93965</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla   33.05723 27.56742 28.51666 26.01848 26.83720 27.57016 30.29603</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28       17.50096 15.51962 14.91479 16.33376 16.78562 14.44168  9.86533</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird 17.97528 15.62626 16.96378 16.31812 16.54070 16.04707 15.59535</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora    20.20025 17.60688 13.24071 17.30561 19.69561 21.45137 17.86446</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    boot14   boot15   boot16   boot17   boot18   boot19   boot20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4        20.96366 23.00697 19.63938 20.72184 22.53705 21.92048 21.68905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710       29.04419 26.01095 21.00265 25.77933 25.60174 25.00468 22.52004</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360       12.14012 14.26750 16.01328 14.81375 15.41257 14.91257 15.08037</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D        22.16729 23.64211 19.49836 23.43581 22.98283 22.26822 21.15043</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280         18.50003 19.07564 18.52614 19.48435 18.95140 18.24974 20.15770</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Honda Civic      31.84528 27.46691 22.16310 27.58397 28.90394 27.96428 24.74005</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corolla   30.00382 27.00526 21.95821 26.47687 27.86820 27.03570 23.91624</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28       13.48879 14.26750 15.80876 14.58134 14.54991 14.16212 14.90464</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pontiac Firebird 16.06674 16.75329 15.26705 15.22047 16.91750 15.85567 15.11960</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora    24.75042 14.54118 16.73050 17.24715 14.33267 13.79177 14.54958</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       boot1     boot2    boot3     boot4    boot5     boot6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4         22.136000 21.355411 21.65471 21.967038 21.12178 22.780565</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710        24.928046 27.496720 28.58999 28.930573 25.90059 29.181294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360        15.793256 13.717993 15.98303 15.357355 16.57274 17.812836</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D         22.679659 23.689025 25.98446 23.622992 23.33223 22.625793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280          19.005454 19.172257 18.41674 17.702542 18.87890 19.248354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SLC       17.060371 16.829704 16.90419 17.391665 17.17946 17.918092</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial  9.882457  9.014427 11.74785  8.959564 10.46209  9.129185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona     24.428651 25.191090 27.21624 28.093210 26.11878 28.516030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28        14.776491 12.967204 15.29944 14.246742 15.24961 16.348295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9         27.026104 28.985211 30.03050 32.140456 27.68260 31.871866</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      boot7    boot8    boot9   boot10    boot11   boot12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4         19.24550 20.98732 22.61251 22.54044 21.980552 24.63474</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710        33.14551 28.60832 29.34080 30.45956 31.539419 30.81072</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360        12.82984 15.34008 18.92005 18.85523 13.509988 16.71592</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D         29.75726 27.06058 22.34043 23.28057 24.354958 28.06333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280          17.82649 20.98565 18.80218 19.22500 17.507895 22.62863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SLC       16.93580 16.93810 17.90399 17.84905 17.115417 16.41933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial 12.24004 12.16036 10.07738 10.35062  9.651028 10.80312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona     26.16696 27.59887 28.79879 29.76482 28.791991 26.45173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28        13.13997 15.32367 17.33309 17.56157 12.504033 15.80196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9         33.39080 29.54351 31.23857 32.30423 33.172279 32.28603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                     boot13   boot14   boot15   boot16   boot17    boot18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4         22.07862 22.83754 21.49454 23.03257 22.09494 22.240705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710        25.92231 27.20084 24.79358 31.42579 28.56655 29.236127</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360        16.73828 16.20564 16.22302 22.57289 15.75047 16.072484</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D         22.91239 25.26060 22.02643 19.00373 24.06170 23.749863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280          19.18101 19.88035 18.70379 17.60249 20.13764 17.666961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SLC       16.71130 17.27470 16.66956 18.84311 16.46770 18.243150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial 10.01055 10.95750 10.91523 10.60293  9.86899  7.830309</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona     25.30916 26.63244 24.27119 30.76295 27.96931 28.361961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28        15.68715 15.34634 15.37686 20.53564 14.80482 14.731036</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9         27.74952 29.14782 26.45900 34.13086 30.51841 32.186810</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                      boot19    boot20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4         21.946519 21.005058</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Datsun 710        30.002143 27.594649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Duster 360        15.903332 15.847325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 240D         23.546456 24.300253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 280          18.273216 18.593329</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Merc 450SLC       18.679698 16.479113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chrysler Imperial  9.220408  9.169328</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Toyota Corona     29.302575 27.860143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Camaro Z28        14.819687 14.392258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Fiat X1-9         32.341210 29.521835</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Extract the indices of the bootstrap replicates</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="bootstrap_samples.html">bootstrap_samples</a></span><span class="op">(</span><span class="va">bolasso_mat</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  3  3  4  5  5  7  8  9  9 10 10 11 14 14 15 18 19 19 19 20 22 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2  5  6  7  7  7  8  9  9 10 10 11 12 12 13 13 14 15 17 21 21 21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  2  4  6  6  7  8  9 11 15 15 16 16 17 17 18 18 20 21 22 22 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  3  3  3  5  5  7  8  8 12 13 14 14 14 15 16 19 19 20 21 22 22 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2  3  7  8 10 10 10 11 12 12 14 14 14 15 15 17 17 18 19 20 22 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2  4  5  6  6  7  7  7  9 10 11 12 13 14 14 16 16 19 19 20 21 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  3  4  4  7  8  8  8 10 11 11 12 15 16 16 17 20 20 20 20 22 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  2  4  6  8  8  8  8 10 11 12 13 13 13 14 14 14 16 18 21 21 21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  5  7  7  7  9  9  9 10 10 11 11 11 13 14 14 19 20 20 21 22 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  1  1  2  3  4  5  6  6  7  9 10 10 14 17 17 17 18 20 20 21 21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  5  6  7  7  8  8  9 10 13 13 16 17 17 18 18 20 21 21 21 21 21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2  2  2  3  3  3  3  4  5  6  6 10 10 10 12 13 13 16 16 17 17 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  2  2  2  3  4  5  7  7  9  9  9 11 11 12 12 13 15 16 19 21 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  3  3  6  6  8  8  9 10 10 12 13 15 16 17 17 18 18 19 20 20 20 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  2  4  5  7  8 10 10 10 11 12 13 13 16 17 17 18 18 19 19 19 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  1  1  2  3  4  6 11 12 12 12 14 15 15 16 16 16 17 18 19 19 21 21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  5  6  6  7  8  9  9 10 10 10 11 11 12 12 13 17 18 18 18 19 20 21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  3  4  4  4  4  6  6  7  8  9 10 10 14 15 16 16 17 19 20 20 21 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2  5  5  6  7  8  9 10 11 11 14 15 15 15 16 16 16 19 19 20 20 22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $boot20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  2  3  5  6  6  6  7  8  8  8 10 11 14 14 15 15 17 17 18 19 20 21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -305,7 +389,7 @@ respective implementations and arguments that can be passed to <code>...</code>.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
