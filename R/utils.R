@@ -4,6 +4,21 @@ bootstraps <- function(dat, n) {
   lapply(1:n, function(i) sort(sample(nrow(dat), replace = TRUE)))
 }
 
+#' Extract indices used for each bootstrap replicate
+#' 
+#' This function extracts the indices used to bootstrap the data
+#' for each replicate. This is helpful when doing some additional
+#' analysis that requires knowledge of the exact bootstrap samples used.
+#' 
+#' @param model A model of class \link{bolasso}.
+#' @return A named list of length equal to the number of bootstrap replicates
+#'   that contains the corresponding indices used to subsample the data.
+#' @export
+bootstrap_samples <- function(model) {
+  stopifnot(inherits(model, "bolasso"))
+  attr(model, "indices")
+}
+
 formula_lhs <- function(form) {
   form <- tryCatch(
     stats::as.formula(form),
