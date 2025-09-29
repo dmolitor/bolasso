@@ -5,7 +5,7 @@ bolasso_fast.fit <- function(x, y, n.boot, ...) {
   global_lambda_n <- length(global_lambda_seq)
   folds <- bootstraps(dat = x, n = n.boot)
   pb <- progressr::progressor(along = folds)
-  bootstrap_models <- future.apply::future_lapply(
+  models <- future.apply::future_lapply(
     folds,
     function(i) {
       lasso_args <- list(x = x[i, ], y = y[i], lambda = global_lambda_seq, ...)
@@ -19,7 +19,8 @@ bolasso_fast.fit <- function(x, y, n.boot, ...) {
     future.seed = TRUE,
     future.packages = c("Matrix", "glmnet", "progressr")
   )
-  return(bootstrap_models)
+  attr(models, "indices") <- folds
+  return(models)
 }
 
 #' @method coef bolasso_fast

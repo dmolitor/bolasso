@@ -106,6 +106,9 @@ predict(bolasso_mat,
         new.data = model.matrix(mpg ~ . - 1, mtcars_test),
         select = "lambda.min")
 
+# Extract the indices of the bootstrap replicates
+bootstrap_samples(bolasso_mat)
+
 }
 \seealso{
 \link[glmnet:cv.glmnet]{glmnet::cv.glmnet} and \link[gamlr:cv.gamlr]{gamlr::cv.gamlr} for full details on the

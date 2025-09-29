@@ -2,6 +2,7 @@
 
 new_bolasso <- function(
   x,
+  indices,
   implement,
   varnames,
   nboot,
@@ -27,6 +28,7 @@ new_bolasso <- function(
     implement %in% c("gamlr", "glmnet")
   )
   class(x) <- if (fast) c("bolasso_fast", "bolasso") else "bolasso"
+  attr(x, "indices") <- stats::setNames(indices, paste0("boot", 1:length(indices)))
   attr(x, "implement") <- implement
   attr(x, "call") <- fun.call
   attr(x, "varnames") <- varnames
@@ -38,7 +40,7 @@ new_bolasso <- function(
 bolasso.fit <- function(x, y, n.boot, implement, ...) {
   folds <- bootstraps(dat = x, n = n.boot)
   pb <- progressr::progressor(along = folds)
-  future.apply::future_lapply(
+  models <- future.apply::future_lapply(
     folds,
     function(i) {
       lasso_args <- list(x = x[i, ], y = y[i], ...)
@@ -52,6 +54,8 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
     future.seed = TRUE,
     future.packages = c("Matrix", implement, "progressr")
   )
+  attr(models, "indices") <- folds
+  return(models)
 }
 
 
@@ -135,6 +139,9 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
 #' predict(bolasso_mat,
 #'         new.data = model.matrix(mpg ~ . - 1, mtcars_test),
 #'         select = "lambda.min")
+#' 
+#' # Extract the indices of the bootstrap replicates
+#' bootstrap_samples(bolasso_mat)
 #'
 #' @return An object of class `bolasso`. This object is a list of length
 #' `n.boot` of `cv.glmnet` or `cv.gamlr` objects.
@@ -196,8 +203,11 @@ bolasso <- function(
       )
     }
   }
+  bootstrap_indices <- attr(models, "indices")
+  attr(models, "indices") <- NULL
   new_bolasso(
     models,
+    indices = bootstrap_indices,
     implement = implement,
     varnames = colnames(data$x),
     nboot = n.boot,
