@@ -89,6 +89,10 @@ plot_selected_variables <- function(
   id <- coef <- covariate <- NULL ## This is so stupid R CMD Check doesn't flip out
   method <- match.arg(method)
   coefs <- selected_vars(x, threshold = threshold, method = method, ...)
+  if (length(names(coefs)) < 2 && names(coefs) == "id") {
+    warning("Nothing to plot! There were no selected variables at the threshold of ", threshold, ".")
+    return(invisible(NULL))
+  }
   if (!is.null(substitute(covariates))) {
     covariates <- substitute(covariates)
     coefs <- subset(coefs, select = c(id, eval(covariates)))
