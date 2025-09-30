@@ -43,7 +43,7 @@ bolasso.fit <- function(x, y, n.boot, implement, ...) {
   models <- future.apply::future_lapply(
     folds,
     function(i) {
-      lasso_args <- list(x = x[i, ], y = y[i], ...)
+      lasso_args <- list(x = x[i, , drop = FALSE], y = y[i], ...)
       g <- do.call(
         what = translate_lasso(implement),
         args = lasso_args

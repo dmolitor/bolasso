@@ -21,17 +21,17 @@
 plot.bolasso <- function(x, covariates = NULL, ...) {
   id <- covariate <- NULL ## This is so stupid R CMD Check doesn't flip out
   coefs <- tidy(x, ...)
-  coefs <- coefs[, setdiff(colnames(coefs), "Intercept")]
+  coefs <- coefs[, setdiff(colnames(coefs), "Intercept"), drop = FALSE]
   if (!is.null(substitute(covariates))) {
     covariates <- substitute(covariates)
     coefs <- subset(coefs, select = c(id, eval(covariates)))
   }
   covar_cols <- setdiff(colnames(coefs), "id")
   if (length(covar_cols) > 30 && is.null(covariates)) {
-    covar_col_means <- colMeans(coefs[, covar_cols])
+    covar_col_means <- colMeans(coefs[, covar_cols, drop = FALSE])
     top_30_covars <- covar_col_means[sort(order(abs(covar_col_means), decreasing = TRUE)[1:30])]
     covar_cols <- names(top_30_covars)
-    coefs <- coefs[, c("id", covar_cols)]
+    coefs <- coefs[, c("id", covar_cols), drop = FALSE]
   }
   coefs_long <- coefs |>
     transform(id = as.integer(gsub("boot", "", id))) |>
@@ -95,10 +95,10 @@ plot_selected_variables <- function(
   }
   covar_cols <- setdiff(colnames(coefs), "id")
   if (length(covar_cols) > 30 && is.null(substitute(covariates))) {
-    covar_col_means <- colMeans(coefs[, covar_cols])
+    covar_col_means <- colMeans(coefs[, covar_cols, drop = FALSE])
     top_30_covars <- covar_col_means[sort(order(abs(covar_col_means), decreasing = TRUE)[1:30])]
     covar_cols <- names(top_30_covars)
-    coefs <- coefs[, c("id", covar_cols)]
+    coefs <- coefs[, c("id", covar_cols), drop = FALSE]
   }
   coefs_long <- coefs |>
     transform(id = as.integer(gsub("boot", "", id))) |>
