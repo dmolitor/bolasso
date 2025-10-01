@@ -33,7 +33,15 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="bolasso-040">bolasso 0.4.0<a class="anchor" aria-label="anchor" href="#bolasso-040"></a></h2>
-<ul><li>Allows the user to extract the bootstrap indices with <code><a href="../reference/bootstrap_samples.html">bootstrap_samples()</a></code>.</li>
+<ul><li>
+<p>Allows the user to extract the bootstrap indices with <code><a href="../reference/bootstrap_samples.html">bootstrap_samples()</a></code>.</p>
+<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.dmolitor.com/bolasso/" class="external-link">bolasso</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bolasso.html">bolasso</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span>, n.boot <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/bootstrap_samples.html">bootstrap_samples</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre>
+</li>
+<li><p>Fixes <a href="https://github.com/dmolitor/bolasso/issues/12" class="external-link">#12</a></p></li>
+<li><p>Fixes <a href="https://github.com/dmolitor/bolasso/issues/13" class="external-link">#13</a></p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.0" id="bolasso-030">bolasso 0.3.0<a class="anchor" aria-label="anchor" href="#bolasso-030"></a></h2><p class="text-muted">CRAN release: 2024-12-08</p>
@@ -43,7 +51,7 @@
 <strong>Fast Estimation Mode</strong>:
 <ul><li>
 <p><code><a href="../reference/bolasso.html">bolasso()</a></code> gains a <code>fast</code> argument which optimizes computation by using a single cross-validated regression on the entire dataset to determine the optimal regularization parameter (<code>lambda</code>). This approach bypasses the need for cross-validation within each bootstrap replicate, drastically reducing computation time, especially beneficial for large datasets or when using a high number of bootstrap replicates.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fast mode reduces computation time by using a single cross-validated lambda</span></span>
 <span><span class="va">model_fast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bolasso.html">bolasso</a></span><span class="op">(</span></span>
 <span><span class="va">diabetes</span> <span class="op">~</span> <span class="va">.</span>,</span>
@@ -60,7 +68,7 @@
 <ul><li><p><code><a href="../reference/selected_variables.html">selected_vars()</a></code> is now a shorthand for <code><a href="../reference/selected_variables.html">selected_variables()</a></code>.</p></li>
 <li>
 <p><code><a href="../reference/selected_variables.html">selected_variables()</a></code>/<code><a href="../reference/selected_variables.html">selected_vars()</a></code> supports two variable selection algorithms via the <code>method</code> argument: the Variable Inclusion Probability (VIP) method and the Quantile (QNT) method. The VIP method selects variables that appear in a high percentage of bootstrap models, while the QNT method selects variables based on bootstrap confidence intervals. Set <code>method = "vip"</code> or <code>method = "qnt"</code>, respectively.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Select variables using the VIP method with a 95% threshold</span></span>
 <span><span class="va">selected_vars_vip</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selected_variables.html">selected_variables</a></span><span class="op">(</span><span class="va">model</span>, threshold <span class="op">=</span> <span class="fl">0.95</span>, method <span class="op">=</span> <span class="st">"vip"</span><span class="op">)</span></span>
 <span></span>
@@ -72,7 +80,7 @@
 <strong>Tidy Method for Bolasso Objects</strong>:
 <ul><li>
 <p><code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> extracts a tidy tibble summarizing bootstrap-level coefficients for each covariate. This method provides a clean and organized way to inspect model coefficients.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Extract a tidy tibble of coefficients</span></span>
 <span><span class="va">tidy_coefs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">model</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span></code></pre></div>
 </li>
@@ -81,7 +89,7 @@
 <strong>Variable Selection Visualization</strong>:
 <ul><li>
 <p><code><a href="../reference/plot_selection_thresholds.html">plot_selection_thresholds()</a></code> provides a visual representation of the selection thresholds for each variable. This visualization helps users understand the stability and robustness of variable selection across different thresholds and methods.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Visualize selection thresholds for variables</span></span>
 <span><span class="fu"><a href="../reference/plot_selection_thresholds.html">plot_selection_thresholds</a></span><span class="op">(</span><span class="va">model</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span></code></pre></div>
 </li>
@@ -93,7 +101,7 @@
 <strong>Plotting Coefficient Distributions</strong>:
 <ul><li>
 <p><code><a href="../reference/plot_selected_variables.html">plot_selected_variables()</a></code> visualizes the coefficient distributions for only the selected variables. This function provides a focused view of the most relevant variables in the model.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot coefficient distributions for selected variables</span></span>
 <span><span class="fu"><a href="../reference/plot_selected_variables.html">plot_selected_variables</a></span><span class="op">(</span></span>
 <span><span class="va">model</span>,</span>
@@ -104,7 +112,7 @@
 </li>
 <li>
 <p><code>plot</code> visualizes the coefficient distributions for all model covariates.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot coefficient distributions for selected variables</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">model</span>, select <span class="op">=</span> <span class="st">"lambda.min"</span><span class="op">)</span></span></code></pre></div>
 </li>
