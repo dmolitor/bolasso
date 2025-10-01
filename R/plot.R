@@ -21,17 +21,24 @@
 plot.bolasso <- function(x, covariates = NULL, ...) {
   id <- covariate <- NULL ## This is so stupid R CMD Check doesn't flip out
   coefs <- tidy(x, ...)
-  coefs <- coefs[, setdiff(colnames(coefs), "Intercept")]
+  coefs <- coefs[, setdiff(colnames(coefs), "Intercept"), drop = FALSE]
   if (!is.null(substitute(covariates))) {
-    covariates <- substitute(covariates)
-    coefs <- subset(coefs, select = c(id, eval(covariates)))
+    covariates_expr <- as.list(substitute(covariates))[-1]
+    if (length(covariates_expr) > 0) {
+      covariates <- vapply(
+        covariates_expr,
+        function(x) if (is.symbol(x)) { deparse(x) } else { x },
+        character(1)
+      )
+      coefs <- subset(coefs, select = c("id", covariates))
+    }
   }
   covar_cols <- setdiff(colnames(coefs), "id")
   if (length(covar_cols) > 30 && is.null(covariates)) {
-    covar_col_means <- colMeans(coefs[, covar_cols])
+    covar_col_means <- colMeans(coefs[, covar_cols, drop = FALSE])
     top_30_covars <- covar_col_means[sort(order(abs(covar_col_means), decreasing = TRUE)[1:30])]
     covar_cols <- names(top_30_covars)
-    coefs <- coefs[, c("id", covar_cols)]
+    coefs <- coefs[, c("id", covar_cols), drop = FALSE]
   }
   coefs_long <- coefs |>
     transform(id = as.integer(gsub("boot", "", id))) |>
@@ -89,16 +96,27 @@ plot_selected_variables <- function(
   id <- coef <- covariate <- NULL ## This is so stupid R CMD Check doesn't flip out
   method <- match.arg(method)
   coefs <- selected_vars(x, threshold = threshold, method = method, ...)
+  if (length(names(coefs)) < 2 && names(coefs) == "id") {
+    warning("Nothing to plot! There were no selected variables at the threshold of ", threshold, ".")
+    return(invisible(NULL))
+  }
   if (!is.null(substitute(covariates))) {
-    covariates <- substitute(covariates)
-    coefs <- subset(coefs, select = c(id, eval(covariates)))
+    covariates_expr <- as.list(substitute(covariates))[-1]
+    if (length(covariates_expr) > 0) {
+      covariates <- vapply(
+        covariates_expr,
+        function(x) if (is.symbol(x)) { deparse(x) } else { x },
+        character(1)
+      )
+      coefs <- subset(coefs, select = c("id", covariates))
+    }
   }
   covar_cols <- setdiff(colnames(coefs), "id")
   if (length(covar_cols) > 30 && is.null(substitute(covariates))) {
-    covar_col_means <- colMeans(coefs[, covar_cols])
+    covar_col_means <- colMeans(coefs[, covar_cols, drop = FALSE])
     top_30_covars <- covar_col_means[sort(order(abs(covar_col_means), decreasing = TRUE)[1:30])]
     covar_cols <- names(top_30_covars)
-    coefs <- coefs[, c("id", covar_cols)]
+    coefs <- coefs[, c("id", covar_cols), drop = FALSE]
   }
   coefs_long <- coefs |>
     transform(id = as.integer(gsub("boot", "", id))) |>

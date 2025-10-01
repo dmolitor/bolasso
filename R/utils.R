@@ -52,7 +52,7 @@ model_matrix <- function(form, data, x = NULL, y = NULL, prediction = FALSE) {
   x <- if (form_lhs %in% colnames(data)) {
     Matrix::sparse.model.matrix(
       form_rhs,
-      data = data[, !colnames(data) == form_lhs]
+      data = data[, !colnames(data) == form_lhs, drop = FALSE]
     )
   } else {
     Matrix::sparse.model.matrix(
@@ -130,14 +130,14 @@ selected_variables <- function(
             is.numeric(threshold))
   method <- match.arg(method, choices = c("vip", "qnt"))
   model_coefs <- stats::coef(object = object, ...)
-  model_coefs <- switch (
+  model_coefs <- switch(
     method,
     vip = vip_threshold(model_coefs, threshold = threshold),
     qnt = qnt_threshold(model_coefs, threshold = threshold)
   )
   model_coefs <- tidy_selected_vars(model_coefs)
   model_coefs <- tidy_intercept(model_coefs)
-  model_coefs <- model_coefs[, setdiff(names(model_coefs), "Intercept")]
+  model_coefs <- model_coefs[, setdiff(names(model_coefs), "Intercept"), drop = FALSE]
   if (var_names_only) return(setdiff(names(model_coefs), "id"))
   return(model_coefs)
 }
@@ -151,7 +151,7 @@ vip_threshold <- function(dat, threshold) {
 
 selected_vars_grid <- function(object, grid, ...) {
   stopifnot(inherits(object, "bolasso"))
-  model_coefs <- stats::coef(object = object, ...)[, -1]
+  model_coefs <- stats::coef(object = object, ...)[, -1, drop = FALSE]
   all_cols <- colnames(model_coefs)
   grid_by_method <- lapply(
     c("vip", "qnt"),

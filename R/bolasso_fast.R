@@ -8,7 +8,7 @@ bolasso_fast.fit <- function(x, y, n.boot, ...) {
   models <- future.apply::future_lapply(
     folds,
     function(i) {
-      lasso_args <- list(x = x[i, ], y = y[i], lambda = global_lambda_seq, ...)
+      lasso_args <- list(x = x[i, , drop = FALSE], y = y[i], lambda = global_lambda_seq, ...)
       g <- do.call(
         what = glmnet::glmnet,
         args = lasso_args
