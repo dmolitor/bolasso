@@ -23,8 +23,15 @@ plot.bolasso <- function(x, covariates = NULL, ...) {
   coefs <- tidy(x, ...)
   coefs <- coefs[, setdiff(colnames(coefs), "Intercept"), drop = FALSE]
   if (!is.null(substitute(covariates))) {
-    covariates <- substitute(covariates)
-    coefs <- subset(coefs, select = c(id, eval(covariates)))
+    covariates_expr <- as.list(substitute(covariates))[-1]
+    if (length(covariates_expr) > 0) {
+      covariates <- vapply(
+        covariates_expr,
+        function(x) if (is.symbol(x)) { deparse(x) } else { x },
+        character(1)
+      )
+      coefs <- subset(coefs, select = c("id", covariates))
+    }
   }
   covar_cols <- setdiff(colnames(coefs), "id")
   if (length(covar_cols) > 30 && is.null(covariates)) {
@@ -94,8 +101,15 @@ plot_selected_variables <- function(
     return(invisible(NULL))
   }
   if (!is.null(substitute(covariates))) {
-    covariates <- substitute(covariates)
-    coefs <- subset(coefs, select = c(id, eval(covariates)))
+    covariates_expr <- as.list(substitute(covariates))[-1]
+    if (length(covariates_expr) > 0) {
+      covariates <- vapply(
+        covariates_expr,
+        function(x) if (is.symbol(x)) { deparse(x) } else { x },
+        character(1)
+      )
+      coefs <- subset(coefs, select = c("id", covariates))
+    }
   }
   covar_cols <- setdiff(colnames(coefs), "id")
   if (length(covar_cols) > 30 && is.null(substitute(covariates))) {
