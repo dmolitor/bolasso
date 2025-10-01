@@ -1,6 +1,15 @@
 # bolasso 0.4.0
 
 - Allows the user to extract the bootstrap indices with `bootstrap_samples()`.
+  ```
+  library(bolasso)
+
+  model <- bolasso(mpg ~ hp + wt, data = mtcars, n.boot = 10)
+  bootstrap_samples(model)
+  ```
+
+- Fixes [#12](https://github.com/dmolitor/bolasso/issues/12)
+- Fixes [#13](https://github.com/dmolitor/bolasso/issues/13)
 
 # bolasso 0.3.0
 
