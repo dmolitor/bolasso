@@ -41,8 +41,9 @@ pak::pkg_install("dmolitor/bolasso@dev")
 
 ## Usage
 
-To illustrate the usage of bolasso, we’ll use the [Pima Indians Diabetes
-dataset](http://math.furman.edu/~dcs/courses/math47/R/library/mlbench/html/PimaIndiansDiabetes.html)
+To illustrate the usage of bolasso, we’ll use the Pima Indians Diabetes
+dataset (see the dataset documentation in the
+[mlbench](https://CRAN.R-project.org/package=mlbench) package)
 to determine which factors are important predictors of testing positive
 for diabetes. For a full description of the input variables, see the
 link above.
@@ -85,7 +86,6 @@ model <- bolasso(
   progress = FALSE,
   family = "binomial"
 )
-#> Loaded glmnet 4.1-8
 ```
 
 ### Variable selection
@@ -474,8 +474,8 @@ time_sequential <- system.time({
 })
 ```
 
-    #> Parallel bolasso time (seconds): 10.815 
-    #> Sequential bolasso time (seconds): 42.909
+    #> Parallel bolasso time (seconds): 9.634 
+    #> Sequential bolasso time (seconds): 41.787
 
 ### Beyond the Lasso
 
