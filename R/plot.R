@@ -31,7 +31,11 @@ plot.bolasso <- function(x, covariates = NULL, ...) {
         function(x) if (is.symbol(x)) { deparse(x) } else { x },
         character(1)
       )
-      coefs <- subset(coefs, select = c("id", covariates))
+      if (family == "multinomial") {
+        coefs <- subset(coefs, select = c("outcome", "id", covariates))
+      } else {
+        coefs <- subset(coefs, select = c("id", covariates))
+      }
     }
   }
   covar_cols <- setdiff(colnames(coefs), "id")
