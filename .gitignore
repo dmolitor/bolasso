@@ -40,3 +40,5 @@ vignettes/*.pdf
 docs
 .Rprofile
 renv/
+scratch.R
+.DS_Store

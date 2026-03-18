@@ -26,6 +26,7 @@ bolasso_fast.fit <- function(x, y, n.boot, ...) {
 #' @method coef bolasso_fast
 #' @export
 coef.bolasso_fast <- function(object, ...) {
+  family <- attributes(object)$call$family %||% "gaussian"
   global_lambda <- last(object[[1]]$lambda)
   coefs <- lapply(
     object,
@@ -34,14 +35,41 @@ coef.bolasso_fast <- function(object, ...) {
       return(model_coefs)
     }
   )
-  coefs <- do.call(cbind, coefs)
-  colnames(coefs) <- paste0("boot", 1:ncol(coefs))
-  Matrix::t(coefs)
+  if (family %in% c("multinomial", "mgaussian")) {
+    if (family == "mgaussian") stop("bolasso does not support family = 'mgaussian' yet")
+    # This chunk handles multi-response outcomes
+    elts_len <- 1:length(coefs[[1]])
+    elts_names <- names(coefs[[1]])
+    elts <- lapply(
+      elts_len,
+      function(i) {
+        coefs <- do.call(cbind, lapply(coefs, function(j) j[[i]]))
+        colnames(coefs) <- paste0("boot", 1:ncol(coefs))
+        Matrix::t(coefs)
+      }
+    )
+    names(elts) <- elts_names
+    coefs <- elts
+  } else {
+    # This chunk handles standard, single-response outcomes
+    coefs <- do.call(cbind, coefs)
+    colnames(coefs) <- paste0("boot", 1:ncol(coefs))
+    coefs <- Matrix::t(coefs)
+  }
+  return(coefs)
 }
 
 #' @method predict bolasso_fast
 #' @export
 predict.bolasso_fast <- function(object, new.data, ...) {
+  dots <- list(...)
+  family <- attributes(object)$call$family %||% "gaussian"
+  if (family %in% c("multinomial", "mgaussian")) {
+    if (family == "mgaussian") stop("bolasso does not support family = 'mgaussian' yet")
+    if (!"type" %in% names(dots) || ("type" %in% names(dots) && dots$type != "class")) {
+      stop("Calling predict on a multinomial bolasso object only supports type = 'class'")
+    }
+  }
   global_lambda <- last(object[[1]]$lambda)
   varnames <- attributes(object)$varnames
   form <- eval(attributes(object)$call$formula)

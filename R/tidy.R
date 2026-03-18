@@ -36,14 +36,34 @@ tidy_selected_vars <- function(object) {
 #'
 #' @export
 tidy.bolasso <- function(x, select = c("lambda.min", "lambda.1se", "min", "1se"), ...) {
+  family <- attributes(x)$call$family %||% "gaussian"
   select <- match.arg(select)
   model_coefs <- stats::coef(x, select = select, ...)
-  model_coefs <- tibble::as_tibble(
-    as.data.frame(
-      as.matrix(model_coefs)
-    ),
-    rownames = "id"
-  )
+  if (family %in% c("multinomial", "mgaussian")) {
+    # Handle multi-response outcomes
+    grouped_model_coefs <- lapply(
+      names(model_coefs),
+      function(x) {
+        coefs <- tibble::as_tibble(
+          as.data.frame(
+            as.matrix(model_coefs[[x]])
+          ),
+          rownames = "id"
+        )
+        coefs <- do.call(cbind, list(tibble::tibble(outcome = x), coefs))
+        return(tibble::as_tibble(coefs))
+      }
+    )
+    model_coefs <- do.call(rbind, grouped_model_coefs)
+  } else {
+    # Otherwise handle standard, single-response outcomes
+    model_coefs <- tibble::as_tibble(
+      as.data.frame(
+        as.matrix(model_coefs)
+      ),
+      rownames = "id"
+    )
+  }
   model_coefs <- tidy_intercept(model_coefs)
   return(model_coefs)
 }

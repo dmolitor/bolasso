@@ -36,7 +36,9 @@ objects with class \link{bolasso} or \code{bolass_fast}.}
 \value{
 A tibble with each selected variable and its respective coefficient
 for each bootstrap replicate OR a vector of the names of all selected
-variables.
+variables. In the case of a multinomial regression this will return
+a list with one element for each unique outcome. Each element will then
+be either a tibble of coefficients or a list of names.
 }
 \description{
 Identifies covariates that are selected by the Bolasso algorithm at

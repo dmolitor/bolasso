@@ -17,7 +17,9 @@ at. Defaults to \code{seq(0, 1, by = 0.01)}.}
 class \link{bolasso} and \code{bolasso_fast}.}
 }
 \value{
-A tibble with dimension (2*p)x5 where p is the number of covariates.
+A tibble with dimension (2\emph{p)x5 where p is the number of covariates.
+In the case of a multinomial regression, a list of tibbles with dimension (2}p)x5
+where the length of the list is N, where N is the number of unique outcome values.
 }
 \description{
 There are two methods of variable selection for covariates. The first
