@@ -4,7 +4,12 @@
 \alias{plot_selection_thresholds}
 \title{Plot each covariate's smallest variable selection threshold}
 \usage{
-plot_selection_thresholds(object = NULL, data = NULL, ...)
+plot_selection_thresholds(
+  object = NULL,
+  data = NULL,
+  is_multinomial = FALSE,
+  ...
+)
 }
 \arguments{
 \item{object}{An object of class \link{bolasso} or \code{bolasso_fast}.
@@ -15,6 +20,11 @@ This argument is optional if you directly pass in the data via the
 obtained via \code{selection_thresholds(object)}. This argument is optional
 if you directly pass a \code{bolasso} or \code{bolasso_fast} object via the \code{object}
 argument.}
+
+\item{is_multinomial}{A boolean indicating if the data provided is from a
+multinomial regression model. Defaults to FALSE. This only needs to be
+provided if \code{data} is passed in directly. Otherwise this will be inferred
+from the model object.}
 
 \item{...}{Additional arguments to pass directly to
 \link{selection_thresholds}.}

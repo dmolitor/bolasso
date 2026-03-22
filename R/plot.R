@@ -19,6 +19,7 @@
 #' @importFrom stats coef reshape
 #' @export
 plot.bolasso <- function(x, covariates = NULL, ...) {
+  family <- attributes(x)$call$family %||% "gaussian"
   id <- covariate <- NULL ## This is so stupid R CMD Check doesn't flip out
   coefs <- tidy(x, ...)
   coefs <- coefs[, setdiff(colnames(coefs), "Intercept"), drop = FALSE]
@@ -30,37 +31,72 @@ plot.bolasso <- function(x, covariates = NULL, ...) {
         function(x) if (is.symbol(x)) { deparse(x) } else { x },
         character(1)
       )
-      coefs <- subset(coefs, select = c("id", covariates))
+      if (family == "multinomial") {
+        coefs <- subset(coefs, select = c("outcome", "id", covariates))
+      } else {
+        coefs <- subset(coefs, select = c("id", covariates))
+      }
     }
   }
   covar_cols <- setdiff(colnames(coefs), "id")
+  if (family == "multinomial") covar_cols <- setdiff(covar_cols, "outcome")
   if (length(covar_cols) > 30 && is.null(covariates)) {
     covar_col_means <- colMeans(coefs[, covar_cols, drop = FALSE])
     top_30_covars <- covar_col_means[sort(order(abs(covar_col_means), decreasing = TRUE)[1:30])]
     covar_cols <- names(top_30_covars)
+    select_cols <- c("id", covar_cols)
+    if (family == "multinomial") select_cols <- c("outcome", select_cols)
     coefs <- coefs[, c("id", covar_cols), drop = FALSE]
   }
-  coefs_long <- coefs |>
-    transform(id = as.integer(gsub("boot", "", id))) |>
-    reshape(
-      idvar = "id",
-      varying = setdiff(colnames(coefs), "id"),
-      v.names = "coef",
-      timevar = "covariate",
-      times = setdiff(colnames(coefs), "id"),
-      direction = "long"
-    ) |>
-    transform(
-      id = paste0("boot", id),
-      covariate_id = as.integer(factor(covariate))
-    ) |>
-    tibble::as_tibble()
-  ggplot2::ggplot(coefs_long, ggplot2::aes(x = factor(covariate), y = coef)) +
-    ggplot2::geom_boxplot(size = 0.25, notchwidth = 0.25, outlier.size = 0.5) +
-    ggplot2::labs(y = "Coefficient distribution", x = "Covariate") +
-    ggplot2::coord_flip() +
-    ggplot2::theme_minimal() +
-    ggplot2::theme(axis.ticks.x = ggplot2::element_line(color = "gray90"))
+  if (family == "multinomial") {
+    coefs_long <- coefs |>
+      transform(id = as.integer(gsub("boot", "", id))) |>
+      reshape(
+        idvar = c("outcome", "id"),
+        varying = setdiff(colnames(coefs), c("outcome", "id")),
+        v.names = "coef",
+        timevar = "covariate",
+        times = setdiff(colnames(coefs), c("outcome", "id")),
+        direction = "long"
+      ) |>
+      transform(
+        id = paste0("boot", id),
+        covariate_id = as.integer(factor(covariate))
+      ) |>
+      tibble::as_tibble()
+    p <- ggplot2::ggplot(coefs_long, ggplot2::aes(x = factor(covariate), y = coef)) +
+      ggplot2::geom_hline(yintercept = 0, linetype = "dotted", color = "red") +
+      ggplot2::geom_boxplot(size = 0.25, notchwidth = 0.25, outlier.size = 0.5) +
+      ggplot2::labs(y = "Coefficient distribution", x = "Covariate") +
+      ggplot2::coord_flip() +
+      ggplot2::facet_wrap(~ outcome, scales = "free_x") +
+      ggplot2::theme_minimal() +
+      ggplot2::theme(axis.ticks.x = ggplot2::element_line(color = "gray90"))
+  } else {
+    coefs_long <- coefs |>
+      transform(id = as.integer(gsub("boot", "", id))) |>
+      reshape(
+        idvar = "id",
+        varying = setdiff(colnames(coefs), "id"),
+        v.names = "coef",
+        timevar = "covariate",
+        times = setdiff(colnames(coefs), "id"),
+        direction = "long"
+      ) |>
+      transform(
+        id = paste0("boot", id),
+        covariate_id = as.integer(factor(covariate))
+      ) |>
+      tibble::as_tibble()
+    p <- ggplot2::ggplot(coefs_long, ggplot2::aes(x = factor(covariate), y = coef)) +
+      ggplot2::geom_hline(yintercept = 0, linetype = "dotted", color = "red") +
+      ggplot2::geom_boxplot(size = 0.25, notchwidth = 0.25, outlier.size = 0.5) +
+      ggplot2::labs(y = "Coefficient distribution", x = "Covariate") +
+      ggplot2::coord_flip() +
+      ggplot2::theme_minimal() +
+      ggplot2::theme(axis.ticks.x = ggplot2::element_line(color = "gray90"))
+  }
+  return(p)
 }
 
 #' Plot selected variables from a `bolasso` object.
@@ -94,6 +130,7 @@ plot_selected_variables <- function(
   ...
 ) {
   id <- coef <- covariate <- NULL ## This is so stupid R CMD Check doesn't flip out
+  family <- attributes(x)$call$family %||% "gaussian"
   method <- match.arg(method)
   coefs <- selected_vars(x, threshold = threshold, method = method, ...)
   if (length(names(coefs)) < 2 && names(coefs) == "id") {
@@ -108,34 +145,74 @@ plot_selected_variables <- function(
         function(x) if (is.symbol(x)) { deparse(x) } else { x },
         character(1)
       )
-      coefs <- subset(coefs, select = c("id", covariates))
+      if (family == "multinomial") {
+        coefs <- subset(coefs, select = c("outcome", "id", covariates))
+      } else {
+        coefs <- subset(coefs, select = c("id", covariates))
+      }
     }
   }
-  covar_cols <- setdiff(colnames(coefs), "id")
+  if (family == "multinomial") {
+    covar_cols <- setdiff(colnames(coefs), c("id", "outcome"))
+  } else {
+    covar_cols <- setdiff(colnames(coefs), "id")
+  }
   if (length(covar_cols) > 30 && is.null(substitute(covariates))) {
     covar_col_means <- colMeans(coefs[, covar_cols, drop = FALSE])
     top_30_covars <- covar_col_means[sort(order(abs(covar_col_means), decreasing = TRUE)[1:30])]
     covar_cols <- names(top_30_covars)
-    coefs <- coefs[, c("id", covar_cols), drop = FALSE]
+    if (family == "multinomial") {
+      coefs <- coefs[, c("outcome", "id", covar_cols), drop = FALSE]
+    } else {
+      coefs <- coefs[, c("id", covar_cols), drop = FALSE]
+    }
   }
-  coefs_long <- coefs |>
-    transform(id = as.integer(gsub("boot", "", id))) |>
-    reshape(
-      idvar = "id",
-      varying = setdiff(colnames(coefs), "id"),
-      v.names = "coef",
-      timevar = "covariate",
-      times = setdiff(colnames(coefs), "id"),
-      direction = "long"
-    ) |>
-    transform(id = paste0("boot", id), covariate_id = as.integer(factor(covariate))) |>
-    tibble::as_tibble()
-  ggplot2::ggplot(coefs_long, ggplot2::aes(x = factor(covariate), y = coef)) +
-    ggplot2::geom_boxplot(size = 0.25, notchwidth = 0.25, outlier.size = 0.5) +
-    ggplot2::labs(y = "Coefficient distribution", x = "Covariate") +
-    ggplot2::coord_flip() +
-    ggplot2::theme_minimal() +
-    ggplot2::theme(axis.ticks.x = ggplot2::element_line(color = "gray90"))
+  if (family == "multinomial") {
+    coefs_long <- coefs |>
+      transform(id = as.integer(gsub("boot", "", id))) |>
+      reshape(
+        idvar = c("outcome", "id"),
+        varying = setdiff(colnames(coefs), c("outcome", "id")),
+        v.names = "coef",
+        timevar = "covariate",
+        times = setdiff(colnames(coefs), c("outcome", "id")),
+        direction = "long"
+      ) |>
+      transform(
+        id = paste0("boot", id),
+        covariate_id = as.integer(factor(covariate))
+      ) |>
+      tibble::as_tibble()
+    p <- ggplot2::ggplot(coefs_long, ggplot2::aes(x = factor(covariate), y = coef)) +
+      ggplot2::geom_hline(yintercept = 0, linetype = "dotted", color = "red") +
+      ggplot2::geom_boxplot(size = 0.25, notchwidth = 0.25, outlier.size = 0.5) +
+      ggplot2::labs(y = "Coefficient distribution", x = "Covariate") +
+      ggplot2::facet_wrap(~ outcome, scales = "free_x")  +
+      ggplot2::coord_flip() +
+      ggplot2::theme_minimal() +
+      ggplot2::theme(axis.ticks.x = ggplot2::element_line(color = "gray90"))
+  } else {
+    coefs_long <- coefs |>
+      transform(id = as.integer(gsub("boot", "", id))) |>
+      reshape(
+        idvar = "id",
+        varying = setdiff(colnames(coefs), "id"),
+        v.names = "coef",
+        timevar = "covariate",
+        times = setdiff(colnames(coefs), "id"),
+        direction = "long"
+      ) |>
+      transform(id = paste0("boot", id), covariate_id = as.integer(factor(covariate))) |>
+      tibble::as_tibble()
+    p <- ggplot2::ggplot(coefs_long, ggplot2::aes(x = factor(covariate), y = coef)) +
+      ggplot2::geom_hline(yintercept = 0, linetype = "dotted", color = "red") +
+      ggplot2::geom_boxplot(size = 0.25, notchwidth = 0.25, outlier.size = 0.5) +
+      ggplot2::labs(y = "Coefficient distribution", x = "Covariate") +
+      ggplot2::coord_flip() +
+      ggplot2::theme_minimal() +
+      ggplot2::theme(axis.ticks.x = ggplot2::element_line(color = "gray90"))
+  }
+  return(p)
 }
 
 #' Plot each covariate's smallest variable selection threshold
@@ -149,6 +226,10 @@ plot_selected_variables <- function(
 #'   obtained via `selection_thresholds(object)`. This argument is optional
 #'   if you directly pass a `bolasso` or `bolasso_fast` object via the `object`
 #'   argument.
+#' @param is_multinomial A boolean indicating if the data provided is from a
+#'   multinomial regression model. Defaults to FALSE. This only needs to be
+#'   provided if `data` is passed in directly. Otherwise this will be inferred
+#'   from the model object.
 #' @param ... Additional arguments to pass directly to
 #'   \link{selection_thresholds}.
 #' 
@@ -156,46 +237,93 @@ plot_selected_variables <- function(
 #' 
 #' @return A `ggplot` object
 #' @export
-plot_selection_thresholds <- function(object = NULL, data = NULL, ...) {
+plot_selection_thresholds <- function(object = NULL, data = NULL, is_multinomial = FALSE, ...) {
   covariate <- covariate_id <- threshold <- NULL
   if (is.null(object) && is.null(data)) {
     stop("Either `object` or `data` must be provided")
   }
   if (is.null(data)) {
+    family <- attributes(object)$call$family %||% "gaussian"
     selection_grid <- selection_thresholds(object, ...)
   } else {
+    family <- ifelse(is_multinomial, "multinomial", "gaussian")
     selection_grid <- data
+  }
+  if (family == "multinomial") {
+    selection_grid_combined <- lapply(
+      names(selection_grid),
+      function(x) {
+        dat <- selection_grid[[x]]
+        dat$outcome <- x
+        return(dat)
+      }
+    )
+    selection_grid <- do.call(rbind, selection_grid_combined)
   }
   t <- 30
   n_covar <- length(unique(selection_grid$covariate))
-  selection_grid |>
-    ggplot2::ggplot(ggplot2::aes(
-      x = if (n_covar > t) covariate_id else covariate,
-      y = threshold
-    )) +
-    ggplot2::geom_bar(
-      stat = "identity",
-      width = 1,
-      color = "gray40",
-      fill = "gray40",
-      alpha = 0.7
-    ) +
-    ggplot2::coord_cartesian(
-      ylim = c(min(selection_grid$threshold), 1),
-      expand = FALSE
-    ) +
-    ggplot2::facet_wrap(~ method, nrow = 2) +
-    ggplot2::labs(
-      x = if (n_covar > t) "Covariate ID" else "Covariate",
-      y = expression("Threshold (1 - " * alpha * ")")
-    ) +
-    ggplot2::theme_minimal() +
-    ggplot2::theme(
-      axis.text.x = ggplot2::element_text(
-        angle = if (n_covar > t) 0 else 90,
-        vjust = 0.5
-      ),
-      axis.ticks.x = ggplot2::element_line(color = "gray70"),
-      strip.background = ggplot2::element_rect(fill = "white", color = NA)
-    )
+  if (family == "multinomial") {
+    p <- selection_grid |>
+      ggplot2::ggplot(ggplot2::aes(
+        x = if (n_covar > t) covariate_id else covariate,
+        y = threshold
+      )) +
+      ggplot2::geom_bar(
+        stat = "identity",
+        width = 1,
+        color = "gray40",
+        fill = "gray40",
+        alpha = 0.7
+      ) +
+      ggplot2::coord_cartesian(
+        ylim = c(min(selection_grid$threshold), 1),
+        expand = FALSE
+      ) +
+      ggplot2::facet_wrap(~ outcome + method, ncol = 2) +
+      ggplot2::labs(
+        x = if (n_covar > t) "Covariate ID" else "Covariate",
+        y = expression("Threshold (1 - " * alpha * ")")
+      ) +
+      ggplot2::theme_minimal() +
+      ggplot2::theme(
+        axis.text.x = ggplot2::element_text(
+          angle = if (n_covar > t) 0 else 90,
+          vjust = 0.5
+        ),
+        axis.ticks.x = ggplot2::element_line(color = "gray70"),
+        strip.background = ggplot2::element_rect(fill = "white", color = NA)
+      )
+  } else {
+    p <- selection_grid |>
+      ggplot2::ggplot(ggplot2::aes(
+        x = if (n_covar > t) covariate_id else covariate,
+        y = threshold
+      )) +
+      ggplot2::geom_bar(
+        stat = "identity",
+        width = 1,
+        color = "gray40",
+        fill = "gray40",
+        alpha = 0.7
+      ) +
+      ggplot2::coord_cartesian(
+        ylim = c(min(selection_grid$threshold), 1),
+        expand = FALSE
+      ) +
+      ggplot2::facet_wrap(~ method, nrow = 2) +
+      ggplot2::labs(
+        x = if (n_covar > t) "Covariate ID" else "Covariate",
+        y = expression("Threshold (1 - " * alpha * ")")
+      ) +
+      ggplot2::theme_minimal() +
+      ggplot2::theme(
+        axis.text.x = ggplot2::element_text(
+          angle = if (n_covar > t) 0 else 90,
+          vjust = 0.5
+        ),
+        axis.ticks.x = ggplot2::element_line(color = "gray70"),
+        strip.background = ggplot2::element_rect(fill = "white", color = NA)
+      )
+  }
+  return(p)
 }

@@ -1,6 +1,7 @@
 #' @method coef bolasso
 #' @export
 coef.bolasso <- function(object, select = c("lambda.min", "lambda.1se", "min", "1se"), ...) {
+  family <- attributes(object)$call$family %||% "gaussian"
   select <- match.arg(select)
   implement <- attributes(object)$implement
   coefs <- lapply(
@@ -12,14 +13,40 @@ coef.bolasso <- function(object, select = c("lambda.min", "lambda.1se", "min", "
       )
     }
   )
-  coefs <- do.call(cbind, coefs)
-  colnames(coefs) <- paste0("boot", 1:ncol(coefs))
-  Matrix::t(coefs)
+  if (family %in% c("multinomial", "mgaussian")) {
+    if (family == "mgaussian") stop("bolasso does not support family = 'mgaussian' yet")
+    # This chunk handles multi-response outcomes
+    elts_len <- 1:length(coefs[[1]])
+    elts_names <- names(coefs[[1]])
+    elts <- lapply(
+      elts_len,
+      function(i) {
+        coefs <- do.call(cbind, lapply(coefs, function(j) j[[i]]))
+        colnames(coefs) <- paste0("boot", 1:ncol(coefs))
+        Matrix::t(coefs)
+      }
+    )
+    names(elts) <- elts_names
+    coefs <- elts
+  } else {
+    coefs <- do.call(cbind, coefs)
+    colnames(coefs) <- paste0("boot", 1:ncol(coefs))
+    coefs <- Matrix::t(coefs)
+  }
+  return(coefs)
 }
 
 #' @method predict bolasso
 #' @export
 predict.bolasso <- function(object, new.data, select = c("lambda.min", "lambda.1se", "min", "1se"), ...) {
+  dots <- list(...)
+  family <- attributes(object)$call$family %||% "gaussian"
+  if (family %in% c("multinomial", "mgaussian")) {
+    if (family == "mgaussian") stop("bolasso does not support family = 'mgaussian' yet")
+    if (!"type" %in% names(dots) || ("type" %in% names(dots) && dots$type != "class")) {
+      stop("Calling predict on a multinomial bolasso object only supports type = 'class'")
+    }
+  }
   select <- match.arg(select)
   varnames <- attributes(object)$varnames
   implement <- attributes(object)$implement

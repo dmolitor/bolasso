@@ -1,3 +1,15 @@
+# bolasso 0.5.0
+
+- Addresses [[#19](https://github.com/dmolitor/bolasso/issues/19)]. When `family = "multinomial"` is
+  specified, previously bolasso did not correctly support variable selection, plotting, etc.
+  This version addresses this. In general, when `family = "multinomial"`, all outputs become a list
+  where each list element corresponds to a unique outcome in the multinomial response vector. However,
+  the content of each list element will be the same as it originally was (e.g. a tibble of
+  coefficients, or a vector of variable names, etc.). In the case of plotting, it will create a
+  facetted plot with one facet per unique outcome. The only limitations are that `family = "mgaussian"`
+  is not currently supported, and when predicting with `family = "multinomial"`, only `type = "class"`
+  is currently supported. These may be added at a later date.
+
 # bolasso 0.4.0
 
 - Allows the user to extract the bootstrap indices with `bootstrap_samples()`.

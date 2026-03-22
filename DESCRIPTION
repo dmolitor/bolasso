@@ -1,6 +1,6 @@
 Package: bolasso
 Title: Model Consistent Lasso Estimation Through the Bootstrap
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: 
     person(given = "Daniel",
            family = "Molitor",

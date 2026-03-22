@@ -111,7 +111,9 @@ same_sign <- function(x) {
 #'
 #' @return A tibble with each selected variable and its respective coefficient
 #'   for each bootstrap replicate OR a vector of the names of all selected
-#'   variables.
+#'   variables. In the case of a multinomial regression this will return
+#'   a list with one element for each unique outcome. Each element will then
+#'   be either a tibble of coefficients or a list of names.
 #'
 #' @seealso [glmnet::coef.glmnet()] and `gamlr:::coef.gamlr` for details
 #'   on additional arguments to pass to `...`.
@@ -129,16 +131,76 @@ selected_variables <- function(
   stopifnot(inherits(object, "bolasso"),
             is.numeric(threshold))
   method <- match.arg(method, choices = c("vip", "qnt"))
+  family <- attributes(object)$call$family %||% "gaussian"
   model_coefs <- stats::coef(object = object, ...)
-  model_coefs <- switch(
-    method,
-    vip = vip_threshold(model_coefs, threshold = threshold),
-    qnt = qnt_threshold(model_coefs, threshold = threshold)
-  )
-  model_coefs <- tidy_selected_vars(model_coefs)
-  model_coefs <- tidy_intercept(model_coefs)
+  if (family %in% c("multinomial", "mgaussian")) {
+    # Calculate selected variables for multi-response outcomes
+    model_coefs_names <- setdiff(colnames(model_coefs[[1]]), c("intercept", "(Intercept)"))
+    per_outcome_model_coefs <- lapply(
+      names(model_coefs),
+      function(x) {
+        outcome_model_coefs <- switch(
+          method,
+          vip = vip_threshold(model_coefs[[x]], threshold = threshold),
+          qnt = qnt_threshold(model_coefs[[x]], threshold = threshold)
+        )
+        outcome_model_coefs <- tidy_selected_vars(outcome_model_coefs)
+        outcome_model_coefs <- tidy_intercept(outcome_model_coefs)
+        tibble::tibble(
+          do.call(cbind, list(tibble::tibble(outcome = x), outcome_model_coefs))
+        )
+      }
+    )
+    names(per_outcome_model_coefs) <- names(model_coefs)
+    # See https://stackoverflow.com/questions/3402371/combine-two-data-frames-by-rows-rbind-when-they-have-different-sets-of-columns
+    # This is literally just trying to avoid a dependence on dplyr so this replaces
+    # a simple dplyr::bind_rows call.
+    model_coefs <- do.call(
+      rbind,
+      lapply(
+        per_outcome_model_coefs,
+        function(x) data.frame(
+          c(x, sapply(
+            setdiff(unique(unlist(lapply(per_outcome_model_coefs, names))), names(x)),
+            function(y) NA
+          ))
+        )
+      )
+    )
+    model_coefs <- tibble::tibble(model_coefs)
+    # Arrange column names nicely
+    model_coefs <- model_coefs[
+      ,
+      c("outcome", "id", base::intersect(model_coefs_names, colnames(model_coefs))),
+      drop = FALSE
+    ]
+  } else {
+    # Handle standard, single-outcome settings
+    model_coefs_names <- setdiff(colnames(model_coefs), c("intercept", "(Intercept)"))
+    model_coefs <- switch(
+      method,
+      vip = vip_threshold(model_coefs, threshold = threshold),
+      qnt = qnt_threshold(model_coefs, threshold = threshold)
+    )
+    model_coefs <- tidy_selected_vars(model_coefs)
+    model_coefs <- tidy_intercept(model_coefs)
+  }
   model_coefs <- model_coefs[, setdiff(names(model_coefs), "Intercept"), drop = FALSE]
-  if (var_names_only) return(setdiff(names(model_coefs), "id"))
+  if (var_names_only) {
+    if (family %in% c("multinomial", "mgaussian")) {
+      names_split <- split(model_coefs, model_coefs$outcome)
+      names_split <- lapply(
+        names_split,
+        function(x) x[, !apply(is.na(x), 2, all), drop = FALSE]
+      )
+      names_split <- lapply(
+        names_split,
+        function(x) setdiff(names(x), c("id", "outcome"))
+      )
+      return(names_split)
+    }
+    return(setdiff(names(model_coefs), c("id", "outcome")))
+  }
   return(model_coefs)
 }
 
@@ -147,6 +209,47 @@ selected_vars <- selected_variables
 
 vip_threshold <- function(dat, threshold) {
   dat[, (diff(dat@p) / dat@Dim[[1]]) >= threshold, drop = FALSE]
+}
+
+selected_vars_grid_multi <- function(object, grid, ...) {
+  stopifnot(inherits(object, "bolasso"))
+  model_coefs <- stats::coef(object = object, ...)
+  model_coefs <- lapply(model_coefs, function(x) x[, -1, drop = FALSE])
+  all_cols <- colnames(model_coefs[[1]])
+  outcome_thresholds <- lapply(
+    model_coefs,
+    function(x) {
+      grid_by_method <- lapply(
+        list("vip" = "vip", "qnt" = "qnt"),
+        function(method) {
+          method_by_threshold <- lapply(
+            grid,
+            function(threshold) {
+              model_coefs_threshold <- switch (
+                method,
+                vip = vip_threshold(x, threshold = threshold),
+                qnt = qnt_threshold(x, threshold = threshold)
+              )
+              tibble::tibble(
+                "covariate" = all_cols,
+                "selected" =  all_cols %in% colnames(model_coefs_threshold),
+                "threshold" = threshold,
+                "method" = toupper(method)
+              )
+            }
+          )
+          method_df <- do.call(rbind, method_by_threshold)
+        }
+      )
+      grid_df <- do.call(rbind, grid_by_method)
+      grid_df$predictor_id <- match(
+        grid_df[["covariate"]],
+        unique(grid_df[["covariate"]])
+      )
+      return(grid_df)
+    }
+  )
+  return(outcome_thresholds)
 }
 
 selected_vars_grid <- function(object, grid, ...) {
@@ -159,14 +262,14 @@ selected_vars_grid <- function(object, grid, ...) {
       method_by_threshold <- lapply(
         grid,
         function(threshold) {
-          model_coefs <- switch (
+          model_coefs_threshold <- switch (
             method,
             vip = vip_threshold(model_coefs, threshold = threshold),
             qnt = qnt_threshold(model_coefs, threshold = threshold)
           )
           tibble::tibble(
             "covariate" = all_cols,
-            "selected" =  all_cols %in% colnames(model_coefs),
+            "selected" =  all_cols %in% colnames(model_coefs_threshold),
             "threshold" = threshold,
             "method" = toupper(method)
           )
@@ -207,23 +310,50 @@ selected_vars_grid <- function(object, grid, ...) {
 #'   class \link{bolasso} and `bolasso_fast`.
 #' 
 #' @return A tibble with dimension (2*p)x5 where p is the number of covariates.
+#'   In the case of a multinomial regression, a list of tibbles with dimension (2*p)x5
+#'   where the length of the list is N, where N is the number of unique outcome values.
 #' @export
 selection_thresholds <- function(object, grid = seq(0, 1, by = 0.01),  ...) {
-  selection_grid <- selected_vars_grid(object, grid = grid, ...)
-  thresholds <- lapply(
-    split(selection_grid, list(selection_grid$covariate, selection_grid$method)),
-    function(group) {
-      max_threshold <- suppressWarnings(max(group$threshold[group$selected]))
-      if (is.infinite(max_threshold)) max_threshold <- min(grid)
-      tibble::tibble(
-        covariate = group$covariate[1],
-        method = group$method[1],
-        threshold = max_threshold,
-        alpha = 1 - max_threshold,
-        covariate_id = group$predictor_id[1]
-      )
-    }
-  )
-  thresholds <- do.call(rbind, thresholds) |> tibble::remove_rownames()
+  family <- attributes(object)$call$family %||% "gaussian"
+  if (family %in% c("multinomial", "mgaussian")) {
+    selection_grid <- selected_vars_grid_multi(object, grid = grid, ...)
+    thresholds <- lapply(
+      selection_grid,
+      function(x) {
+        outcome_thresholds <- lapply(
+          split(x, list(x$covariate, x$method)),
+          function(group) {
+            max_threshold <- suppressWarnings(max(group$threshold[group$selected]))
+            if (is.infinite(max_threshold)) max_threshold <- min(grid)
+            tibble::tibble(
+              covariate = group$covariate[1],
+              method = group$method[1],
+              threshold = max_threshold,
+              alpha = 1 - max_threshold,
+              covariate_id = group$predictor_id[1]
+            )
+          }
+        )
+        outcome_thresholds <- do.call(rbind, outcome_thresholds) |> tibble::remove_rownames()
+      }
+    )
+  } else {
+    selection_grid <- selected_vars_grid(object, grid = grid, ...)
+    thresholds <- lapply(
+      split(selection_grid, list(selection_grid$covariate, selection_grid$method)),
+      function(group) {
+        max_threshold <- suppressWarnings(max(group$threshold[group$selected]))
+        if (is.infinite(max_threshold)) max_threshold <- min(grid)
+        tibble::tibble(
+          covariate = group$covariate[1],
+          method = group$method[1],
+          threshold = max_threshold,
+          alpha = 1 - max_threshold,
+          covariate_id = group$predictor_id[1]
+        )
+      }
+    )
+    thresholds <- do.call(rbind, thresholds) |> tibble::remove_rownames()
+  }
   return(thresholds)
 }
