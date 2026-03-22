@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/dmolitor/bolasso/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/dmolitor/bolasso/blob/v0.5.0/DESCRIPTION)
 
 Molitor D (2026). *bolasso: Model Consistent Lasso Estimation Through
 the Bootstrap*. R package version 0.5.0,

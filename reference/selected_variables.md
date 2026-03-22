@@ -70,6 +70,6 @@ bootstrap replicates, or a vector of selected covariate names.
 
 ## See also
 
-[`glmnet::coef.glmnet()`](https://glmnet.stanford.edu/reference/predict.glmnet.html)
+[`glmnet::coef.glmnet()`](https://rdrr.io/pkg/glmnet/man/predict.glmnet.html)
 and `gamlr:::coef.gamlr` for details on additional arguments to pass to
 `...`.

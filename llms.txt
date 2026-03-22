@@ -474,9 +474,9 @@ bolasso also allows us to fit penalized regression models beyond the
 Lasso. For example, suppose we want to fit a bootstrap-enhanced
 elasticnet model with a mixing parameter of 0.5 (an even mix of the
 Ridge and Lasso regularization terms). We can simply pass the underlying
-[`glmnet::glmnet`](https://glmnet.stanford.edu/reference/glmnet.html)
-argument `alpha = 0.5` through bolasso. The following code compares
-selected variables between the Lasso and elasticnet models.
+[`glmnet::glmnet`](https://rdrr.io/pkg/glmnet/man/glmnet.html) argument
+`alpha = 0.5` through bolasso. The following code compares selected
+variables between the Lasso and elasticnet models.
 
 ``` r
 lasso <- bolasso(

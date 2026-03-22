@@ -53,7 +53,7 @@ bolasso(
 
   A character; either 'glmnet' or 'gamlr', specifying which Lasso
   implementation to utilize. For specific modeling details, see
-  [`glmnet::cv.glmnet`](https://glmnet.stanford.edu/reference/cv.glmnet.html)
+  [`glmnet::cv.glmnet`](https://rdrr.io/pkg/glmnet/man/cv.glmnet.html)
   or [`gamlr::cv.gamlr`](https://rdrr.io/pkg/gamlr/man/cv.gamlr.html).
 
 - x:
@@ -68,9 +68,9 @@ bolasso(
 
   A boolean. Whether or not to fit a "fast" bootstrap procedure. If
   `fast == TRUE`, `bolasso` will fit
-  [glmnet::cv.glmnet](https://glmnet.stanford.edu/reference/cv.glmnet.html)
-  on the entire dataset. It will then fit all bootstrapped models with
-  the value of lambda (regularization parameter) that minimized
+  [glmnet::cv.glmnet](https://rdrr.io/pkg/glmnet/man/cv.glmnet.html) on
+  the entire dataset. It will then fit all bootstrapped models with the
+  value of lambda (regularization parameter) that minimized
   cross-validation loss in the full model. If `fast == FALSE` (the
   default), `bolasso` will use cross-validation to find the optimal
   lambda for each bootstrap model.
@@ -78,7 +78,7 @@ bolasso(
 - ...:
 
   Additional parameters to pass to either
-  [`glmnet::cv.glmnet`](https://glmnet.stanford.edu/reference/cv.glmnet.html)
+  [`glmnet::cv.glmnet`](https://rdrr.io/pkg/glmnet/man/cv.glmnet.html)
   or [`gamlr::cv.gamlr`](https://rdrr.io/pkg/gamlr/man/cv.gamlr.html).
 
 ## Value
@@ -88,9 +88,9 @@ of `cv.glmnet` or `cv.gamlr` objects.
 
 ## See also
 
-[glmnet::cv.glmnet](https://glmnet.stanford.edu/reference/cv.glmnet.html)
-and [gamlr::cv.gamlr](https://rdrr.io/pkg/gamlr/man/cv.gamlr.html) for
-full details on the respective implementations and arguments that can be
+[glmnet::cv.glmnet](https://rdrr.io/pkg/glmnet/man/cv.glmnet.html) and
+[gamlr::cv.gamlr](https://rdrr.io/pkg/gamlr/man/cv.gamlr.html) for full
+details on the respective implementations and arguments that can be
 passed to `...`.
 
 ## Examples
