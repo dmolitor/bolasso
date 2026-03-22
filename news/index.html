@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">bolasso</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +31,10 @@
       <small>Source: <a href="https://github.com/dmolitor/bolasso/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.0" id="bolasso-050">bolasso 0.5.0<a class="anchor" aria-label="anchor" href="#bolasso-050"></a></h2><p class="text-muted">CRAN release: 2026-03-19</p>
+<ul><li>Addresses [<a href="https://github.com/dmolitor/bolasso/issues/19" class="external-link">#19</a>]. When <code>family = "multinomial"</code> is specified, previously bolasso did not correctly support variable selection, plotting, etc. This version addresses this. In general, when <code>family = "multinomial"</code>, all outputs become a list where each list element corresponds to a unique outcome in the multinomial response vector. However, the content of each list element will be the same as it originally was (e.g. a tibble of coefficients, or a vector of variable names, etc.). In the case of plotting, it will create a facetted plot with one facet per unique outcome. The only limitations are that <code>family = "mgaussian"</code> is not currently supported, and when predicting with <code>family = "multinomial"</code>, only <code>type = "class"</code> is currently supported. These may be added at a later date.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="bolasso-040">bolasso 0.4.0<a class="anchor" aria-label="anchor" href="#bolasso-040"></a></h2><p class="text-muted">CRAN release: 2025-10-14</p>
 <ul><li>
@@ -139,7 +143,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
